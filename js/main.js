@@ -10,6 +10,9 @@ function still(p) { return `${DEPTH}assets/stills/${p.slug}.${p.img}`; }
 function pageUrl(p) { return `${DEPTH}project.html?p=${p.slug}`; }
 
 // ---------- YouTube helpers ----------
+// NOTE: YouTube refuses to play when the page is opened via file:// or inside
+// a sandboxed preview iframe (Error 153 = missing referrer). Always view the
+// site over http(s) — locally that's http://localhost:8090.
 function ytId(url) {
   const m = String(url || "").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);
   return m ? m[1] : null;
@@ -78,26 +81,6 @@ function cardHtml(p, extraClass = "") {
   </a>`;
 }
 
-// ---------- homepage: hero slideshow ----------
-function renderHero() {
-  const host = $("#hero-media");
-  if (!host) return;
-  const slides = PROJECTS.filter(p => p.featured);
-  const cred = $("#hero-cred");
-  host.innerHTML = slides.map((p, i) =>
-    `<img src="${still(p)}" alt="Still from ${esc(p.title)}" class="${i === 0 ? "on" : ""}">`).join("");
-  const imgs = host.querySelectorAll("img");
-  const captions = slides.map(p => `Still from ${p.title}${p.award ? " — " + p.award : ""}`);
-  if (cred) cred.textContent = captions[0];
-  let i = 0;
-  setInterval(() => {
-    imgs[i].classList.remove("on");
-    i = (i + 1) % imgs.length;
-    imgs[i].classList.add("on");
-    if (cred) cred.textContent = captions[i];
-  }, 6000);
-}
-
 // ---------- homepage: selected work ----------
 function renderFeatured() {
   const host = $("#featured-grid");
@@ -107,100 +90,156 @@ function renderFeatured() {
   host.innerHTML = feats.map((p, i) => cardHtml(p, `${spans[i % spans.length]} reveal`)).join("");
 }
 
-// ---------- homepage: edit-suite timeline (bins + program monitor + tracks) ----------
-function renderTimeline() {
-  const host = $("#timeline");
-  if (!host) return;
-  const Y0 = 2010, Y1 = 2026;
-  const pct = y => ((y - Y0) / (Y1 - Y0)) * 100;
+// ---------- timeline layout (shared by homepage suite + project mini nav) ----------
+const TL_Y0 = 2010, TL_Y1 = 2026;
+const tlPct = y => ((y - TL_Y0) / (TL_Y1 - TL_Y0)) * 100;
 
-  const clips = PROJECTS.map(p => ({
-    title: p.title, detail: `${p.role} · ${p.year}`, type: p.type,
+function buildClips() {
+  return PROJECTS.map(p => ({
+    slug: p.slug, title: p.title, detail: `${p.role} · ${p.year}`, type: p.type,
     start: p.start || p.year, end: (p.end || p.year) + 0.85,
     href: pageUrl(p), video: p.trailer, poster: still(p),
     editor: /(^|\/ ?)Editor|Director/i.test(p.role)
   })).concat(TIMELINE_EXTRAS.map(x => ({
-    title: x.title, detail: x.detail, type: x.type,
+    slug: null, title: x.title, detail: x.detail, type: x.type,
     start: x.start, end: x.end, href: null, video: x.video || null, poster: null,
     editor: x.type !== "teaching"
   })));
+}
 
+// greedy lane packing inside each track so clips never overlap
+function tlLanes(list) {
+  const ls = [];
+  list.sort((a, b) => a.start - b.start).forEach(c => {
+    let lane = ls.find(l => l[l.length - 1].end <= c.start + 0.05);
+    if (!lane) { lane = []; ls.push(lane); }
+    lane.push(c);
+  });
+  return ls;
+}
+
+// Renders the year ruler + three tracks. mini=true renders compact <a> clips
+// for navigation (currentSlug highlighted); mini=false renders interactive divs.
+function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
   const tracks = { feature: [], series: [], other: [] };
   clips.forEach(c => (tracks[c.type === "feature" ? "feature" : c.type === "series" ? "series" : "other"]).push(c));
 
-  function lanes(list) {
-    const ls = [];
-    list.sort((a, b) => a.start - b.start).forEach(c => {
-      let lane = ls.find(l => l[l.length - 1].end <= c.start + 0.05);
-      if (!lane) { lane = []; ls.push(lane); }
-      lane.push(c);
-    });
-    return ls;
-  }
-
   const years = [];
-  for (let y = Y0; y < Y1; y += 2) years.push(`<span>${y}</span>`);
+  for (let y = TL_Y0; y < TL_Y1; y += 2) years.push(`<span>${y}</span>`);
 
   let html = `<div class="tl-years">${years.join("")}</div>`;
   const trackNames = { feature: "V1 · FEATURES", series: "V2 · SERIES", other: "V3 · SHORTS + MORE" };
   let idx = 0;
   const byIdx = [];
+  let currentMid = null;
   for (const key of ["feature", "series", "other"]) {
     html += `<p class="tl-track-name">${trackNames[key]}</p>`;
-    lanes(tracks[key]).forEach(lane => {
+    tlLanes(tracks[key]).forEach(lane => {
       html += `<div class="tl-track">`;
       lane.forEach(c => {
         byIdx[idx] = c;
-        const left = pct(c.start), width = Math.max(pct(c.end) - pct(c.start), 3.2);
-        html += `<div class="tl-clip${c.editor ? " editor" : ""}" role="button" tabindex="0"
-          style="left:${left}%;width:${width}%" data-i="${idx}" data-mid="${left + width / 2}">
-          ${esc(c.title)}</div>`;
+        const left = tlPct(c.start), width = Math.max(tlPct(c.end) - tlPct(c.start), 3.2);
+        const mid = left + width / 2;
+        const isCurrent = currentSlug && c.slug === currentSlug;
+        if (isCurrent) currentMid = mid;
+        if (mini) {
+          const inner = `class="tl-clip${c.editor ? " editor" : ""}${isCurrent ? " lit" : ""}"
+            style="left:${left}%;width:${width}%" title="${esc(c.title)} · ${esc(c.detail)}"`;
+          html += c.href
+            ? `<a ${inner} href="${c.href}">${esc(c.title)}</a>`
+            : `<span ${inner}>${esc(c.title)}</span>`;
+        } else {
+          html += `<div class="tl-clip${c.editor ? " editor" : ""}" role="button" tabindex="0"
+            style="left:${left}%;width:${width}%" data-i="${idx}" data-mid="${mid}">
+            ${esc(c.title)}</div>`;
+        }
         idx++;
       });
       html += `</div>`;
     });
   }
-  html += `<div class="tl-playhead" id="playhead" style="left:60%"></div>`;
+  html += `<div class="tl-playhead"${currentMid !== null ? ` style="left:${currentMid}%"` : ` style="left:60%"`}></div>`;
+  return { html, byIdx };
+}
+
+// ---------- homepage: edit-suite hero (bins + program monitor + tracks) ----------
+function renderTimeline() {
+  const host = $("#timeline");
+  if (!host) return;
+  const clips = buildClips();
+  const { html, byIdx } = timelineMarkup(clips);
   host.innerHTML = html;
 
   const screen = $("#mon-screen"), readTitle = $("#tl-title"), readDetail = $("#tl-detail");
-  const openLink = $("#mon-open"), playhead = $("#playhead");
+  const openLink = $("#mon-open"), playhead = host.querySelector(".tl-playhead");
+  const heroBox = $("#mon-hero");
+  let heroMode = true, heroTimer = null;
   let current = null;
 
+  // --- hero slideshow inside the monitor (runs until a clip is clicked) ---
+  const slides = PROJECTS.filter(p => p.featured);
+  if (heroBox) {
+    slides.forEach((p, i) => {
+      const im = document.createElement("img");
+      im.src = still(p);
+      im.alt = `Still from ${p.title}`;
+      if (i === 0) im.className = "on";
+      heroBox.prepend(im);
+    });
+    const imgs = [...heroBox.querySelectorAll("img")];
+    const captions = slides.map(p => `Now showing: ${p.title}${p.award ? " — " + p.award : ""}`);
+    readDetail.textContent = captions[0] + " · hover a clip to scrub · click to play";
+    let i = 0;
+    heroTimer = setInterval(() => {
+      imgs[i].classList.remove("on");
+      i = (i + 1) % imgs.length;
+      imgs[i].classList.add("on");
+      if (heroMode) readDetail.textContent = captions[i] + " · hover a clip to scrub · click to play";
+    }, 6000);
+  }
+
+  // preload poster frames so loading feels instant
   clips.forEach(c => { const src = c.poster || ytThumb(c.video); if (src) { const im = new Image(); im.src = src; } });
   function posterSrc(c) { return c.poster || ytThumb(c.video); }
 
+  // hover: highlight + readout only — never touches what's loaded in the monitor
   function scrubTo(c, clipEl) {
+    host.querySelectorAll(".tl-clip.hov").forEach(x => x.classList.remove("hov"));
+    if (clipEl) clipEl.classList.add("hov");
+    readTitle.textContent = c.title;
+    readDetail.textContent = c.detail + (c.video ? " · CLICK TO PLAY" : "");
+  }
+
+  // click: load the clip into the monitor and play it
+  function loadClip(c, clipEl) {
+    if (heroMode) { heroMode = false; clearInterval(heroTimer); }
     current = c;
     host.querySelectorAll(".tl-clip.lit").forEach(x => x.classList.remove("lit"));
     if (clipEl) { clipEl.classList.add("lit"); playhead.style.left = clipEl.dataset.mid + "%"; }
     readTitle.textContent = c.title;
     readDetail.textContent = c.detail;
-    const src = posterSrc(c);
-    screen.innerHTML = src
-      ? `<img src="${src}" alt="Preview of ${esc(c.title)}">${c.video ? `<span class="mon-play">▶&#xFE0E;</span>` : ""}`
-      : `<p class="mon-empty">${esc(c.title)}</p>`;
     if (openLink) {
       if (c.href) { openLink.style.display = ""; openLink.href = c.href; }
       else openLink.style.display = "none";
     }
-  }
-
-  function playCurrent() {
-    if (!current) return;
-    if (current.video) loadVideoInto(screen, current.video, posterSrc(current), true);
-    else if (current.href) location.href = current.href;
+    if (c.video) {
+      loadVideoInto(screen, c.video, posterSrc(c), true);
+    } else if (c.poster) {
+      screen.innerHTML = `<img src="${c.poster}" alt="Still from ${esc(c.title)}">`;
+    } else if (c.href) {
+      location.href = c.href;
+    }
   }
 
   host.querySelectorAll(".tl-clip").forEach(el => {
     const c = byIdx[el.dataset.i];
     el.addEventListener("mouseenter", () => scrubTo(c, el));
     el.addEventListener("focus", () => scrubTo(c, el));
-    el.addEventListener("click", () => { scrubTo(c, el); playCurrent(); });
-    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); scrubTo(c, el); playCurrent(); } });
+    el.addEventListener("click", () => loadClip(c, el));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); loadClip(c, el); } });
   });
-  screen.addEventListener("click", () => { if (!screen.querySelector(".ytm, iframe")) playCurrent(); });
 
+  // ---- bins ----
   const bins = $("#bins");
   if (bins) {
     const groups = [
@@ -218,14 +257,10 @@ function renderTimeline() {
         btn.classList.add("on");
         const first = clips.filter(c => c.type === btn.dataset.bin).sort((a, b) => b.start - a.start)[0];
         const el = [...host.querySelectorAll(".tl-clip")].find(x => byIdx[x.dataset.i] === first);
-        if (first) scrubTo(first, el);
+        if (first) loadClip(first, el);
       });
     });
   }
-
-  const start = clips.find(c => c.title === "To Kill a Tiger") || clips[0];
-  const startEl = [...host.querySelectorAll(".tl-clip")].find(x => byIdx[x.dataset.i] === start);
-  scrubTo(start, startEl);
 }
 
 // ---------- work page: archive + filters ----------
@@ -252,15 +287,6 @@ function renderArchive() {
   });
 }
 
-// ---------- project page: filmstrip nav ----------
-function stripHtml(currentSlug) {
-  const sorted = [...PROJECTS].sort((a, b) => a.year - b.year);
-  return `<div class="strip-scroll"><div class="strip">` + sorted.map(p =>
-    `<a class="strip-item${p.slug === currentSlug ? " on" : ""}" href="${pageUrl(p)}" title="${esc(p.title)} · ${p.year}">
-      <img src="${still(p)}" alt="" loading="lazy">
-      <span>${esc(p.title)}</span><em>${p.year}</em></a>`).join("") + `</div></div>`;
-}
-
 // ---------- project page ----------
 function renderProject() {
   const host = $("#proj");
@@ -284,6 +310,8 @@ function renderProject() {
       `<button class="clip-thumb" data-url="${esc(v.url)}" data-poster="${ytThumb(v.url)}" title="${esc(v.title)}">
         <img src="${ytThumb(v.url)}" alt="" loading="lazy"><span>${esc(v.title)}</span></button>`).join("")}
     </div>` : "";
+
+  const mini = timelineMarkup(buildClips(), { mini: true, currentSlug: p.slug });
 
   host.innerHTML = `
     <div class="wrap proj-top">
@@ -309,8 +337,8 @@ function renderProject() {
     </div>
 
     <div class="wrap proj-strip-wrap">
-      <p class="strip-head">JUMP TO ANOTHER PROJECT — 2015 → 2025</p>
-      ${stripHtml(p.slug)}
+      <p class="strip-head">THE TIMELINE — CLICK A CLIP TO JUMP TO IT</p>
+      <div class="tl-scroll"><div class="tl-inner tl-mini">${mini.html}</div></div>
     </div>
 
     <div class="wrap proj-nav">
@@ -330,10 +358,6 @@ function renderProject() {
       frame.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   });
-
-  // centre the current item in the filmstrip
-  const cur = host.querySelector(".strip-item.on");
-  if (cur) cur.scrollIntoView({ inline: "center", block: "nearest" });
 }
 
 // ---------- reveal on scroll ----------
@@ -344,7 +368,6 @@ function watchReveals() {
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 }
 
-renderHero();
 renderFeatured();
 renderTimeline();
 renderArchive();
