@@ -20,7 +20,7 @@ const PROJECTS = [
     desc: "To Kill a Tiger follows Ranjit, a farmer in rural India, as he demands justice for his 13-year-old daughter after a brutal assault, defying deeply entrenched patriarchal traditions in a village where such advocacy is virtually unheard of.",
     award: "Academy Award nominee",
     laurels: "Nominated for Best Documentary Feature at the 96th Academy Awards. Winner of 20+ awards including Best Documentary at Palm Springs, Best Feature Length Documentary at the Canadian Screen Awards, and the TIFF Amplify Voices Award.",
-    trailer: null, featured: true
+    trailer: "https://www.youtube.com/watch?v=mC6-igJ_WWM", featured: true
   },
   {
     slug: "any-other-way-the-jackie-shane-story", title: "Any Other Way: The Jackie Shane Story", year: 2024,
@@ -30,7 +30,7 @@ const PROJECTS = [
     desc: "The life of pioneering Black trans soul singer Jackie Shane, who captivated Toronto's music scene in the 1960s alongside Etta James and Little Richard before mysteriously vanishing on the cusp of stardom.",
     award: "Peabody Award winner",
     laurels: "Winner of a Peabody Award and the Rogers Best Canadian Documentary Award (Toronto Film Critics Association). Best Music Documentary at the Krakow Film Festival; IDA Award and Allan King Award nominations.",
-    trailer: null, featured: true
+    trailer: "https://www.youtube.com/watch?v=xnlvygHhqrM", featured: true
   },
   {
     slug: "your-tomorrow", title: "Your Tomorrow", year: 2024,
@@ -40,7 +40,7 @@ const PROJECTS = [
     desc: "An observational documentary following an eccentric group of park regulars and staff living out the final year of Ontario Place, Toronto's iconic waterfront park, as it faces a controversial transformation.",
     award: "TIFF People's Choice runner-up",
     laurels: "Premiered at TIFF 2024, where it won the People's Choice Documentary Award Runner-up.",
-    trailer: null, featured: true
+    trailer: "https://www.youtube.com/watch?v=rzmVfoqGA9Q", featured: true
   },
   {
     slug: "dark-side-of-comedy", title: "Dark Side of Comedy", year: 2025, start: 2024, end: 2025,
@@ -50,7 +50,7 @@ const PROJECTS = [
     desc: "A Vice TV series exploring the internal battles, addiction struggles, and tragic circumstances behind the laughter of legendary comedians including Chris Farley, Robin Williams, Richard Pryor, and Sam Kinison.",
     award: "CSA winner — Best Direction, Doc Series",
     laurels: "Winner of the Canadian Screen Award for Best Direction in a Documentary Series.",
-    trailer: null, featured: true
+    trailer: "https://www.youtube.com/watch?v=D0JPAeavmDM", featured: true
   },
   {
     slug: "eye-of-the-hurricane", title: "Eye of the Hurricane", year: 2024,
@@ -58,7 +58,7 @@ const PROJECTS = [
     role: "Additional Editor",
     credit: "The Red Car · Dir: Peter Thurling · Editor: Dave Kazala · Prod: Joan Schafer",
     desc: "Legendary boxer Rubin “Hurricane” Carter was a destroyer in the ring until 1966, when he was wrongfully imprisoned. Diagnosed with terminal cancer — sick but feisty — he brings his story full circle, fighting one final opponent.",
-    award: null, laurels: null, trailer: null, featured: true
+    award: null, laurels: null, trailer: "https://youtu.be/kDa9LrEh4DU", featured: true
   },
   {
     slug: "it-happens-to-us", title: "It Happens to Us", year: 2023,
@@ -78,7 +78,7 @@ const PROJECTS = [
     desc: "An eight-part CBC series reframing over 400 years of Black experiences in Canada — enslavement, empowerment, hip-hop culture, immigration, policing, and settlement. Premiered at TIFF 2023.",
     award: "CSA nominee",
     laurels: "Premiered at the 2023 Toronto International Film Festival. Canadian Screen Award nominations including Best Direction in a Documentary Series.",
-    trailer: null, featured: false
+    trailer: "https://www.youtube.com/watch?v=GSwjQA06ry4", featured: false
   },
   {
     slug: "witness", title: "WITNESS", year: 2025, start: 2023, end: 2025,
@@ -86,7 +86,7 @@ const PROJECTS = [
     role: "Media Specialist / Assistant Editor",
     credit: "Scarborough Pictures / CBC Gem · Created by Amar Wala · Editor: Caitlin Durlak",
     desc: "A six-part CBC Gem series exploring some of the most riveting viral videos of our time through the eyes of the people who captured them. Premiered at Hot Docs 2023.",
-    award: null, laurels: "Premiered at the 2023 Hot Docs Film Festival.", trailer: null, featured: false
+    award: null, laurels: "Premiered at the 2023 Hot Docs Film Festival.", trailer: "https://www.youtube.com/watch?v=0uDPghPcqbs", featured: false
   },
   {
     slug: "72-summit-series", title: "Summit '72", year: 2022,
@@ -96,7 +96,7 @@ const PROJECTS = [
     desc: "A CBC series marking the 50th anniversary of the 1972 Canada–USSR Summit Series, with never-before-seen 16mm archival footage restored in 4K and interviews with Paul Henderson, Phil Esposito, Bobby Clarke, and Ken Dryden.",
     award: "CSA nominee",
     laurels: "Canadian Screen Award nomination for Best History Documentary Program or Series.",
-    trailer: null, featured: false
+    trailer: "https://www.youtube.com/watch?v=22oqAcAEDt4", featured: false
   },
   {
     slug: "evil-by-design", title: "Evil By Design: Surviving Nygård", year: 2022,
@@ -104,7 +104,7 @@ const PROJECTS = [
     role: "Lead Assistant Editor",
     credit: "Blue Ant Media · CBC/Starz · Dir: Deb Wainwright · Editors: Pamela Bayne, Deb Palloway, Barry McMann",
     desc: "A three-part investigative series examining decades of alleged abuse by fashion mogul Peter Nygård, featuring exclusive interviews with survivors, many speaking out for the first time.",
-    award: null, laurels: null, trailer: null, featured: false
+    award: null, laurels: null, trailer: "https://www.youtube.com/watch?v=aopUxfvZy4k", featured: false
   },
   {
     slug: "coven", title: "Coven", year: 2023,
@@ -112,7 +112,7 @@ const PROJECTS = [
     role: "Assistant Editor",
     credit: "Dir: Rama Rau · Prod: Ed Barreveld · Editor: Rob Ruzic",
     desc: "Three millennial women who practice witchcraft, including musician Witch Prophet. Premiered at the 2023 Hot Docs Canadian International Documentary Festival.",
-    award: null, laurels: "Premiered at Hot Docs 2023.", trailer: null, featured: false
+    award: null, laurels: "Premiered at Hot Docs 2023.", trailer: "https://www.youtube.com/watch?v=WiSbityHv5E", featured: false
   },
   {
     slug: "bodies-for-rent", title: "Bodies for Rent", year: 2024,
@@ -120,7 +120,7 @@ const PROJECTS = [
     role: "Assistant Editor",
     credit: "90th Parallel / IJB · Dirs: John Choi, Habiba Nosheen, Anu Singh · Editor: Edwin Janzen · CBC The Passionate Eye",
     desc: "Inside the hidden world of pharmaceutical drug testing: two professional clinical trial subjects make their living renting out their bodies for experimental drugs, facing real medical risk.",
-    award: null, laurels: null, trailer: null, featured: false
+    award: null, laurels: null, trailer: "https://www.youtube.com/watch?v=AIYW74s0rcY", featured: false
   },
   {
     slug: "crush", title: "Crush: Message in a Bottle", year: 2024,
@@ -128,7 +128,7 @@ const PROJECTS = [
     role: "Media Specialist / Assistant Editor",
     credit: "Red Queen Productions · Dir: Maya Gallus · Editor: Dave Kazala · Prod: Howard Fraiberg",
     desc: "The changing face of the wine industry through eco-minded artisanal winemakers in Ontario's Niagara region, over the course of one punishing harvest season. Premiered at Santa Barbara IFF 2024.",
-    award: null, laurels: null, trailer: null, featured: false
+    award: null, laurels: null, trailer: "https://www.youtube.com/watch?v=bxOnyyaaJsE", featured: false
   },
   {
     slug: "bots", title: "Bots", year: 2025,
@@ -138,7 +138,7 @@ const PROJECTS = [
     desc: "A wickedly sharp satirical short following a unit of dedicated bots scheming chaos and divisiveness from their office desks. Premiered at TIFF 2025.",
     award: "TIFF 2025",
     laurels: "Premiered at the 2025 Toronto International Film Festival.",
-    trailer: null, featured: false
+    trailer: "https://www.youtube.com/watch?v=h2E8Bl--xKA", featured: false
   },
   {
     slug: "bangla-surf-girls", title: "Bangla Surf Girls", year: 2021, start: 2019, end: 2021,
@@ -148,7 +148,7 @@ const PROJECTS = [
     desc: "Three teenage girls from Cox's Bazar, Bangladesh dare to determine their own futures by becoming the country's first women surfers.",
     award: "Multiple festival wins",
     laurels: "Best Documentary Feature at Bushwick and Coronado Island; Women in Surf Award (Portuguese Surf Festival); Best Canadian Feature (Vancouver Asian Film Festival).",
-    trailer: null, featured: false
+    trailer: "https://youtu.be/cXArhc0u0wY", featured: false
   },
   {
     slug: "the-long-weekend", title: "The Long Weekend", year: 2021,
@@ -164,7 +164,7 @@ const PROJECTS = [
     role: "Assistant Editor / Media Management",
     credit: "Dirs: Katy Grannan, Hannah Hughes · Editor: Stephen Berger · Prod: Marc Smolowitz",
     desc: "Celebrated photographer Katy Grannan's searing, nonjudgmental portrait of the drifters and hustlers of South Ninth Street in Modesto, California.",
-    award: null, laurels: null, trailer: null, featured: false
+    award: null, laurels: null, trailer: "https://www.youtube.com/watch?v=JmY_JOFw7Ls", featured: false
   },
   {
     slug: "illusion-bound", title: "Illusion BOUND", year: 2016,
@@ -172,7 +172,7 @@ const PROJECTS = [
     role: "Editor",
     credit: "Dir: Jagdish Metla · Independent feature, India",
     desc: "Two strangers come together to stage an extreme protest against control of thought, feeling, and expression.",
-    award: null, laurels: null, trailer: null, featured: false
+    award: null, laurels: null, trailer: "https://www.youtube.com/watch?v=pqPnGSF9paA", featured: false
   },
   {
     slug: "art-school-of-horrors", title: "Art School of Horrors", year: 2015,
@@ -190,14 +190,28 @@ const PROJECTS = [
     desc: "Documentary-style commercials, brand films, and motion graphics for major brands and agencies — including the BILD Award-winning Scout Condos campaign of real-people neighbourhood stories.",
     award: "BILD Award — Best Long Video",
     laurels: "Best Long Video, Marketing Category, BILD Awards 2019 (Scout Condos, LA Ads).",
-    trailer: null, featured: false
+    trailer: "https://youtu.be/qJvcJGG67uw", featured: false,
+    // Extra spots shown as a clip-bin on the project page (first one = main player)
+    videos: [
+      { title: "TreMari Bakery — Scout Condos (BILD Award campaign)", url: "https://youtu.be/qJvcJGG67uw" },
+      { title: "People's Pint — Scout Condos", url: "https://youtu.be/9X-SDKQifvM" },
+      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q" },
+      { title: "Chevrolet Cruze — 120s spot", url: "https://youtu.be/HWLaX6nLD_g" },
+      { title: "Chevrolet Cruze — cargo space", url: "https://youtu.be/l83_4PBmga4" },
+      { title: "Chevrolet Cruze — smartphone connectivity", url: "https://youtu.be/1R-6cUYAfas" },
+      { title: "GMC Acadia — fold-flat rows", url: "https://youtu.be/YRmSPFesOpQ" },
+      { title: "GMC Acadia — seats up to 7", url: "https://youtu.be/YC43ziJ4WlQ" },
+      { title: "Chevrolet Silverado — smartphone connectivity", url: "https://youtu.be/LmY2a57hMuk" },
+      { title: "Chevrolet Silverado — max towing", url: "https://youtu.be/exYTvJ5x-NI" }
+    ]
   }
 ];
 
 // Career timeline extras (non-project clips)
 const TIMELINE_EXTRAS = [
-  { title: "Teaching — Seneca DFI", detail: "Professor, Non-Fiction Editing", start: 2022, end: 2026, type: "teaching" },
-  { title: "Transfer", detail: "Editor — Best Editing, Int'l British Film Fest 2020", start: 2020, end: 2020.9, type: "short" }
+  { title: "Teaching — Seneca DFI", detail: "Professor, Non-Fiction Editing · 2022–2024", start: 2022, end: 2024.9, type: "teaching" },
+  { title: "Transfer", detail: "Editor — Best Editing, Int'l British Film Fest 2020", start: 2020, end: 2020.9, type: "short",
+    video: "https://youtu.be/9MfryYg026I" }
 ];
 
 const TYPE_LABELS = { feature: "Feature", series: "Series", short: "Short", commercial: "Commercial", teaching: "Teaching" };

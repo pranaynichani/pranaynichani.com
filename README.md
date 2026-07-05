@@ -42,7 +42,8 @@ this repo. Then point the `pranaynichani.com` DNS at it and retire Adobe Portfol
 
 ## Still to do
 
-- [ ] Get real trailer URLs for featured projects (data.js `trailer:` fields)
-- [ ] Consider a 30–60s hero showreel loop instead of the static Ken Burns still
+- [x] Trailer URLs wired into data.js (all major projects + 10 commercial spots)
+- [ ] Consider a 30–60s hero showreel loop (hero currently crossfades featured stills)
 - [ ] Higher-res stills for Eye of the Hurricane (only 540px available on old site)
+- [ ] First original blog post (two external articles are linked already)
 - [ ] Deploy + DNS cutover
