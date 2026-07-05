@@ -171,10 +171,10 @@ section.suite-hero { border-top: none; padding: 28px 0 44px; }
 .mon-screen img, .mon-screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
 .mon-screen .mon-play {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 44px; color: rgba(242,240,233,0.9); text-shadow: 0 2px 14px rgba(0,0,0,0.7);
-  transition: transform .2s;
+  font-size: 44px; color: rgba(242,240,233,0.92); text-shadow: 0 2px 14px rgba(0,0,0,0.7);
+  background: none; border: 0; cursor: pointer; transition: transform .2s; z-index: 2;
 }
-.mon-screen:hover .mon-play { transform: scale(1.12); }
+.mon-screen:hover .mon-play { transform: scale(1.12); color: var(--accent); }
 .mon-screen .mon-empty {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   color: var(--text-faint); font-family: "SF Mono", Menlo, monospace; font-size: 13px;
@@ -185,8 +185,18 @@ section.suite-hero { border-top: none; padding: 28px 0 44px; }
 }
 .mon-bar .tl-title { font-family: var(--font-display); font-size: 18px; line-height: 1.2; }
 .mon-bar .tl-detail { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-#mon-open { flex-shrink: 0; font-size: 11px; letter-spacing: 1.5px; color: var(--accent); }
+.mon-controls { display: flex; align-items: center; gap: 18px; flex-shrink: 0; }
+#mon-open { font-size: 11px; letter-spacing: 1.5px; color: var(--accent); }
 #mon-open:hover { text-decoration: underline; }
+
+/* autoplay switch */
+.ap-toggle { display: flex; align-items: center; gap: 8px; background: none; border: 0; cursor: pointer; padding: 0; }
+.ap-track { width: 32px; height: 18px; border-radius: 10px; background: var(--line-strong); position: relative; transition: background .2s; }
+.ap-thumb { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--text-dim); transition: all .2s; }
+.ap-toggle[aria-checked="true"] .ap-track { background: var(--accent-dim); }
+.ap-toggle[aria-checked="true"] .ap-thumb { left: 16px; background: var(--accent); }
+.ap-label { font-size: 11px; letter-spacing: 1px; color: var(--text-dim); }
+.ap-toggle[aria-checked="true"] .ap-label { color: var(--text); }
 .tl-scroll { overflow-x: auto; padding-bottom: 12px; }
 .tl-inner { position: relative; min-width: 900px; }
 .tl-years { display: flex; border-bottom: 1px solid var(--line-strong); padding-bottom: 6px; margin-bottom: 10px; }

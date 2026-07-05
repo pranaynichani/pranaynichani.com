@@ -103,7 +103,7 @@ function buildClips() {
   })).concat(TIMELINE_EXTRAS.map(x => ({
     slug: null, title: x.title, detail: x.detail, type: x.type,
     start: x.start, end: x.end, href: null, video: x.video || null, poster: null,
-    editor: x.type !== "teaching"
+    page: x.page || null, editor: x.type !== "teaching"
   })));
 }
 
@@ -202,48 +202,83 @@ function renderTimeline() {
   clips.forEach(c => { const src = c.poster || ytThumb(c.video); if (src) { const im = new Image(); im.src = src; } });
   function posterSrc(c) { return c.poster || ytThumb(c.video); }
 
+  const clipEls = [...host.querySelectorAll(".tl-clip")];
+  const findEl = c => clipEls.find(x => byIdx[x.dataset.i] === c);
+
+  // commercial spots live inside the Commercial Work project, not on the timeline
+  const commClip = clips.find(c => c.type === "commercial");
+  const commProj = PROJECTS.find(p => p.slug === "commercial-work");
+  const spots = (commProj && commProj.videos) || [];
+
+  // autoplay toggle — when off, clicking a clip loads its poster + a play button
+  const apToggle = $("#autoplay-toggle");
+  const autoplayOn = () => apToggle ? apToggle.getAttribute("aria-checked") === "true" : true;
+  if (apToggle) apToggle.addEventListener("click", () =>
+    apToggle.setAttribute("aria-checked", String(!autoplayOn())));
+
   // hover: highlight + readout only — never touches what's loaded in the monitor
   function scrubTo(c, clipEl) {
     host.querySelectorAll(".tl-clip.hov").forEach(x => x.classList.remove("hov"));
     if (clipEl) clipEl.classList.add("hov");
     readTitle.textContent = c.title;
-    readDetail.textContent = c.detail + (c.video ? " · CLICK TO PLAY" : "");
+    readDetail.textContent = c.detail + (c.page ? " · OPENS A PAGE" : c.video ? (autoplayOn() ? " · CLICK TO PLAY" : " · CLICK TO LOAD") : "");
   }
 
-  // click: load the clip into the monitor and play it
-  function loadClip(c, clipEl) {
+  // core: put a spec {title, detail, video, poster, href, page} into the monitor
+  function showMonitor(spec, clipEl) {
+    if (spec.page) { location.href = DEPTH + spec.page; return; }
     if (heroMode) { heroMode = false; clearInterval(heroTimer); }
-    current = c;
     host.querySelectorAll(".tl-clip.lit").forEach(x => x.classList.remove("lit"));
     if (clipEl) { clipEl.classList.add("lit"); playhead.style.left = clipEl.dataset.mid + "%"; }
-    readTitle.textContent = c.title;
-    readDetail.textContent = c.detail;
+    readTitle.textContent = spec.title;
+    readDetail.textContent = spec.detail;
     if (openLink) {
-      if (c.href) { openLink.style.display = ""; openLink.href = c.href; }
+      if (spec.href) { openLink.style.display = ""; openLink.href = spec.href; }
       else openLink.style.display = "none";
     }
-    if (c.video) {
-      loadVideoInto(screen, c.video, posterSrc(c), true);
-    } else if (c.poster) {
-      screen.innerHTML = `<img src="${c.poster}" alt="Still from ${esc(c.title)}">`;
-    } else if (c.href) {
-      location.href = c.href;
+    const poster = spec.poster || ytThumb(spec.video);
+    if (spec.video) {
+      if (autoplayOn()) {
+        loadVideoInto(screen, spec.video, poster, true);
+      } else {
+        screen.innerHTML = `<img src="${poster}" alt="${esc(spec.title)}"><button class="mon-play" aria-label="Play ${esc(spec.title)}">▶&#xFE0E;</button>`;
+        const play = () => loadVideoInto(screen, spec.video, poster, true);
+        screen.querySelector(".mon-play").addEventListener("click", play);
+        screen.querySelector("img").addEventListener("click", play);
+      }
+    } else if (poster) {
+      screen.innerHTML = `<img src="${poster}" alt="${esc(spec.title)}">`;
     }
-    // reflect the selection in the bins panel (open its bin, highlight it)
-    const binsEl = document.getElementById("bins");
-    if (binsEl) {
-      binsEl.querySelectorAll(".bin-item.on").forEach(b => b.classList.remove("on"));
-      const item = binsEl.querySelector(`.bin-item[data-ci="${clips.indexOf(c)}"]`);
-      if (item) { item.classList.add("on"); const g = item.closest(".bin-group"); if (g) g.classList.add("open"); }
-    }
+  }
+
+  function highlightBin(sel) {
+    const bx = document.getElementById("bins");
+    if (!bx) return;
+    bx.querySelectorAll(".bin-item.on").forEach(b => b.classList.remove("on"));
+    const item = bx.querySelector(sel);
+    if (item) { item.classList.add("on"); const g = item.closest(".bin-group"); if (g) g.classList.add("open"); }
+  }
+
+  // a timeline clip / regular bin item
+  function loadClip(c, clipEl) {
+    showMonitor({ title: c.title, detail: c.detail, video: c.video, poster: c.poster, href: c.href, page: c.page }, clipEl);
+    if (!c.page) highlightBin(`.bin-item[data-ci="${clips.indexOf(c)}"]`);
+  }
+
+  // a commercial spot (no timeline clip of its own; lights the Commercial Work clip)
+  function loadSpot(i) {
+    const s = spots[i];
+    showMonitor({ title: s.title, detail: "Commercial · Editor / DP / Motion Graphics", video: s.url,
+      href: commClip ? commClip.href : null }, findEl(commClip));
+    highlightBin(`.bin-item[data-spot="${i}"]`);
   }
 
   host.querySelectorAll(".tl-clip").forEach(el => {
     const c = byIdx[el.dataset.i];
     el.addEventListener("mouseenter", () => scrubTo(c, el));
     el.addEventListener("focus", () => scrubTo(c, el));
-    el.addEventListener("click", () => loadClip(c, el));
-    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); loadClip(c, el); } });
+    el.addEventListener("click", () => c.type === "commercial" ? loadSpot(0) : loadClip(c, el));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.type === "commercial" ? loadSpot(0) : loadClip(c, el); } });
   });
 
   // ---- bins ----
@@ -254,10 +289,17 @@ function renderTimeline() {
       { key: "short", label: "Shorts" }, { key: "commercial", label: "Commercial" },
       { key: "teaching", label: "Teaching" }
     ];
-    const clipEls = [...host.querySelectorAll(".tl-clip")];
-    const findEl = c => clipEls.find(x => byIdx[x.dataset.i] === c);
 
     bins.innerHTML = `<p class="bins-head">BINS · CLICK TO OPEN</p><div class="bins-list">` + groups.map(g => {
+      // Commercial expands to every individual spot, not the single project clip
+      if (g.key === "commercial") {
+        if (!spots.length) return "";
+        return `<div class="bin-group" data-bin="commercial">
+          <button class="bin-header"><span class="bin-icon">▸</span><span class="bin-label">Commercial</span><span class="bin-count">${spots.length}</span></button>
+          <div class="bin-items">${spots.map((s, i) =>
+            `<button class="bin-item" data-spot="${i}"><span class="bin-dot">◆</span><span class="bin-title">${esc(s.title)}</span></button>`).join("")}</div>
+        </div>`;
+      }
       const items = clips.map((c, i) => [c, i]).filter(([c]) => c.type === g.key)
         .sort((a, b) => b[0].start - a[0].start);
       if (!items.length) return "";
@@ -273,8 +315,8 @@ function renderTimeline() {
     });
     bins.querySelectorAll(".bin-item").forEach(it => {
       it.addEventListener("click", () => {
-        const c = clips[+it.dataset.ci];
-        loadClip(c, findEl(c));
+        if (it.dataset.spot !== undefined) loadSpot(+it.dataset.spot);
+        else loadClip(clips[+it.dataset.ci], findEl(clips[+it.dataset.ci]));
       });
     });
   }
