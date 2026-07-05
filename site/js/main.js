@@ -9,17 +9,66 @@ const DEPTH = document.body.dataset.depth || "";
 function still(p) { return `${DEPTH}assets/stills/${p.slug}.${p.img}`; }
 function pageUrl(p) { return `${DEPTH}project.html?p=${p.slug}`; }
 
-// YouTube helpers — accepts watch?v=, youtu.be, or embed URLs
+// ---------- YouTube helpers ----------
 function ytId(url) {
   const m = String(url || "").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);
   return m ? m[1] : null;
 }
 function ytThumb(url) { const id = ytId(url); return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null; }
-function ytEmbed(url, autoplay = true) {
-  const id = ytId(url);
-  return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1${autoplay ? "&autoplay=1" : ""}` : null;
+function ytWatch(url) { const id = ytId(url); return id ? `https://www.youtube.com/watch?v=${id}` : url; }
+
+// Load the IFrame Player API once. Resolves with the YT namespace.
+let _ytReady;
+function ytApi() {
+  if (_ytReady) return _ytReady;
+  _ytReady = new Promise(resolve => {
+    if (window.YT && window.YT.Player) return resolve(window.YT);
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); resolve(window.YT); };
+    const s = document.createElement("script");
+    s.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(s);
+  });
+  return _ytReady;
 }
 
+function ytFallback(node, url, poster) {
+  const wrap = document.createElement("div");
+  wrap.className = "yt-fallback";
+  wrap.innerHTML =
+    `${poster ? `<img src="${poster}" alt="" class="yt-fallback-bg">` : ""}
+     <div class="yt-fallback-in">
+       <p>This trailer is set to play on YouTube only.</p>
+       <a class="btn" href="${url}" target="_blank" rel="noopener">WATCH ON YOUTUBE ↗</a>
+     </div>`;
+  node.replaceWith(wrap);
+}
+
+// Mount a player into the given div (`el` is consumed/replaced by the iframe).
+// On any embedding error, swap in a clean "Watch on YouTube" fallback.
+function mountYouTube(el, url, opts = {}) {
+  const { autoplay = false, poster = null } = opts;
+  const id = ytId(url);
+  if (!id) return;
+  ytApi().then(YT => {
+    new YT.Player(el, {
+      videoId: id,
+      playerVars: { rel: 0, modestbranding: 1, playsinline: 1, autoplay: autoplay ? 1 : 0, origin: location.origin },
+      events: {
+        onReady: e => { if (autoplay) { try { e.target.playVideo(); } catch (_) {} } },
+        onError: e => ytFallback(e.target.getIframe(), ytWatch(url), poster)
+      }
+    });
+  });
+}
+
+// Replace a media frame's contents with a fresh mount point and load a video.
+function loadVideoInto(frame, url, poster, autoplay) {
+  frame.innerHTML = `<div class="ytm"></div>`;
+  mountYouTube(frame.querySelector(".ytm"), url, { autoplay, poster });
+}
+
+// ---------- cards ----------
 function cardHtml(p, extraClass = "") {
   const tag = p.award ? `<span class="tag">${esc(p.award)}</span>` : "";
   return `<a class="card ${extraClass}" href="${pageUrl(p)}" data-type="${p.type}">
@@ -38,8 +87,7 @@ function renderHero() {
   host.innerHTML = slides.map((p, i) =>
     `<img src="${still(p)}" alt="Still from ${esc(p.title)}" class="${i === 0 ? "on" : ""}">`).join("");
   const imgs = host.querySelectorAll("img");
-  const captions = slides.map(p =>
-    `Still from ${p.title}${p.award ? " — " + p.award : ""}`);
+  const captions = slides.map(p => `Still from ${p.title}${p.award ? " — " + p.award : ""}`);
   if (cred) cred.textContent = captions[0];
   let i = 0;
   setInterval(() => {
@@ -80,7 +128,6 @@ function renderTimeline() {
   const tracks = { feature: [], series: [], other: [] };
   clips.forEach(c => (tracks[c.type === "feature" ? "feature" : c.type === "series" ? "series" : "other"]).push(c));
 
-  // greedy lane packing inside each track so clips never overlap
   function lanes(list) {
     const ls = [];
     list.sort((a, b) => a.start - b.start).forEach(c => {
@@ -116,15 +163,12 @@ function renderTimeline() {
   html += `<div class="tl-playhead" id="playhead" style="left:60%"></div>`;
   host.innerHTML = html;
 
-  // ---- program monitor ----
   const screen = $("#mon-screen"), readTitle = $("#tl-title"), readDetail = $("#tl-detail");
   const openLink = $("#mon-open"), playhead = $("#playhead");
   let current = null;
 
-  // preload poster frames so scrubbing is instant
   clips.forEach(c => { const src = c.poster || ytThumb(c.video); if (src) { const im = new Image(); im.src = src; } });
-
-  function posterSrc(c) { return ytThumb(c.video) || c.poster; }
+  function posterSrc(c) { return c.poster || ytThumb(c.video); }
 
   function scrubTo(c, clipEl) {
     current = c;
@@ -134,7 +178,7 @@ function renderTimeline() {
     readDetail.textContent = c.detail;
     const src = posterSrc(c);
     screen.innerHTML = src
-      ? `<img src="${src}" alt="Preview of ${esc(c.title)}"><span class="mon-play">▶&#xFE0E;</span>`
+      ? `<img src="${src}" alt="Preview of ${esc(c.title)}">${c.video ? `<span class="mon-play">▶&#xFE0E;</span>` : ""}`
       : `<p class="mon-empty">${esc(c.title)}</p>`;
     if (openLink) {
       if (c.href) { openLink.style.display = ""; openLink.href = c.href; }
@@ -144,8 +188,7 @@ function renderTimeline() {
 
   function playCurrent() {
     if (!current) return;
-    const embed = ytEmbed(current.video);
-    if (embed) screen.innerHTML = `<iframe src="${embed}" title="${esc(current.title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    if (current.video) loadVideoInto(screen, current.video, posterSrc(current), true);
     else if (current.href) location.href = current.href;
   }
 
@@ -156,9 +199,8 @@ function renderTimeline() {
     el.addEventListener("click", () => { scrubTo(c, el); playCurrent(); });
     el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); scrubTo(c, el); playCurrent(); } });
   });
-  screen.addEventListener("click", e => { if (!screen.querySelector("iframe")) playCurrent(); });
+  screen.addEventListener("click", () => { if (!screen.querySelector(".ytm, iframe")) playCurrent(); });
 
-  // ---- bins ----
   const bins = $("#bins");
   if (bins) {
     const groups = [
@@ -174,15 +216,13 @@ function renderTimeline() {
       btn.addEventListener("click", () => {
         bins.querySelectorAll(".bin.on").forEach(b => b.classList.remove("on"));
         btn.classList.add("on");
-        const first = clips.filter(c => c.type === btn.dataset.bin)
-          .sort((a, b) => b.start - a.start)[0];
+        const first = clips.filter(c => c.type === btn.dataset.bin).sort((a, b) => b.start - a.start)[0];
         const el = [...host.querySelectorAll(".tl-clip")].find(x => byIdx[x.dataset.i] === first);
         if (first) scrubTo(first, el);
       });
     });
   }
 
-  // default: land on To Kill a Tiger
   const start = clips.find(c => c.title === "To Kill a Tiger") || clips[0];
   const startEl = [...host.querySelectorAll(".tl-clip")].find(x => byIdx[x.dataset.i] === start);
   scrubTo(start, startEl);
@@ -212,6 +252,15 @@ function renderArchive() {
   });
 }
 
+// ---------- project page: filmstrip nav ----------
+function stripHtml(currentSlug) {
+  const sorted = [...PROJECTS].sort((a, b) => a.year - b.year);
+  return `<div class="strip-scroll"><div class="strip">` + sorted.map(p =>
+    `<a class="strip-item${p.slug === currentSlug ? " on" : ""}" href="${pageUrl(p)}" title="${esc(p.title)} · ${p.year}">
+      <img src="${still(p)}" alt="" loading="lazy">
+      <span>${esc(p.title)}</span><em>${p.year}</em></a>`).join("") + `</div></div>`;
+}
+
 // ---------- project page ----------
 function renderProject() {
   const host = $("#proj");
@@ -224,55 +273,67 @@ function renderProject() {
   const prev = PROJECTS[(idx - 1 + PROJECTS.length) % PROJECTS.length];
   const next = PROJECTS[(idx + 1) % PROJECTS.length];
 
-  const trailerEmbed = ytEmbed(p.trailer, false);
-  const playerHtml = trailerEmbed
-    ? `<div class="player" id="player"><iframe src="${trailerEmbed}" title="${esc(p.title)} trailer" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`
-    : "";
+  // media frame: trailer player if there's a video, otherwise the still
+  const mediaHtml = p.trailer
+    ? `<div class="proj-media" id="proj-media"></div>`
+    : `<div class="proj-media still"><img src="${still(p)}" alt="Still from ${esc(p.title)}"></div>`;
+
   const videosHtml = p.videos ? `
-    <p class="clip-bin-head">SELECTED SPOTS — CLICK TO LOAD</p>
+    <p class="clip-bin-head">SELECTED SPOTS — CLICK TO PLAY</p>
     <div class="clip-bin">${p.videos.map(v =>
-      `<button class="clip-thumb" data-url="${esc(v.url)}" title="${esc(v.title)}">
+      `<button class="clip-thumb" data-url="${esc(v.url)}" data-poster="${ytThumb(v.url)}" title="${esc(v.title)}">
         <img src="${ytThumb(v.url)}" alt="" loading="lazy"><span>${esc(v.title)}</span></button>`).join("")}
     </div>` : "";
 
   host.innerHTML = `
-    <div class="proj-hero">
-      <div class="hero-media"><img src="${still(p)}" alt="Still from ${esc(p.title)}"></div>
-      <div class="wrap hero-content">
-        ${p.award ? `<p class="hero-kicker">${esc(p.award).toUpperCase()}</p>` : ""}
-        <h1 class="hero-title">${esc(p.title)}</h1>
-        <p class="hero-sub">${TYPE_LABELS[p.type]} · ${p.year}</p>
+    <div class="wrap proj-top">
+      <a class="proj-back" href="${DEPTH}work.html">← All work</a>
+      <div class="proj-lead">
+        ${mediaHtml}
+        <div class="proj-info">
+          ${p.award ? `<p class="proj-award">${esc(p.award)}</p>` : ""}
+          <h1>${esc(p.title)}</h1>
+          <p class="proj-type">${TYPE_LABELS[p.type]} · ${p.year}</p>
+          <dl class="spec">
+            <dt>MY ROLE</dt><dd>${esc(p.role)}</dd>
+            <dt>CREDITS</dt><dd>${esc(p.credit)}</dd>
+          </dl>
+          ${p.trailer ? `<a class="proj-yt" href="${ytWatch(p.trailer)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>` : ""}
+        </div>
       </div>
-    </div>
-    <div class="wrap proj-body">
-      <div class="desc">
-        ${playerHtml}
+      <div class="proj-desc">
         <p>${esc(p.desc)}</p>
         ${p.laurels ? `<div class="laurels-text">${esc(p.laurels)}</div>` : ""}
         ${videosHtml}
       </div>
-      <dl class="spec">
-        <dt>MY ROLE</dt><dd>${esc(p.role)}</dd>
-        <dt>CREDITS</dt><dd>${esc(p.credit)}</dd>
-        <dt>YEAR</dt><dd>${p.year}</dd>
-        <dt>FORMAT</dt><dd>${TYPE_LABELS[p.type]}</dd>
-      </dl>
     </div>
+
+    <div class="wrap proj-strip-wrap">
+      <p class="strip-head">JUMP TO ANOTHER PROJECT — 2015 → 2025</p>
+      ${stripHtml(p.slug)}
+    </div>
+
     <div class="wrap proj-nav">
       <a href="${pageUrl(prev)}">← ${esc(prev.title)}</a>
       <a href="${DEPTH}work.html">All work</a>
       <a href="${pageUrl(next)}">${esc(next.title)} →</a>
     </div>`;
 
+  // load the main trailer (poster + play; auto-falls back if embedding is off)
+  if (p.trailer) loadVideoInto($("#proj-media"), p.trailer, ytThumb(p.trailer), false);
+
+  // clip-bin thumbs swap the main media frame
   host.querySelectorAll(".clip-thumb").forEach(btn => {
     btn.addEventListener("click", () => {
-      const player = $("#player");
-      if (player) {
-        player.querySelector("iframe").src = ytEmbed(btn.dataset.url);
-        player.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+      const frame = $("#proj-media");
+      loadVideoInto(frame, btn.dataset.url, btn.dataset.poster, true);
+      frame.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   });
+
+  // centre the current item in the filmstrip
+  const cur = host.querySelector(".strip-item.on");
+  if (cur) cur.scrollIntoView({ inline: "center", block: "nearest" });
 }
 
 // ---------- reveal on scroll ----------
