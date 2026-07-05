@@ -26,14 +26,15 @@
 </header>
 
 <div class="hero">
-  <div class="hero-media">
-    <img src="assets/stills/to-kill-a-tiger.jpg" alt="Still from To Kill a Tiger">
+  <div class="hero-media" id="hero-media">
+    <img src="assets/stills/to-kill-a-tiger.jpg" alt="Still from To Kill a Tiger" class="on">
   </div>
   <div class="wrap hero-content">
     <p class="hero-kicker">POST-PRODUCTION · ASSISTANT EDITOR · EDITOR — TORONTO</p>
     <h1 class="hero-title">I get documentaries from the shoot to the screen.</h1>
     <p class="hero-sub">Fifteen years across features, series, and shorts — from an Academy Award–nominated feature to Peabody-winning television.</p>
-    <p class="hero-cred">Still from To Kill a Tiger (dir. Nisha Pahuja) — nominated, Best Documentary Feature, 96th Academy Awards</p>
+    <p class="hero-cred" id="hero-cred">Still from To Kill a Tiger — Academy Award nominee</p>
+    <a class="hero-tl-link" href="#timeline-suite">SCRUB THROUGH TEN YEARS ON MY TIMELINE ↓</a>
   </div>
 </div>
 
@@ -56,15 +57,24 @@
   </div>
 </section>
 
-<section class="block timeline-section">
+<section class="block timeline-section" id="timeline-suite">
   <div class="wrap">
     <div class="section-head">
       <h2 class="section-title">Ten years on the timeline</h2>
-      <span class="section-link">HOVER TO SCRUB · CLICK TO OPEN</span>
+      <span class="section-link">HOVER TO SCRUB · CLICK TO PLAY</span>
     </div>
-    <div class="tl-readout">
-      <p class="tl-title" id="tl-title">To Kill a Tiger</p>
-      <p class="tl-detail" id="tl-detail">Media Specialist / Post-Production Coordinator / Assistant Editor · 2018–2023</p>
+    <div class="suite">
+      <div class="bins" id="bins"></div>
+      <div class="monitor">
+        <div class="mon-screen" id="mon-screen"></div>
+        <div class="mon-bar">
+          <div>
+            <p class="tl-title" id="tl-title"></p>
+            <p class="tl-detail" id="tl-detail"></p>
+          </div>
+          <a id="mon-open" href="#">OPEN PROJECT →</a>
+        </div>
+      </div>
     </div>
     <div class="tl-scroll"><div class="tl-inner" id="timeline"></div></div>
     <div class="tl-legend">
@@ -89,8 +99,8 @@
       <span class="go">SEE THE WORK →</span>
     </a>
     <a class="panel reveal" href="about.html">
-      <h3>Teaching at Seneca DFI</h3>
-      <p>Professor of Non-Fiction Editing at Seneca's Documentary Film Institute (Seneca@York) since 2022 — training the next generation of documentary editors.</p>
+      <h3>Teaching &amp; mentorship</h3>
+      <p>Professor of Non-Fiction Editing at Seneca's Documentary Film Institute (Seneca@York), 2022–2024 — and I still train assistant editors and editorial interns on my productions.</p>
       <span class="go">MORE ABOUT ME →</span>
     </a>
   </div>
