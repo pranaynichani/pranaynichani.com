@@ -231,13 +231,33 @@ h2.section-title { font-family: var(--font-display); font-weight: 350; font-size
 .panel .go { display: inline-block; margin-top: 18px; font-size: 13px; letter-spacing: 1px; color: var(--accent); }
 
 /* ---------- project page ---------- */
-.proj-hero { position: relative; min-height: 62vh; display: flex; align-items: flex-end; overflow: hidden; }
-.proj-hero .hero-media img { animation: none; filter: brightness(0.45); }
-.proj-body { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; padding-top: 56px; padding-bottom: 80px; }
-.proj-body .desc { font-size: 17px; line-height: 1.75; color: #d8d6cd; }
-.proj-body .desc .laurels-text { margin-top: 24px; padding: 20px; border-left: 2px solid var(--accent); background: var(--bg-raised); font-size: 14.5px; color: var(--text-dim); }
-.player { position: relative; aspect-ratio: 16/9; background: #000; border-radius: 6px; overflow: hidden; margin-bottom: 28px; }
-.player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.proj-top { padding-top: 30px; }
+.proj-back { display: inline-block; font-size: 12px; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 22px; }
+.proj-back:hover { color: var(--accent); }
+.proj-lead { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: start; }
+
+/* media frame — holds player, still, or fallback; always 16:9 */
+.proj-media { position: relative; aspect-ratio: 16/9; background: #000; border-radius: 6px; overflow: hidden; }
+.proj-media img, .proj-media iframe, .proj-media .ytm iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.proj-media img { object-fit: cover; }
+
+.proj-info { padding-top: 4px; }
+.proj-award { font-size: 12px; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 12px; }
+.proj-info h1 { font-family: var(--font-display); font-weight: 350; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.12; }
+.proj-type { font-size: 14px; color: var(--text-dim); margin: 8px 0 20px; }
+.proj-info .spec { border-top: 1px solid var(--line); padding-top: 4px; }
+.proj-yt { display: inline-block; margin-top: 20px; font-size: 13px; letter-spacing: 1px; color: var(--accent); border-bottom: 1px solid var(--accent-dim); padding-bottom: 2px; }
+.proj-yt:hover { border-color: var(--accent); }
+
+.proj-desc { max-width: 760px; margin-top: 48px; font-size: 17px; line-height: 1.75; color: #d8d6cd; }
+.proj-desc .laurels-text { margin-top: 24px; padding: 20px; border-left: 2px solid var(--accent); background: var(--bg-raised); font-size: 14.5px; color: var(--text-dim); }
+
+/* fallback when a trailer refuses to embed */
+.yt-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; }
+.yt-fallback-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.35; filter: blur(2px); }
+.yt-fallback-in { position: relative; text-align: center; padding: 20px; }
+.yt-fallback-in p { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; }
+
 .clip-bin-head { margin-top: 36px; font-size: 11px; letter-spacing: 2px; color: var(--text-faint); font-family: "SF Mono", Menlo, monospace; }
 .clip-bin { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
 .clip-thumb {
@@ -247,13 +267,29 @@ h2.section-title { font-family: var(--font-display); font-weight: 350; font-size
 .clip-thumb:hover { border-color: var(--accent-dim); }
 .clip-thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
 .clip-thumb span { display: block; padding: 8px 10px 0; font-size: 11.5px; color: var(--text-dim); font-family: var(--font-body); line-height: 1.4; }
+
 .spec { font-size: 13.5px; }
-.spec dt { color: var(--text-faint); letter-spacing: 1px; font-size: 11px; margin-top: 20px; }
+.spec dt { color: var(--text-faint); letter-spacing: 1px; font-size: 11px; margin-top: 16px; }
 .spec dd { color: var(--text); margin-top: 4px; line-height: 1.6; }
-.proj-nav { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 28px; padding-bottom: 72px; font-size: 14px; color: var(--text-dim); }
+
+/* filmstrip nav */
+.proj-strip-wrap { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line); }
+.strip-head { font-size: 11px; letter-spacing: 2px; color: var(--text-faint); font-family: "SF Mono", Menlo, monospace; margin-bottom: 14px; }
+.strip-scroll { overflow-x: auto; padding-bottom: 8px; }
+.strip { display: flex; gap: 10px; }
+.strip-item { flex: 0 0 132px; }
+.strip-item img { width: 132px; height: 74px; object-fit: cover; border-radius: 3px; border: 1px solid var(--line); filter: brightness(0.7); transition: all .2s; }
+.strip-item:hover img { filter: brightness(1); border-color: var(--line-strong); }
+.strip-item.on img { border-color: var(--accent); filter: brightness(1); }
+.strip-item span { display: block; margin-top: 6px; font-size: 11px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 132px; }
+.strip-item.on span { color: var(--accent); }
+.strip-item em { font-size: 10px; color: var(--text-faint); font-style: normal; }
+
+.proj-nav { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); padding-top: 28px; padding-bottom: 72px; margin-top: 40px; font-size: 14px; color: var(--text-dim); }
 .proj-nav a:hover { color: var(--accent); }
+
 .btn {
-  display: inline-block; margin-top: 22px; padding: 11px 26px;
+  display: inline-block; margin-top: 4px; padding: 11px 26px;
   border: 1px solid var(--accent); border-radius: 30px; color: var(--accent);
   font-size: 13px; letter-spacing: 1.5px; transition: all .2s;
 }
@@ -302,7 +338,7 @@ footer.site .wrap { display: flex; justify-content: space-between; flex-wrap: wr
   nav.main a { font-size: 12px; }
   .grid, .grid.archive { grid-template-columns: 1fr 1fr; }
   .card.span-8, .card.span-6, .card.span-4 { grid-column: auto; }
-  .proj-body, .about-grid, .duo { grid-template-columns: 1fr; gap: 36px; }
+  .proj-lead, .about-grid, .duo { grid-template-columns: 1fr; gap: 28px; }
   .hero { min-height: 72vh; }
   .suite { grid-template-columns: 1fr; }
   .bins { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
