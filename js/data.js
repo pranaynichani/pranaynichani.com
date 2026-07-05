@@ -209,7 +209,7 @@ const PROJECTS = [
 
 // Career timeline extras (non-project clips)
 const TIMELINE_EXTRAS = [
-  { title: "Teaching — Seneca DFI", detail: "Professor, Non-Fiction Editing · 2022–2024", start: 2022, end: 2024.9, type: "teaching" },
+  { title: "Teaching — Seneca DFI", detail: "Professor, Non-Fiction Editing · 2022–2024", start: 2022, end: 2024.9, type: "teaching", page: "teaching.html" },
   { title: "Transfer", detail: "Editor — Best Editing, Int'l British Film Fest 2020", start: 2020, end: 2020.9, type: "short",
     video: "https://youtu.be/9MfryYg026I" }
 ];
