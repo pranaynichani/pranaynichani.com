@@ -229,6 +229,13 @@ function renderTimeline() {
     } else if (c.href) {
       location.href = c.href;
     }
+    // reflect the selection in the bins panel (open its bin, highlight it)
+    const binsEl = document.getElementById("bins");
+    if (binsEl) {
+      binsEl.querySelectorAll(".bin-item.on").forEach(b => b.classList.remove("on"));
+      const item = binsEl.querySelector(`.bin-item[data-ci="${clips.indexOf(c)}"]`);
+      if (item) { item.classList.add("on"); const g = item.closest(".bin-group"); if (g) g.classList.add("open"); }
+    }
   }
 
   host.querySelectorAll(".tl-clip").forEach(el => {
@@ -247,17 +254,27 @@ function renderTimeline() {
       { key: "short", label: "Shorts" }, { key: "commercial", label: "Commercial" },
       { key: "teaching", label: "Teaching" }
     ];
-    bins.innerHTML = `<p class="bins-head">BINS</p>` + groups.map(g => {
-      const n = clips.filter(c => c.type === g.key).length;
-      return `<button class="bin" data-bin="${g.key}"><span class="bin-icon">▸</span> ${g.label} <span class="bin-count">${n}</span></button>`;
-    }).join("");
-    bins.querySelectorAll(".bin").forEach(btn => {
-      btn.addEventListener("click", () => {
-        bins.querySelectorAll(".bin.on").forEach(b => b.classList.remove("on"));
-        btn.classList.add("on");
-        const first = clips.filter(c => c.type === btn.dataset.bin).sort((a, b) => b.start - a.start)[0];
-        const el = [...host.querySelectorAll(".tl-clip")].find(x => byIdx[x.dataset.i] === first);
-        if (first) loadClip(first, el);
+    const clipEls = [...host.querySelectorAll(".tl-clip")];
+    const findEl = c => clipEls.find(x => byIdx[x.dataset.i] === c);
+
+    bins.innerHTML = `<p class="bins-head">BINS · CLICK TO OPEN</p><div class="bins-list">` + groups.map(g => {
+      const items = clips.map((c, i) => [c, i]).filter(([c]) => c.type === g.key)
+        .sort((a, b) => b[0].start - a[0].start);
+      if (!items.length) return "";
+      return `<div class="bin-group" data-bin="${g.key}">
+        <button class="bin-header"><span class="bin-icon">▸</span><span class="bin-label">${g.label}</span><span class="bin-count">${items.length}</span></button>
+        <div class="bin-items">${items.map(([c, i]) =>
+          `<button class="bin-item" data-ci="${i}"><span class="bin-dot">${c.editor ? "◆" : "▸"}</span><span class="bin-title">${esc(c.title)}</span></button>`).join("")}</div>
+      </div>`;
+    }).join("") + `</div>`;
+
+    bins.querySelectorAll(".bin-header").forEach(h => {
+      h.addEventListener("click", () => h.parentElement.classList.toggle("open"));
+    });
+    bins.querySelectorAll(".bin-item").forEach(it => {
+      it.addEventListener("click", () => {
+        const c = clips[+it.dataset.ci];
+        loadClip(c, findEl(c));
       });
     });
   }
