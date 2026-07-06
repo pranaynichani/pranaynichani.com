@@ -156,10 +156,17 @@ section.suite-hero.stage-static::after { height: 44px; }
 .ho-text-small { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 20px 26px; opacity: 0; }
 .ho-text-small .hero-kicker { font-size: 10px; letter-spacing: 2px; color: var(--accent); margin-bottom: 6px; }
 .ho-title-small { font-family: var(--font-display); font-weight: 350; font-size: clamp(18px, 2.2vw, 28px); line-height: 1.15; max-width: 540px; }
-/* bins panel — stretches to the monitor's full height (grid align: stretch) */
-.bins { border: 1px solid var(--line); border-radius: 6px; background: var(--bg); padding: 12px 10px; display: flex; flex-direction: column; min-height: 0; }
+/* bins panel — the cell is the grid item; the panel is absolutely positioned
+   inside it so open bins contribute ZERO height to the grid row. The row is
+   sized by the monitor alone, and the bins list scrolls internally. */
+.bins-cell { position: relative; min-height: 0; }
+.bins { position: absolute; inset: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); padding: 12px 10px; display: flex; flex-direction: column; min-height: 0; }
 .bins-head { font-size: 10px; letter-spacing: 2px; color: var(--text-faint); font-family: "SF Mono", Menlo, monospace; margin: 2px 4px 8px; flex-shrink: 0; }
 .bins-list { flex: 1; overflow-y: auto; min-height: 0; margin: 0 -4px; padding: 0 4px; }
+.bins-list::-webkit-scrollbar { width: 8px; }
+.bins-list::-webkit-scrollbar-track { background: transparent; }
+.bins-list::-webkit-scrollbar-thumb { background: #3d3d3d; border-radius: 4px; }
+.bins-list::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
 
 .bin-group { border-bottom: 1px solid var(--line); }
 .bin-group:last-child { border-bottom: none; }
@@ -433,7 +440,9 @@ footer.site .wrap { display: flex; justify-content: space-between; flex-wrap: wr
   .proj-lead, .about-grid, .duo { grid-template-columns: 1fr; gap: 28px; }
   .hero { min-height: 72vh; }
   .suite { grid-template-columns: 1fr; }
-  .bins { max-height: 320px; }
+  /* stacked layout: absolute panel would collapse to 0 height — revert to flow */
+  .bins-cell { position: static; }
+  .bins { position: static; max-height: 320px; }
 }
 @media (max-width: 560px) {
   .grid, .grid.archive { grid-template-columns: 1fr; }

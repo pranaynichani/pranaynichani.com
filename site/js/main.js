@@ -356,7 +356,12 @@ function renderTimeline() {
     if (!bx) return;
     bx.querySelectorAll(".bin-item.on").forEach(b => b.classList.remove("on"));
     const item = bx.querySelector(sel);
-    if (item) { item.classList.add("on"); const g = item.closest(".bin-group"); if (g) g.classList.add("open"); }
+    if (item) {
+      item.classList.add("on");
+      const g = item.closest(".bin-group");
+      if (g) g.classList.add("open");
+      item.scrollIntoView({ block: "nearest" });
+    }
   }
 
   // a timeline clip / regular bin item
