@@ -26,39 +26,51 @@
 </header>
 
 <section class="block timeline-section suite-hero" id="timeline-suite">
-  <div class="wrap">
-    <div class="suite">
-      <div class="bins" id="bins"></div>
-      <div class="monitor">
-        <div class="mon-screen" id="mon-screen">
-          <div class="mon-hero" id="mon-hero">
-            <div class="mon-hero-text">
-              <p class="hero-kicker">POST-PRODUCTION · ASSISTANT EDITOR · EDITOR — TORONTO</p>
-              <h1 class="hero-title">I get documentaries from the shoot to the screen.</h1>
-              <p class="hero-sub">Fifteen years across features, series, and shorts — from an Academy Award–nominated feature to Peabody-winning television.</p>
+  <div class="suite-sticky" id="suite-sticky">
+    <div class="wrap">
+      <div class="suite">
+        <div class="bins" id="bins"></div>
+        <div class="monitor">
+          <span class="mon-label">PROGRAM</span>
+          <div class="mon-screen" id="mon-screen"></div>
+          <div class="mon-bar">
+            <div>
+              <p class="tl-title" id="tl-title">Pranay Nichani — ten years on the timeline</p>
+              <p class="tl-detail" id="tl-detail">Hover a clip to scrub · click to play it here</p>
+            </div>
+            <div class="mon-controls">
+              <span class="mon-tc" id="mon-tc">01:00:00:00</span>
+              <button class="ap-toggle" id="autoplay-toggle" role="switch" aria-checked="true" title="Autoplay a clip the moment you click it">
+                <span class="ap-track"><span class="ap-thumb"></span></span>
+                <span class="ap-label">Autoplay</span>
+              </button>
+              <a id="mon-open" href="#" style="display:none">OPEN PROJECT →</a>
             </div>
           </div>
         </div>
-        <div class="mon-bar">
-          <div>
-            <p class="tl-title" id="tl-title">Pranay Nichani — ten years on the timeline</p>
-            <p class="tl-detail" id="tl-detail">Hover a clip to scrub · click to play it here</p>
-          </div>
-          <div class="mon-controls">
-            <button class="ap-toggle" id="autoplay-toggle" role="switch" aria-checked="true" title="Autoplay a clip the moment you click it">
-              <span class="ap-track"><span class="ap-thumb"></span></span>
-              <span class="ap-label">Autoplay</span>
-            </button>
-            <a id="mon-open" href="#" style="display:none">OPEN PROJECT →</a>
-          </div>
-        </div>
+      </div>
+      <div class="tl-scroll"><div class="tl-inner" id="timeline"></div></div>
+      <div class="tl-legend">
+        <span class="editor-key">Editor / director credit</span>
+        <span>Everything else: assistant editor &amp; post-production</span>
+        <span class="tl-hint">CLICK A CLIP TO PLAY IT IN THE MONITOR</span>
       </div>
     </div>
-    <div class="tl-scroll"><div class="tl-inner" id="timeline"></div></div>
-    <div class="tl-legend">
-      <span class="editor-key">Editor / director credit</span>
-      <span>Everything else: assistant editor &amp; post-production</span>
-      <span class="tl-hint">CLICK A CLIP TO PLAY IT IN THE MONITOR</span>
+    <div class="hero-overlay" id="hero-overlay">
+      <div class="ho-slides" id="ho-slides"></div>
+      <div class="ho-shade"></div>
+      <div class="ho-text-big" id="ho-text-big">
+        <div class="wrap">
+          <p class="hero-kicker">POST-PRODUCTION · ASSISTANT EDITOR · EDITOR — TORONTO</p>
+          <h1 class="hero-title">I get documentaries from the shoot to the screen.</h1>
+          <p class="hero-sub">Fifteen years across features, series, and shorts — from an Academy Award–nominated feature to Peabody-winning television.</p>
+          <p class="ho-scroll-hint">SCROLL — THE EDIT SUITE LOADS ↓</p>
+        </div>
+      </div>
+      <div class="ho-text-small" id="ho-text-small">
+        <p class="hero-kicker">POST-PRODUCTION · ASSISTANT EDITOR · EDITOR — TORONTO</p>
+        <p class="ho-title-small">I get documentaries from the shoot to the screen.</p>
+      </div>
     </div>
   </div>
 </section>

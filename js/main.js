@@ -127,7 +127,7 @@ function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
   const years = [];
   for (let y = TL_Y0; y < TL_Y1; y += 2) years.push(`<span>${y}</span>`);
 
-  let html = `<div class="tl-years">${years.join("")}</div>`;
+  let html = `<div class="tl-years">${years.join("")}</div><div class="tl-ticks" aria-hidden="true"></div>`;
   const trackNames = { feature: "V1 · FEATURES", series: "V2 · SERIES", other: "V3 · SHORTS + MORE" };
   let idx = 0;
   const byIdx = [];
@@ -158,6 +158,22 @@ function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
       html += `</div>`;
     });
   }
+  if (!mini) {
+    // decorative A1 audio track — pure NLE garnish
+    const aStart = tlPct(2014), aEnd = tlPct(2025.85);
+    let bars = "";
+    for (let x = 0; x < 240; x++) {
+      const h = 14 + 72 * Math.abs(Math.sin(x * 0.83) * 0.55 + Math.sin(x * 0.19) * 0.45);
+      bars += `<rect x="${x * 4}" y="${(100 - h) / 2}" width="2.4" height="${h.toFixed(1)}"/>`;
+    }
+    html += `<p class="tl-track-name">A1 · STEREO MIX</p>
+      <div class="tl-track tl-audio-track">
+        <div class="tl-audio" style="left:${aStart}%;width:${(aEnd - aStart)}%">
+          <svg viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
+          <span>PRANAY_CAREER_MIX.wav</span>
+        </div>
+      </div>`;
+  }
   html += `<div class="tl-playhead"${currentMid !== null ? ` style="left:${currentMid}%"` : ` style="left:60%"`}></div>`;
   return { html, byIdx };
 }
@@ -172,21 +188,16 @@ function renderTimeline() {
 
   const screen = $("#mon-screen"), readTitle = $("#tl-title"), readDetail = $("#tl-detail");
   const openLink = $("#mon-open"), playhead = host.querySelector(".tl-playhead");
-  const heroBox = $("#mon-hero");
   let heroMode = true, heroTimer = null;
   let current = null;
 
-  // --- hero slideshow inside the monitor (runs until a clip is clicked) ---
+  // --- hero slideshow in the overlay (full-screen, docks into the monitor on scroll) ---
+  const overlay = $("#hero-overlay"), slidesBox = $("#ho-slides");
   const slides = PROJECTS.filter(p => p.featured);
-  if (heroBox) {
-    slides.forEach((p, i) => {
-      const im = document.createElement("img");
-      im.src = still(p);
-      im.alt = `Still from ${p.title}`;
-      if (i === 0) im.className = "on";
-      heroBox.prepend(im);
-    });
-    const imgs = [...heroBox.querySelectorAll("img")];
+  if (slidesBox) {
+    slidesBox.innerHTML = slides.map((p, i) =>
+      `<img src="${still(p)}" alt="Still from ${esc(p.title)}" class="${i === 0 ? "on" : ""}">`).join("");
+    const imgs = [...slidesBox.querySelectorAll("img")];
     const captions = slides.map(p => `Now showing: ${p.title}${p.award ? " — " + p.award : ""}`);
     readDetail.textContent = captions[0] + " · hover a clip to scrub · click to play";
     let i = 0;
@@ -196,6 +207,85 @@ function renderTimeline() {
       imgs[i].classList.add("on");
       if (heroMode) readDetail.textContent = captions[i] + " · hover a clip to scrub · click to play";
     }, 6000);
+  }
+
+  // --- scroll-driven docking: hero shrinks into the program monitor,
+  //     bins slide in from the left, timeline rises from below ---
+  const sticky = $("#suite-sticky"), section = $("#timeline-suite");
+  const binsPanel = $("#bins"), monitorEl = document.querySelector(".monitor");
+  const tlScroll = section && section.querySelector(".tl-scroll");
+  const tlLegend = section && section.querySelector(".tl-legend");
+  const textBig = $("#ho-text-big"), textSmall = $("#ho-text-small");
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const ease = t => t * t * (3 - 2 * t);
+  const staticStage = window.matchMedia("(max-width: 860px)").matches ||
+                      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function stageAt(p) {
+    if (!overlay || !sticky) return;
+    const sR = sticky.getBoundingClientRect();
+    const mR = screen.getBoundingClientRect();
+    const full = { left: 0, top: 0, w: sR.width, h: Math.min(window.innerHeight - sR.top, sR.height) };
+    const dock = { left: mR.left - sR.left, top: mR.top - sR.top, w: mR.width, h: mR.height };
+    const e = ease(p), L = (a, b) => a + (b - a) * e;
+    overlay.style.left = L(full.left, dock.left) + "px";
+    overlay.style.top = L(full.top, dock.top) + "px";
+    overlay.style.width = L(full.w, dock.w) + "px";
+    overlay.style.height = L(full.h, dock.h) + "px";
+    overlay.style.borderRadius = (6 * e) + "px";
+    if (textBig) {
+      const o = clamp01(1 - p / 0.35);
+      textBig.style.opacity = o;
+      textBig.style.transform = `translateY(${(1 - o) * -26}px)`;
+      textBig.style.visibility = o <= 0 ? "hidden" : "";
+    }
+    if (textSmall) textSmall.style.opacity = clamp01((p - 0.75) / 0.25);
+    const slideIn = (el, from, at, span) => {
+      if (!el) return;
+      const o = ease(clamp01((p - at) / span));
+      el.style.opacity = o;
+      el.style.transform = `translate(${from[0] * (1 - o)}px, ${from[1] * (1 - o)}px)`;
+      el.style.pointerEvents = o > 0.6 ? "" : "none";
+    };
+    slideIn(binsPanel, [-36, 0], 0.40, 0.45);
+    slideIn(monitorEl && monitorEl.querySelector(".mon-bar"), [0, 14], 0.55, 0.40);
+    slideIn(tlScroll, [0, 44], 0.50, 0.45);
+    slideIn(tlLegend, [0, 24], 0.65, 0.35);
+  }
+
+  let stageTicking = false;
+  function onStageScroll() {
+    if (stageTicking) return;
+    stageTicking = true;
+    requestAnimationFrame(() => {
+      stageTicking = false;
+      if (!heroMode && overlay && overlay.classList.contains("gone")) { stageAt(1); return; }
+      const runway = section.offsetHeight - sticky.offsetHeight;
+      const p = runway > 0 ? clamp01(-section.getBoundingClientRect().top / runway) : 1;
+      stageAt(p);
+    });
+  }
+  if (overlay && sticky) {
+    if (staticStage) {
+      section.classList.add("stage-static");
+      stageAt(1);
+      window.addEventListener("resize", () => stageAt(1));
+    } else {
+      window.addEventListener("scroll", onStageScroll, { passive: true });
+      window.addEventListener("resize", onStageScroll);
+      onStageScroll();
+    }
+  }
+
+  // --- program timecode (23.976-flavoured, starts at 01:00:00:00) ---
+  const tcEl = $("#mon-tc");
+  if (tcEl) {
+    const t0 = performance.now();
+    const pad = n => String(n).padStart(2, "0");
+    setInterval(() => {
+      const f = Math.floor((performance.now() - t0) / 1000 * 24);
+      tcEl.textContent = `01:${pad(Math.floor(f / 1440) % 60)}:${pad(Math.floor(f / 24) % 60)}:${pad(f % 24)}`;
+    }, 42);
   }
 
   // preload poster frames so loading feels instant
@@ -227,7 +317,11 @@ function renderTimeline() {
   // core: put a spec {title, detail, video, poster, href, page} into the monitor
   function showMonitor(spec, clipEl) {
     if (spec.page) { location.href = DEPTH + spec.page; return; }
-    if (heroMode) { heroMode = false; clearInterval(heroTimer); }
+    if (heroMode) {
+      heroMode = false;
+      clearInterval(heroTimer);
+      if (overlay) overlay.classList.add("gone");
+    }
     host.querySelectorAll(".tl-clip.lit").forEach(x => x.classList.remove("lit"));
     if (clipEl) { clipEl.classList.add("lit"); playhead.style.left = clipEl.dataset.mid + "%"; }
     readTitle.textContent = spec.title;
