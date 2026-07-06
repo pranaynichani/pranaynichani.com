@@ -49,26 +49,26 @@ function ytFallback(node, url, poster) {
 
 // Mount a player into the given div (`el` is consumed/replaced by the iframe).
 // On any embedding error, swap in a clean "Watch on YouTube" fallback.
+// Returns a promise resolving to the YT.Player instance (or null if no id),
+// so callers that need real transport control (play/pause) can keep it.
 function mountYouTube(el, url, opts = {}) {
   const { autoplay = false, poster = null } = opts;
   const id = ytId(url);
-  if (!id) return;
-  ytApi().then(YT => {
-    new YT.Player(el, {
-      videoId: id,
-      playerVars: { rel: 0, modestbranding: 1, playsinline: 1, autoplay: autoplay ? 1 : 0, origin: location.origin },
-      events: {
-        onReady: e => { if (autoplay) { try { e.target.playVideo(); } catch (_) {} } },
-        onError: e => ytFallback(e.target.getIframe(), ytWatch(url), poster)
-      }
-    });
-  });
+  if (!id) return Promise.resolve(null);
+  return ytApi().then(YT => new YT.Player(el, {
+    videoId: id,
+    playerVars: { rel: 0, modestbranding: 1, playsinline: 1, autoplay: autoplay ? 1 : 0, origin: location.origin },
+    events: {
+      onReady: e => { if (autoplay) { try { e.target.playVideo(); } catch (_) {} } },
+      onError: e => ytFallback(e.target.getIframe(), ytWatch(url), poster)
+    }
+  }));
 }
 
 // Replace a media frame's contents with a fresh mount point and load a video.
 function loadVideoInto(frame, url, poster, autoplay) {
   frame.innerHTML = `<div class="ytm"></div>`;
-  mountYouTube(frame.querySelector(".ytm"), url, { autoplay, poster });
+  return mountYouTube(frame.querySelector(".ytm"), url, { autoplay, poster });
 }
 
 // ---------- cards ----------
@@ -105,6 +105,17 @@ function buildClips() {
     start: x.start, end: x.end, href: null, video: x.video || null, poster: null,
     page: x.page || null, editor: x.type !== "teaching"
   })));
+}
+
+// decorative NLE waveform bars — shared by the desktop A1 track and the
+// mobile Rush editor's A1 strip
+function audioBarsSvg(n = 240) {
+  let bars = "";
+  for (let x = 0; x < n; x++) {
+    const h = 14 + 72 * Math.abs(Math.sin(x * 0.83) * 0.55 + Math.sin(x * 0.19) * 0.45);
+    bars += `<rect x="${x * 4}" y="${(100 - h) / 2}" width="2.4" height="${h.toFixed(1)}"/>`;
+  }
+  return bars;
 }
 
 // greedy lane packing inside each track so clips never overlap
@@ -164,15 +175,10 @@ function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
   if (!mini) {
     // decorative A1 audio track — pure NLE garnish
     const aStart = tlPct(2014), aEnd = tlPct(2025.85);
-    let bars = "";
-    for (let x = 0; x < 240; x++) {
-      const h = 14 + 72 * Math.abs(Math.sin(x * 0.83) * 0.55 + Math.sin(x * 0.19) * 0.45);
-      bars += `<rect x="${x * 4}" y="${(100 - h) / 2}" width="2.4" height="${h.toFixed(1)}"/>`;
-    }
     html += `<div class="tl-track tl-audio-track">
         <span class="tl-track-tag">A1 · MIX</span>
         <div class="tl-audio" style="left:${aStart}%;width:${(aEnd - aStart)}%">
-          <svg viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
+          <svg viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true">${audioBarsSvg()}</svg>
           <span>PRANAY_CAREER_MIX.wav</span>
         </div>
       </div>`;
@@ -199,9 +205,14 @@ function renderTimeline() {
   const overlay = $("#hero-overlay"), slidesBox = $("#ho-slides");
   const slides = PROJECTS.filter(p => p.featured);
   if (slidesBox) {
+    // each slide carries a blurred, zoomed copy of the same still (the .ho-slide-bg
+    // layer) that mobile shows behind a fully-visible (contain) image — no poster
+    // text ever gets cropped. Desktop hides the backdrop and keeps the cover fill.
+    // (The backdrop path is an inline style so it resolves against the page, like
+    // the <img>, not against the stylesheet.)
     slidesBox.innerHTML = slides.map((p, i) =>
-      `<img src="${still(p)}" alt="Still from ${esc(p.title)}" class="${i === 0 ? "on" : ""}">`).join("");
-    const imgs = [...slidesBox.querySelectorAll("img")];
+      `<div class="ho-slide${i === 0 ? " on" : ""}"><div class="ho-slide-bg" style="background-image:url('${still(p)}')"></div><img src="${still(p)}" alt="Still from ${esc(p.title)}"></div>`).join("");
+    const imgs = [...slidesBox.querySelectorAll(".ho-slide")];
     const captions = slides.map(p => `Now showing: ${p.title}${p.award ? " — " + p.award : ""}`);
     readDetail.textContent = captions[0] + " · hover a clip to scrub · click to play";
     let i = 0;
@@ -273,11 +284,12 @@ function renderTimeline() {
   }
   if (overlay && sticky) {
     if (isMobileStage) {
-      // phones get a plain full-width hero — no docking, edit-suite hidden by CSS
+      // phones get a plain full-width hero, then their own Rush-style mini-editor
       section.classList.add("stage-mobile");
       overlay.removeAttribute("style");
       if (textBig) textBig.removeAttribute("style");
       if (textSmall) textSmall.style.display = "none";
+      renderMobileEditor(clips, section);
     } else if (reducedMotion) {
       section.classList.add("stage-static");
       stageAt(1);
@@ -486,6 +498,226 @@ function renderTimeline() {
   window.addEventListener("pointerup", () => { phDrag = false; playhead.style.transition = ""; });
 }
 
+// ---------- mobile "Rush" editor: vertical scroll-scrub timeline ----------
+const RUSH_ICONS = {
+  all: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="2.5" width="6.5" height="6.5" rx="1"/><rect x="11" y="2.5" width="6.5" height="6.5" rx="1"/><rect x="2.5" y="11" width="6.5" height="6.5" rx="1"/><rect x="11" y="11" width="6.5" height="6.5" rx="1"/></svg>`,
+  feature: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2.5 7l1.3-3.5h12.4L17.5 7"/><rect x="2.5" y="7" width="15" height="10.5" rx="1"/><path d="M2.5 7l2.6-3.5M8.3 7l2.6-3.5M14.1 7l2.6-3.5"/></svg>`,
+  series: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M10 2.5l7.5 4L10 10.5l-7.5-4 7.5-4z"/><path d="M2.5 10.5l7.5 4 7.5-4"/><path d="M2.5 14l7.5 4 7.5-4"/></svg>`,
+  short: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="5" cy="5" r="2.4"/><circle cx="5" cy="15" r="2.4"/><path d="M16.5 3.5L7 10M16.5 16.5L7 10"/></svg>`,
+  commercial: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.3v3.4h3.3l5 3.3V5l-5 3.3H2.5z"/><path d="M14 7.3a3.2 3.2 0 010 5.4"/></svg>`
+};
+const RUSH_PLAY = `<svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6V4z"/></svg>`;
+const RUSH_PAUSE = `<svg viewBox="0 0 20 20" fill="currentColor"><rect x="5" y="4" width="3.4" height="12"/><rect x="11.6" y="4" width="3.4" height="12"/></svg>`;
+const RUSH_SKIPBACK = `<svg viewBox="0 0 20 20" fill="currentColor"><path d="M16 4.5L7 10l9 5.5v-11z"/><rect x="4" y="4.5" width="2" height="11"/></svg>`;
+const RUSH_SKIPFWD = `<svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4.5L13 10l-9 5.5v-11z"/><rect x="14" y="4.5" width="2" height="11"/></svg>`;
+const RUSH_BIGGER = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="3" width="16" height="14" rx="1.5"/></svg>`;
+const RUSH_SMALLER = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="5" y="7.5" width="10" height="5" rx="1"/></svg>`;
+const RUSH_CHEVRON = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg>`;
+const RUSH_TABS = [
+  { key: "all", label: "All" }, { key: "feature", label: "Features" },
+  { key: "series", label: "Series" }, { key: "short", label: "Shorts" },
+  { key: "commercial", label: "Commercial" }
+];
+
+// Builds the mobile-only Rush-style mini-editor (sticky chrome + a vertical
+// scroll-scrub timeline of poster cards) and appends it into `section`.
+// Desktop is untouched — this only ever runs from the isMobileStage branch.
+function renderMobileEditor(clips, section) {
+  const sorted = [...clips].filter(c => c.title).sort((a, b) => b.start - a.start);
+  if (!sorted.length) return;
+
+  const posterFor = c => c.poster || ytThumb(c.video);
+  const awardFor = c => c.slug ? (PROJECTS.find(p => p.slug === c.slug) || {}).award : null;
+
+  const cardsHtml = sorted.map((c, i) => {
+    const poster = posterFor(c), award = awardFor(c), yr = Math.round(c.start);
+    const media = poster
+      ? `<img src="${poster}" alt="Still from ${esc(c.title)}" loading="lazy">`
+      : `<div class="rt-noposter">${esc((c.type || "").toUpperCase())}</div>`;
+    return `<div class="rt-card" data-i="${i}" data-type="${c.type}">
+      <span class="rt-yr">${yr}</span><span class="rt-dot"></span>
+      <div class="rt-media">
+        ${media}
+        ${award ? `<span class="rt-tag">${esc(award)}</span>` : ""}
+        <span class="rt-now">▶ now in the monitor</span>
+        ${c.video ? `<button class="rt-play" aria-label="Play trailer for ${esc(c.title)}">${RUSH_PLAY}</button>` : ""}
+      </div>
+      <div class="rt-meta"><h3>${esc(c.title)}<span class="rt-now-text">▶ now in the monitor</span></h3><p>${esc(c.detail)}</p></div>
+    </div>`;
+  }).join("");
+
+  const html = `
+  <div class="rush-mobile" id="rush-mobile">
+    <div class="rush-sticky" id="rush-sticky">
+      <div class="rush-appbar">
+        <a class="rush-back" href="${DEPTH}work.html">‹ Work</a>
+        <span class="rush-brand">PRANAY NICHANI</span>
+        <div class="rush-appbar-actions">
+          <button class="rush-skip" id="rush-skip" aria-label="Skip past the timeline to Selected work" title="Skip to Selected work">${RUSH_CHEVRON}</button>
+          <a class="rush-share" href="#contact" aria-label="Contact">⤴</a>
+        </div>
+      </div>
+      <div class="rush-program"><span class="rush-program-tag">● PROGRAM</span><div class="rush-screen" id="rush-screen"></div></div>
+      <div class="rush-readout">
+        <div class="rush-readout-text"><h3 id="rush-title"></h3><p id="rush-detail"></p></div>
+        <a class="rush-open" id="rush-open" href="#">OPEN PROJECT →</a>
+      </div>
+      <div class="rush-transport">
+        <button id="rush-back-btn" aria-label="Previous clip">${RUSH_SKIPBACK}</button>
+        <button id="rush-play-btn" aria-label="Play or pause">${RUSH_PLAY}</button>
+        <button id="rush-fwd-btn" aria-label="Next clip">${RUSH_SKIPFWD}</button>
+        <button id="rt-size-bigger" class="rush-size-btn" title="Bigger cards" aria-label="Bigger cards">${RUSH_BIGGER}</button>
+        <button id="rt-size-smaller" class="rush-size-btn" title="Smaller cards" aria-label="Smaller cards">${RUSH_SMALLER}</button>
+        <span class="rush-tc" id="rush-tc">01:00:00:00</span>
+      </div>
+      <div class="rush-toolbar" id="rush-toolbar">
+        ${RUSH_TABS.map(t => `<button class="rush-tab${t.key === "all" ? " on" : ""}" data-filter="${t.key}">${RUSH_ICONS[t.key]}<span>${t.label}</span></button>`).join("")}
+      </div>
+    </div>
+    <div class="rush-timeline" id="rush-timeline"><div class="rt-rail"></div>${cardsHtml}</div>
+  </div>`;
+
+  section.insertAdjacentHTML("beforeend", html);
+
+  // ---- wiring ----
+  const screen = $("#rush-screen"), titleEl = $("#rush-title"), detailEl = $("#rush-detail");
+  const tcEl = $("#rush-tc"), playBtn = $("#rush-play-btn"), openBtn = $("#rush-open");
+  const stickyEl = $("#rush-sticky");
+  const cardEls = [...document.querySelectorAll(".rt-card")];
+  let activeIndex = -1, currentPlayer = null;
+
+  const pad = n => String(n).padStart(2, "0");
+  const setTC = i => { tcEl.textContent = `01:00:${pad(i % 60)}:${pad((i * 7) % 24)}`; };
+
+  function showPoster(c) {
+    const poster = posterFor(c);
+    screen.innerHTML = poster ? `<img src="${poster}" alt="${esc(c.title)}">` : `<div class="mon-empty">No preview</div>`;
+    currentPlayer = null;
+    playBtn.innerHTML = RUSH_PLAY;
+    playBtn.setAttribute("aria-label", c.video ? "Play trailer" : "No trailer available");
+  }
+
+  function playTrailer(c) {
+    if (!c.video) return;
+    loadVideoInto(screen, c.video, posterFor(c), true).then(player => {
+      currentPlayer = player;
+      playBtn.innerHTML = RUSH_PAUSE;
+      playBtn.setAttribute("aria-label", "Pause trailer");
+    });
+  }
+
+  function setActive(i) {
+    if (i === activeIndex || i < 0 || i >= sorted.length) return;
+    activeIndex = i;
+    const c = sorted[i], award = awardFor(c);
+    cardEls.forEach(el => el.classList.toggle("active", +el.dataset.i === i));
+    titleEl.textContent = c.title;
+    detailEl.textContent = c.detail + (award ? " · " + award : "") + (c.page ? " · OPENS A PAGE" : "");
+    setTC(i);
+    showPoster(c);
+    // OPEN PROJECT → jumps to this film's project page (or the extra's page);
+    // hidden for entries with no destination of their own
+    const dest = c.href || (c.page ? DEPTH + c.page : null);
+    if (dest) { openBtn.style.display = ""; openBtn.href = dest; }
+    else openBtn.style.display = "none";
+  }
+
+  // tap the PROGRAM preview to play the active clip's trailer
+  screen.addEventListener("click", () => {
+    if (activeIndex < 0 || currentPlayer) return;
+    playTrailer(sorted[activeIndex]);
+  });
+
+  // cards: tap to select (loads it into the PROGRAM monitor). Page-links
+  // navigate; tapping the already-selected card (or its play button) plays it.
+  cardEls.forEach(el => {
+    const i = +el.dataset.i, c = sorted[i];
+    el.addEventListener("click", e => {
+      if (c.page) { location.href = DEPTH + c.page; return; }
+      if (e.target.closest(".rt-play")) { setActive(i); playTrailer(c); return; }
+      if (i === activeIndex) playTrailer(c);
+      else setActive(i);
+    });
+  });
+
+  // transport: real play/pause + real prev/next (scrolls to the neighbouring card)
+  playBtn.addEventListener("click", () => {
+    if (activeIndex < 0) return;
+    const c = sorted[activeIndex];
+    if (!currentPlayer) { playTrailer(c); return; }
+    if (currentPlayer.getPlayerState && currentPlayer.getPlayerState() === 1) {
+      currentPlayer.pauseVideo(); playBtn.innerHTML = RUSH_PLAY; playBtn.setAttribute("aria-label", "Play trailer");
+    } else {
+      currentPlayer.playVideo(); playBtn.innerHTML = RUSH_PAUSE; playBtn.setAttribute("aria-label", "Pause trailer");
+    }
+  });
+  $("#rush-back-btn").addEventListener("click", () => {
+    const target = cardEls.slice(0, activeIndex).reverse().find(el => el.style.display !== "none");
+    if (target) { setActive(+target.dataset.i); target.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  });
+  $("#rush-fwd-btn").addEventListener("click", () => {
+    const target = cardEls.slice(activeIndex + 1).find(el => el.style.display !== "none");
+    if (target) { setActive(+target.dataset.i); target.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  });
+
+  // bottom tool-bar: filter the vertical timeline by category
+  const tabs = [...document.querySelectorAll(".rush-tab")];
+  tabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabs.forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      const f = btn.dataset.filter;
+      cardEls.forEach(el => { el.style.display = (f === "all" || el.dataset.type === f) ? "" : "none"; });
+      const activeEl = cardEls[activeIndex];
+      if (activeEl && activeEl.style.display === "none") {
+        const next = cardEls.find(el => el.style.display !== "none");
+        if (next) { setActive(+next.dataset.i); next.scrollIntoView({ behavior: "smooth", block: "center" }); }
+      }
+    });
+  });
+
+  // card size: a live "Bigger / Smaller" stepper over the poster aspect-ratio,
+  // remembered between visits via localStorage. The last (default) step drops
+  // the poster entirely for a plain-text list, like the desktop mini-timeline.
+  const RT_SIZES = ["16/8.5", "16/7", "16/5.5", "16/4.4", "text"];
+  const timelineEl = $("#rush-timeline");
+  let rtSizeIdx = parseInt(localStorage.getItem("rushCardSize"), 10);
+  if (isNaN(rtSizeIdx) || rtSizeIdx < 0 || rtSizeIdx >= RT_SIZES.length) rtSizeIdx = RT_SIZES.length - 1;
+  function applyCardSize() {
+    const val = RT_SIZES[rtSizeIdx];
+    const textMode = val === "text";
+    timelineEl.classList.toggle("rt-text", textMode);
+    if (!textMode) document.documentElement.style.setProperty("--rt-ar", val);
+    localStorage.setItem("rushCardSize", rtSizeIdx);
+  }
+  $("#rt-size-bigger").addEventListener("click", () => { rtSizeIdx = Math.max(0, rtSizeIdx - 1); applyCardSize(); });
+  $("#rt-size-smaller").addEventListener("click", () => { rtSizeIdx = Math.min(RT_SIZES.length - 1, rtSizeIdx + 1); applyCardSize(); });
+
+  // Selection is tap-driven only — scrolling the timeline never changes what's
+  // loaded in the monitor. Keep the sticky editor pinned just under the header.
+  function syncStickyTop() {
+    stickyEl.style.top = document.querySelector("header.site").offsetHeight + "px";
+  }
+  syncStickyTop();
+  window.addEventListener("resize", syncStickyTop);
+
+  // The monitor is not a scroll trap: a swipe/scroll starting on it scrolls the
+  // page normally (following the finger) like any other content, so you stay in
+  // control of the pace instead of being flung to the next section.
+
+  // deliberate "skip past the timeline" chevron in the app bar
+  $("#rush-skip").addEventListener("click", () => {
+    const next = document.getElementById("selected-work");
+    if (!next) return;
+    const headerH = document.querySelector("header.site").offsetHeight;
+    const y = next.getBoundingClientRect().top + window.scrollY - headerH - 8;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  });
+
+  applyCardSize();
+  setActive(0);
+}
+
 // ---------- work page: archive + filters ----------
 function renderArchive() {
   const host = $("#archive-grid");
@@ -591,8 +823,23 @@ function watchReveals() {
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 }
 
+// ---------- header: hamburger nav (mobile) ----------
+function wireNavToggle() {
+  const btn = $("#nav-toggle"), header = document.querySelector("header.site");
+  if (!btn || !header) return;
+  btn.addEventListener("click", () => {
+    const open = header.classList.toggle("nav-open");
+    btn.setAttribute("aria-expanded", String(open));
+  });
+  header.querySelectorAll("nav.main a").forEach(a => a.addEventListener("click", () => {
+    header.classList.remove("nav-open");
+    btn.setAttribute("aria-expanded", "false");
+  }));
+}
+
 renderFeatured();
 renderTimeline();
 renderArchive();
 renderProject();
 watchReveals();
+wireNavToggle();
