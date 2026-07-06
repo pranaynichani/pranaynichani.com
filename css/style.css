@@ -439,10 +439,21 @@ footer.site .wrap { display: flex; justify-content: space-between; flex-wrap: wr
   .card.span-8, .card.span-6, .card.span-4 { grid-column: auto; }
   .proj-lead, .about-grid, .duo { grid-template-columns: 1fr; gap: 28px; }
   .hero { min-height: 72vh; }
-  .suite { grid-template-columns: 1fr; }
-  /* stacked layout: absolute panel would collapse to 0 height — revert to flow */
-  .bins-cell { position: static; }
-  .bins { position: static; max-height: 320px; }
+
+  /* Phones get a plain full-width hero — the interactive edit suite (bins,
+     program monitor, scrubbable timeline) is a desktop-only experience and
+     is hidden here. Projects stay reachable via Selected work + the nav. */
+  section.suite-hero.stage-mobile { padding: 0; }
+  section.suite-hero.stage-mobile::after { display: none; }
+  .stage-mobile .suite-sticky { position: static; padding: 0; }
+  .stage-mobile > .suite-sticky > .wrap { display: none; }
+  .stage-mobile .hero-overlay {
+    position: relative; left: 0; top: 0; width: 100%; height: 82vh;
+    border-radius: 0; display: block;
+  }
+  .stage-mobile .ho-text-big { bottom: 6vh; }
+  .stage-mobile .ho-text-big .hero-title { font-size: clamp(30px, 8.5vw, 46px); }
+  .stage-mobile .ho-scroll-hint { display: none; }
 }
 @media (max-width: 560px) {
   .grid, .grid.archive { grid-template-columns: 1fr; }

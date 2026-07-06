@@ -222,8 +222,8 @@ function renderTimeline() {
   const textBig = $("#ho-text-big"), textSmall = $("#ho-text-small");
   const clamp01 = v => Math.max(0, Math.min(1, v));
   const ease = t => t * t * (3 - 2 * t);
-  const staticStage = window.matchMedia("(max-width: 860px)").matches ||
-                      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isMobileStage = window.matchMedia("(max-width: 860px)").matches;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function stageAt(p) {
     if (!overlay || !sticky) return;
@@ -272,7 +272,13 @@ function renderTimeline() {
     });
   }
   if (overlay && sticky) {
-    if (staticStage) {
+    if (isMobileStage) {
+      // phones get a plain full-width hero — no docking, edit-suite hidden by CSS
+      section.classList.add("stage-mobile");
+      overlay.removeAttribute("style");
+      if (textBig) textBig.removeAttribute("style");
+      if (textSmall) textSmall.style.display = "none";
+    } else if (reducedMotion) {
       section.classList.add("stage-static");
       stageAt(1);
       window.addEventListener("resize", () => stageAt(1));
