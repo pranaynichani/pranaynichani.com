@@ -49,11 +49,23 @@
           </div>
         </div>
       </div>
-      <div class="tl-scroll"><div class="tl-inner" id="timeline"></div></div>
+      <div class="tl-toolbar">
+        <span class="tl-tool-label">TIMELINE</span>
+        <span class="tl-tool-group"><span class="tl-tool-label">H ZOOM</span>
+          <button id="tlz-hminus" title="Zoom out horizontally">−</button>
+          <button id="tlz-hplus" title="Zoom in horizontally">+</button>
+        </span>
+        <span class="tl-tool-group"><span class="tl-tool-label">TRACK HEIGHT</span>
+          <button id="tlz-vminus" title="Shorter tracks">−</button>
+          <button id="tlz-vplus" title="Taller tracks (shows clip thumbnails)">+</button>
+        </span>
+        <button id="tlz-fit" title="Reset zoom">FIT</button>
+        <span class="tl-hint">DRAG THE PLAYHEAD · CLICK A CLIP TO PLAY IT IN THE MONITOR</span>
+      </div>
+      <div class="tl-scroll" id="tl-scroll"><div class="tl-inner" id="timeline"></div></div>
       <div class="tl-legend">
         <span class="editor-key">Editor / director credit</span>
         <span>Everything else: assistant editor &amp; post-production</span>
-        <span class="tl-hint">CLICK A CLIP TO PLAY IT IN THE MONITOR</span>
       </div>
     </div>
     <div class="hero-overlay" id="hero-overlay">

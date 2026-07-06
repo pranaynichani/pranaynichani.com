@@ -133,9 +133,9 @@ function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
   const byIdx = [];
   let currentMid = null;
   for (const key of ["feature", "series", "other"]) {
-    html += `<p class="tl-track-name">${trackNames[key]}</p>`;
-    tlLanes(tracks[key]).forEach(lane => {
+    tlLanes(tracks[key]).forEach((lane, li) => {
       html += `<div class="tl-track">`;
+      if (li === 0) html += `<span class="tl-track-tag">${trackNames[key]}</span>`;
       lane.forEach(c => {
         byIdx[idx] = c;
         const left = tlPct(c.start), width = Math.max(tlPct(c.end) - tlPct(c.start), 3.2);
@@ -149,9 +149,12 @@ function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
             ? `<a ${inner} href="${c.href}">${esc(c.title)}</a>`
             : `<span ${inner}>${esc(c.title)}</span>`;
         } else {
+          const thumbSrc = c.poster || ytThumb(c.video);
+          const thumb = thumbSrc ? `<img class="cthumb" src="${thumbSrc}" alt="" loading="lazy">` : "";
           html += `<div class="tl-clip${c.editor ? " editor" : ""}" role="button" tabindex="0"
-            style="left:${left}%;width:${width}%" data-i="${idx}" data-mid="${mid}">
-            ${esc(c.title)}</div>`;
+            style="left:${left}%;width:${width}%" data-i="${idx}" data-mid="${mid}"
+            data-start="${c.start}" data-end="${c.end}">
+            ${thumb}<span class="tl-clip-name">${esc(c.title)}</span></div>`;
         }
         idx++;
       });
@@ -166,8 +169,8 @@ function timelineMarkup(clips, { mini = false, currentSlug = null } = {}) {
       const h = 14 + 72 * Math.abs(Math.sin(x * 0.83) * 0.55 + Math.sin(x * 0.19) * 0.45);
       bars += `<rect x="${x * 4}" y="${(100 - h) / 2}" width="2.4" height="${h.toFixed(1)}"/>`;
     }
-    html += `<p class="tl-track-name">A1 · STEREO MIX</p>
-      <div class="tl-track tl-audio-track">
+    html += `<div class="tl-track tl-audio-track">
+        <span class="tl-track-tag">A1 · MIX</span>
         <div class="tl-audio" style="left:${aStart}%;width:${(aEnd - aStart)}%">
           <svg viewBox="0 0 960 100" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
           <span>PRANAY_CAREER_MIX.wav</span>
@@ -190,6 +193,7 @@ function renderTimeline() {
   const openLink = $("#mon-open"), playhead = host.querySelector(".tl-playhead");
   let heroMode = true, heroTimer = null;
   let current = null;
+  let userScrubbed = false; // once true, slideshow captions stop stomping the readout
 
   // --- hero slideshow in the overlay (full-screen, docks into the monitor on scroll) ---
   const overlay = $("#hero-overlay"), slidesBox = $("#ho-slides");
@@ -205,7 +209,7 @@ function renderTimeline() {
       imgs[i].classList.remove("on");
       i = (i + 1) % imgs.length;
       imgs[i].classList.add("on");
-      if (heroMode) readDetail.textContent = captions[i] + " · hover a clip to scrub · click to play";
+      if (heroMode && !userScrubbed) readDetail.textContent = captions[i] + " · hover a clip to scrub · click to play";
     }, 6000);
   }
 
@@ -260,8 +264,10 @@ function renderTimeline() {
     requestAnimationFrame(() => {
       stageTicking = false;
       if (!heroMode && overlay && overlay.classList.contains("gone")) { stageAt(1); return; }
+      // dock completes at 55% of the runway; the rest is a hold so the
+      // assembled suite stays pinned for a few more scrolls before release
       const runway = section.offsetHeight - sticky.offsetHeight;
-      const p = runway > 0 ? clamp01(-section.getBoundingClientRect().top / runway) : 1;
+      const p = runway > 0 ? clamp01(-section.getBoundingClientRect().top / (runway * 0.55)) : 1;
       stageAt(p);
     });
   }
@@ -414,6 +420,59 @@ function renderTimeline() {
       });
     });
   }
+
+  // ---- timeline zoom: horizontal stretches the ruler, vertical grows the
+  //      tracks (taller tracks reveal clip thumbnails) ----
+  const scroller = $("#tl-scroll");
+  const VZ = [{ h: 18, fs: 8.5 }, { h: 24, fs: 9.5 }, { h: 40, fs: 10 }, { h: 56, fs: 11 }];
+  let zh = 1, vz = 1;
+  function applyZoom() {
+    host.style.width = (zh * 100) + "%";
+    host.style.setProperty("--trackh", VZ[vz].h + "px");
+    host.style.setProperty("--clipfs", VZ[vz].fs + "px");
+    host.dataset.vz = vz;
+  }
+  applyZoom();
+  const zoomBtn = (id, fn) => { const b = document.getElementById(id); if (b) b.addEventListener("click", fn); };
+  zoomBtn("tlz-hplus", () => { zh = Math.min(zh * 1.5, 5.1); applyZoom(); });
+  zoomBtn("tlz-hminus", () => { zh = Math.max(zh / 1.5, 1); applyZoom(); });
+  zoomBtn("tlz-vplus", () => { vz = Math.min(vz + 1, VZ.length - 1); applyZoom(); });
+  zoomBtn("tlz-vminus", () => { vz = Math.max(vz - 1, 0); applyZoom(); });
+  zoomBtn("tlz-fit", () => {
+    zh = 1; vz = 1; applyZoom();
+    if (scroller) { scroller.scrollLeft = 0; scroller.scrollTop = 0; }
+  });
+
+  // ---- draggable playhead: grab it, or scrub anywhere on the year ruler ----
+  const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  function movePlayhead(clientX) {
+    userScrubbed = true;
+    const r = host.getBoundingClientRect();
+    const pct = clamp01((clientX - r.left) / r.width) * 100;
+    playhead.style.left = pct + "%";
+    const yr = TL_Y0 + (pct / 100) * (TL_Y1 - TL_Y0);
+    readTitle.textContent = `Playhead — ${MONTHS[Math.min(11, Math.floor((yr % 1) * 12))]} ${Math.floor(yr)}`;
+    const under = [];
+    clipEls.forEach(el => {
+      const c = byIdx[el.dataset.i];
+      const hit = c.start <= yr && yr <= c.end;
+      el.classList.toggle("hov", hit);
+      if (hit) under.push(c.title);
+    });
+    readDetail.textContent = under.length ? "Under the playhead: " + under.join(" · ") : "Nothing on the timeline here — keep scrubbing";
+  }
+  let phDrag = false;
+  function startPH(e) {
+    phDrag = true;
+    playhead.style.transition = "none";
+    e.preventDefault();
+    movePlayhead(e.clientX);
+  }
+  playhead.classList.add("grabbable");
+  playhead.addEventListener("pointerdown", startPH);
+  host.querySelectorAll(".tl-years, .tl-ticks").forEach(el => el.addEventListener("pointerdown", startPH));
+  window.addEventListener("pointermove", e => { if (phDrag) movePlayhead(e.clientX); });
+  window.addEventListener("pointerup", () => { phDrag = false; playhead.style.transition = ""; });
 }
 
 // ---------- work page: archive + filters ----------
