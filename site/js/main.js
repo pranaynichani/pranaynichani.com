@@ -108,12 +108,34 @@ const TL_Y0 = 2010, TL_Y1 = 2026;
 const tlPct = y => ((y - TL_Y0) / (TL_Y1 - TL_Y0)) * 100;
 
 function buildClips() {
-  return PROJECTS.map(p => ({
-    slug: p.slug, title: p.title, detail: `${p.role} · ${p.year}`, type: p.type,
-    start: p.start || p.year, end: (p.end || p.year) + 0.85,
-    href: pageUrl(p), video: p.trailer, poster: still(p),
-    editor: /(^|\/ ?)Editor|Director/i.test(p.role)
-  })).concat(TIMELINE_EXTRAS.map(x => ({
+  const projectClips = [];
+  PROJECTS.forEach(p => {
+    const isEditor = /(^|\/ ?)Editor|Director/i.test(p.role);
+    // splitTimelineByGroup breaks one project into several timeline clips (one
+    // per video `group`, e.g. per client/brand) so a long reel doesn't render
+    // as a single block — each clip plays that group's first spot on click.
+    const groups = p.splitTimelineByGroup && p.videos && p.videos.length ? groupVideos(p.videos) : null;
+    if (groups && groups.length > 1) {
+      groups.forEach(g => {
+        const meta = (p.groupMeta && p.groupMeta[g.key]) || {};
+        const start = meta.start != null ? meta.start : (p.start || p.year);
+        const end = meta.end != null ? meta.end : (p.end || p.year);
+        projectClips.push({
+          slug: p.slug, group: g.key, title: g.key || p.title, detail: `${p.role} · ${Math.round(start)}`,
+          type: p.type, start, end, href: pageUrl(p), video: g.items[0][0].url, poster: still(p),
+          spotIndex: g.items[0][1], editor: isEditor
+        });
+      });
+    } else {
+      projectClips.push({
+        slug: p.slug, title: p.title, detail: `${p.role} · ${p.year}`, type: p.type,
+        start: p.start || p.year, end: (p.end || p.year) + 0.85,
+        href: pageUrl(p), video: p.trailer, poster: still(p),
+        spotIndex: p.videos && p.videos.length ? 0 : undefined, editor: isEditor
+      });
+    }
+  });
+  return projectClips.concat(TIMELINE_EXTRAS.map(x => ({
     slug: null, title: x.title, detail: x.detail, type: x.type,
     start: x.start, end: x.end, href: null, video: x.video || null, poster: null,
     page: x.page || null, editor: x.type !== "teaching"
@@ -335,7 +357,9 @@ function renderTimeline() {
   // projects with a videos[] array (Commercial, Real Estate, ...) expand into
   // individual spots in their bin, rather than showing as a single timeline clip
   const spotProjects = PROJECTS.filter(p => p.videos && p.videos.length);
-  const spotClipBySlug = new Map(spotProjects.map(p => [p.slug, clips.find(c => c.slug === p.slug)]));
+  // keyed by "slug::group" (group is "" when a project isn't split) so each
+  // split sub-clip lights up its own timeline block, not just the first one
+  const spotClipByKey = new Map(clips.filter(c => c.spotIndex != null).map(c => [`${c.slug}::${c.group || ""}`, c]));
 
   // autoplay toggle — when off, clicking a clip loads its poster + a play button
   const apToggle = $("#autoplay-toggle");
@@ -403,22 +427,23 @@ function renderTimeline() {
     if (!c.page) highlightBin(`.bin-item[data-ci="${clips.indexOf(c)}"]`);
   }
 
-  // a spot from a videos[]-bearing project (no timeline clip of its own; lights that project's clip)
+  // a spot from a videos[]-bearing project (no timeline clip of its own, or one of
+  // several split sub-clips; lights up that group's own timeline clip)
   function loadSpot(proj, i) {
-    const clip = spotClipBySlug.get(proj.slug);
     const s = proj.videos[i];
+    const clip = spotClipByKey.get(`${proj.slug}::${s.group || ""}`) || spotClipByKey.get(`${proj.slug}::`);
     showMonitor({ title: s.title, detail: `${TYPE_LABELS[proj.type]} · ${proj.role}`, video: s.url,
-      href: clip ? clip.href : null }, findEl(clip));
+      href: clip ? clip.href : pageUrl(proj) }, findEl(clip));
     highlightBin(`.bin-item[data-spot="${proj.slug}:${i}"]`);
   }
 
   host.querySelectorAll(".tl-clip").forEach(el => {
     const c = byIdx[el.dataset.i];
-    const proj = c.slug && spotClipBySlug.has(c.slug) ? PROJECTS.find(p => p.slug === c.slug) : null;
+    const proj = c.spotIndex != null ? PROJECTS.find(p => p.slug === c.slug) : null;
     el.addEventListener("mouseenter", () => scrubTo(c, el));
     el.addEventListener("focus", () => scrubTo(c, el));
-    el.addEventListener("click", () => proj ? loadSpot(proj, 0) : loadClip(c, el));
-    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); proj ? loadSpot(proj, 0) : loadClip(c, el); } });
+    el.addEventListener("click", () => proj ? loadSpot(proj, c.spotIndex) : loadClip(c, el));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); proj ? loadSpot(proj, c.spotIndex) : loadClip(c, el); } });
   });
 
   // ---- bins ----
