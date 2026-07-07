@@ -1,0 +1,8 @@
+{
+  "name": "pranaynichani-com",
+  "compatibility_date": "2026-07-07",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "none"
+  }
+}
