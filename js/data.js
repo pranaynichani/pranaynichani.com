@@ -186,8 +186,8 @@ const PROJECTS = [
     slug: "commercial-work", title: "Commercial Work", year: 2025, start: 2016, end: 2025,
     img: "png", type: "commercial",
     role: "Editor / DP / Motion Graphics",
-    credit: "GM · Chevrolet · Loblaws · Shoppers Drug Mart · Intel · NFB and more",
-    desc: "Documentary-style commercials, brand films, and motion graphics for major automotive and consumer brands and agencies.",
+    credit: "Chevrolet · GMC (with Rune Entertainment) · Bear Paws · Schneiders (with TCG – The Creative Group)",
+    desc: "Documentary-style commercials, brand films, and motion graphics for major automotive and consumer brands — Chevrolet and GMC spots made with Rune Entertainment; Bear Paws and Schneiders spots made with TCG – The Creative Group.",
     award: null, laurels: null,
     trailer: "https://youtu.be/HWLaX6nLD_g", featured: false,
     // Extra spots shown as a clip-bin on the project page (first one = main player)
@@ -198,15 +198,25 @@ const PROJECTS = [
       { title: "GMC Acadia — fold-flat rows", url: "https://youtu.be/YRmSPFesOpQ" },
       { title: "GMC Acadia — seats up to 7", url: "https://youtu.be/YC43ziJ4WlQ" },
       { title: "Chevrolet Silverado — smartphone connectivity", url: "https://youtu.be/LmY2a57hMuk" },
-      { title: "Chevrolet Silverado — max towing", url: "https://youtu.be/exYTvJ5x-NI" }
+      { title: "Chevrolet Silverado — max towing", url: "https://youtu.be/exYTvJ5x-NI" },
+      { title: "Bear Paws — PawPop", url: "https://youtube.com/shorts/UUvKTXgyQbs" },
+      { title: "Bear Paws — Fruit Paw", url: "https://youtube.com/shorts/v6kukkKV3lk" },
+      { title: "Bear Paws — Fruit Paw (alt cut)", url: "https://youtube.com/shorts/j6YrlNlLYGs" },
+      { title: "Bear Paws — Chill Paw", url: "https://youtube.com/shorts/ryUcW1D99NA" },
+      { title: "Bear Paws — Chill Paw (alt cut)", url: "https://youtube.com/shorts/XndP5vuMGX0" },
+      { title: "Schneiders Winter Grilling — Recipe 1 (stop motion)", url: "https://youtube.com/shorts/tnYQfL5uAL4" },
+      { title: "Schneiders Winter Grilling — Recipe 2, vertical (stop motion)", url: "https://youtube.com/shorts/Z0qRwoZx1Fs" },
+      { title: "Schneiders Winter Grilling — Recipe 2 (stop motion)", url: "https://youtube.com/shorts/FGmGhhc5sls" },
+      { title: "Schneiders Winter Grilling — Recipe 3, vertical (stop motion)", url: "https://youtube.com/shorts/mihO2LmK3qc" },
+      { title: "Schneiders Winter Grilling — Recipe 3 (stop motion)", url: "https://youtube.com/shorts/_97kZoQF4as" }
     ]
   },
   {
-    slug: "real-estate-work", title: "Real Estate Commercials", year: 2019, start: 2019, end: 2019,
+    slug: "real-estate-work", title: "Real Estate Commercials", year: 2020, start: 2019, end: 2020,
     img: "jpg", type: "realestate",
     role: "Editor / DP / Motion Graphics",
-    credit: "Scout Condos · LA Ads · Royal LePage",
-    desc: "Documentary-style, real-people neighbourhood stories for the BILD Award-winning Scout Condos campaign.",
+    credit: "Scout Condos (with LA Ads) · Georgian Odessa, Brixton Social, Tridel Royal Bayview, Revel Park, 7 Dale Social (with The Brand Factory)",
+    desc: "Real-estate developer commercials and brand content — including the documentary-style, real-people neighbourhood stories for the BILD Award-winning Scout Condos campaign, plus additional development campaigns made with The Brand Factory.",
     award: "BILD Award — Best Long Video",
     laurels: "Best Long Video, Marketing Category, BILD Awards 2019 (Scout Condos, LA Ads).",
     trailer: "https://youtu.be/qJvcJGG67uw", featured: false,
@@ -214,7 +224,14 @@ const PROJECTS = [
     videos: [
       { title: "TreMari Bakery — Scout Condos (BILD Award campaign)", url: "https://youtu.be/qJvcJGG67uw" },
       { title: "People's Pint — Scout Condos", url: "https://youtu.be/9X-SDKQifvM" },
-      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q" }
+      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q" },
+      { title: "Georgian Odessa — 60s spot", url: "https://youtu.be/8uwRAIC04xk" },
+      { title: "Brixton Social — traditional cut", url: "https://youtu.be/jt-lLKRTjR0" },
+      { title: "Brixton Social — rental cut", url: "https://youtu.be/gf5ckpcQRvs" },
+      { title: "Brixton Social — nightlife cut", url: "https://youtu.be/B-xFbprIcBo" },
+      { title: "Tridel Royal Bayview Golf Club — webinar", url: "https://youtu.be/vV0hMwwypiI" },
+      { title: "Revel Park — slideshow", url: "https://youtu.be/KzIGGxaqsuc" },
+      { title: "7 Dale Social", url: "https://youtu.be/wFeZkAJ1rOI" }
     ]
   }
 ];
