@@ -4,7 +4,7 @@
 // Fields:
 //   slug      — must match the image filename in assets/stills/
 //   img       — image file extension
-//   type      — 'feature' | 'series' | 'short' | 'commercial'
+//   type      — 'feature' | 'series' | 'short' | 'commercial' | 'realestate' | 'teaching'
 //   start/end — years on the career timeline (end defaults to year)
 //   award     — short award label shown as a tag (or null)
 //   laurels   — longer awards line for the project page (or null)
@@ -186,16 +186,12 @@ const PROJECTS = [
     slug: "commercial-work", title: "Commercial Work", year: 2025, start: 2016, end: 2025,
     img: "png", type: "commercial",
     role: "Editor / DP / Motion Graphics",
-    credit: "GM · Chevrolet · Loblaws · Shoppers Drug Mart · Intel · NFB · Royal LePage · UHN and more",
-    desc: "Documentary-style commercials, brand films, and motion graphics for major brands and agencies — including the BILD Award-winning Scout Condos campaign of real-people neighbourhood stories.",
-    award: "BILD Award — Best Long Video",
-    laurels: "Best Long Video, Marketing Category, BILD Awards 2019 (Scout Condos, LA Ads).",
-    trailer: "https://youtu.be/qJvcJGG67uw", featured: false,
+    credit: "GM · Chevrolet · Loblaws · Shoppers Drug Mart · Intel · NFB and more",
+    desc: "Documentary-style commercials, brand films, and motion graphics for major automotive and consumer brands and agencies.",
+    award: null, laurels: null,
+    trailer: "https://youtu.be/HWLaX6nLD_g", featured: false,
     // Extra spots shown as a clip-bin on the project page (first one = main player)
     videos: [
-      { title: "TreMari Bakery — Scout Condos (BILD Award campaign)", url: "https://youtu.be/qJvcJGG67uw" },
-      { title: "People's Pint — Scout Condos", url: "https://youtu.be/9X-SDKQifvM" },
-      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q" },
       { title: "Chevrolet Cruze — 120s spot", url: "https://youtu.be/HWLaX6nLD_g" },
       { title: "Chevrolet Cruze — cargo space", url: "https://youtu.be/l83_4PBmga4" },
       { title: "Chevrolet Cruze — smartphone connectivity", url: "https://youtu.be/1R-6cUYAfas" },
@@ -203,6 +199,22 @@ const PROJECTS = [
       { title: "GMC Acadia — seats up to 7", url: "https://youtu.be/YC43ziJ4WlQ" },
       { title: "Chevrolet Silverado — smartphone connectivity", url: "https://youtu.be/LmY2a57hMuk" },
       { title: "Chevrolet Silverado — max towing", url: "https://youtu.be/exYTvJ5x-NI" }
+    ]
+  },
+  {
+    slug: "real-estate-work", title: "Real Estate Commercials", year: 2019, start: 2019, end: 2019,
+    img: "jpg", type: "realestate",
+    role: "Editor / DP / Motion Graphics",
+    credit: "Scout Condos · LA Ads · Royal LePage",
+    desc: "Documentary-style, real-people neighbourhood stories for the BILD Award-winning Scout Condos campaign.",
+    award: "BILD Award — Best Long Video",
+    laurels: "Best Long Video, Marketing Category, BILD Awards 2019 (Scout Condos, LA Ads).",
+    trailer: "https://youtu.be/qJvcJGG67uw", featured: false,
+    // Extra spots shown as a clip-bin on the project page (first one = main player)
+    videos: [
+      { title: "TreMari Bakery — Scout Condos (BILD Award campaign)", url: "https://youtu.be/qJvcJGG67uw" },
+      { title: "People's Pint — Scout Condos", url: "https://youtu.be/9X-SDKQifvM" },
+      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q" }
     ]
   }
 ];
@@ -214,4 +226,4 @@ const TIMELINE_EXTRAS = [
     video: "https://youtu.be/9MfryYg026I" }
 ];
 
-const TYPE_LABELS = { feature: "Feature", series: "Series", short: "Short", commercial: "Commercial", teaching: "Teaching" };
+const TYPE_LABELS = { feature: "Feature", series: "Series", short: "Short", commercial: "Commercial", realestate: "Real Estate", teaching: "Teaching" };

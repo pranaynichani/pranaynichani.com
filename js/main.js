@@ -319,10 +319,10 @@ function renderTimeline() {
   const clipEls = [...host.querySelectorAll(".tl-clip")];
   const findEl = c => clipEls.find(x => byIdx[x.dataset.i] === c);
 
-  // commercial spots live inside the Commercial Work project, not on the timeline
-  const commClip = clips.find(c => c.type === "commercial");
-  const commProj = PROJECTS.find(p => p.slug === "commercial-work");
-  const spots = (commProj && commProj.videos) || [];
+  // projects with a videos[] array (Commercial, Real Estate, ...) expand into
+  // individual spots in their bin, rather than showing as a single timeline clip
+  const spotProjects = PROJECTS.filter(p => p.videos && p.videos.length);
+  const spotClipBySlug = new Map(spotProjects.map(p => [p.slug, clips.find(c => c.slug === p.slug)]));
 
   // autoplay toggle — when off, clicking a clip loads its poster + a play button
   const apToggle = $("#autoplay-toggle");
@@ -388,20 +388,22 @@ function renderTimeline() {
     if (!c.page) highlightBin(`.bin-item[data-ci="${clips.indexOf(c)}"]`);
   }
 
-  // a commercial spot (no timeline clip of its own; lights the Commercial Work clip)
-  function loadSpot(i) {
-    const s = spots[i];
-    showMonitor({ title: s.title, detail: "Commercial · Editor / DP / Motion Graphics", video: s.url,
-      href: commClip ? commClip.href : null }, findEl(commClip));
-    highlightBin(`.bin-item[data-spot="${i}"]`);
+  // a spot from a videos[]-bearing project (no timeline clip of its own; lights that project's clip)
+  function loadSpot(proj, i) {
+    const clip = spotClipBySlug.get(proj.slug);
+    const s = proj.videos[i];
+    showMonitor({ title: s.title, detail: `${TYPE_LABELS[proj.type]} · ${proj.role}`, video: s.url,
+      href: clip ? clip.href : null }, findEl(clip));
+    highlightBin(`.bin-item[data-spot="${proj.slug}:${i}"]`);
   }
 
   host.querySelectorAll(".tl-clip").forEach(el => {
     const c = byIdx[el.dataset.i];
+    const proj = c.slug && spotClipBySlug.has(c.slug) ? PROJECTS.find(p => p.slug === c.slug) : null;
     el.addEventListener("mouseenter", () => scrubTo(c, el));
     el.addEventListener("focus", () => scrubTo(c, el));
-    el.addEventListener("click", () => c.type === "commercial" ? loadSpot(0) : loadClip(c, el));
-    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.type === "commercial" ? loadSpot(0) : loadClip(c, el); } });
+    el.addEventListener("click", () => proj ? loadSpot(proj, 0) : loadClip(c, el));
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); proj ? loadSpot(proj, 0) : loadClip(c, el); } });
   });
 
   // ---- bins ----
@@ -410,17 +412,18 @@ function renderTimeline() {
     const groups = [
       { key: "feature", label: "Features" }, { key: "series", label: "Series" },
       { key: "short", label: "Shorts" }, { key: "commercial", label: "Commercial" },
-      { key: "teaching", label: "Teaching" }
+      { key: "realestate", label: "Real Estate" }, { key: "teaching", label: "Teaching" }
     ];
 
     bins.innerHTML = `<p class="bins-head">BINS · CLICK TO OPEN</p><div class="bins-list">` + groups.map(g => {
-      // Commercial expands to every individual spot, not the single project clip
-      if (g.key === "commercial") {
-        if (!spots.length) return "";
-        return `<div class="bin-group" data-bin="commercial">
-          <button class="bin-header"><span class="bin-icon">▸</span><span class="bin-label">Commercial</span><span class="bin-count">${spots.length}</span></button>
-          <div class="bin-items">${spots.map((s, i) =>
-            `<button class="bin-item" data-spot="${i}"><span class="bin-dot">◆</span><span class="bin-title">${esc(s.title)}</span></button>`).join("")}</div>
+      // a videos[]-bearing project expands to every individual spot, not a single project clip
+      const sp = spotProjects.find(p => p.type === g.key);
+      if (sp) {
+        if (!sp.videos.length) return "";
+        return `<div class="bin-group" data-bin="${g.key}">
+          <button class="bin-header"><span class="bin-icon">▸</span><span class="bin-label">${g.label}</span><span class="bin-count">${sp.videos.length}</span></button>
+          <div class="bin-items">${sp.videos.map((s, i) =>
+            `<button class="bin-item" data-spot="${sp.slug}:${i}"><span class="bin-dot">◆</span><span class="bin-title">${esc(s.title)}</span></button>`).join("")}</div>
         </div>`;
       }
       const items = clips.map((c, i) => [c, i]).filter(([c]) => c.type === g.key)
@@ -438,7 +441,10 @@ function renderTimeline() {
     });
     bins.querySelectorAll(".bin-item").forEach(it => {
       it.addEventListener("click", () => {
-        if (it.dataset.spot !== undefined) loadSpot(+it.dataset.spot);
+        if (it.dataset.spot !== undefined) {
+          const [slug, i] = it.dataset.spot.split(":");
+          loadSpot(PROJECTS.find(p => p.slug === slug), +i);
+        }
         else loadClip(clips[+it.dataset.ci], findEl(clips[+it.dataset.ci]));
       });
     });
@@ -504,7 +510,8 @@ const RUSH_ICONS = {
   feature: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M2.5 7l1.3-3.5h12.4L17.5 7"/><rect x="2.5" y="7" width="15" height="10.5" rx="1"/><path d="M2.5 7l2.6-3.5M8.3 7l2.6-3.5M14.1 7l2.6-3.5"/></svg>`,
   series: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M10 2.5l7.5 4L10 10.5l-7.5-4 7.5-4z"/><path d="M2.5 10.5l7.5 4 7.5-4"/><path d="M2.5 14l7.5 4 7.5-4"/></svg>`,
   short: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="5" cy="5" r="2.4"/><circle cx="5" cy="15" r="2.4"/><path d="M16.5 3.5L7 10M16.5 16.5L7 10"/></svg>`,
-  commercial: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.3v3.4h3.3l5 3.3V5l-5 3.3H2.5z"/><path d="M14 7.3a3.2 3.2 0 010 5.4"/></svg>`
+  commercial: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.3v3.4h3.3l5 3.3V5l-5 3.3H2.5z"/><path d="M14 7.3a3.2 3.2 0 010 5.4"/></svg>`,
+  realestate: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5L10 3l7.5 6.5"/><path d="M4.5 8v8h11V8"/></svg>`
 };
 const RUSH_PLAY = `<svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4l10 6-10 6V4z"/></svg>`;
 const RUSH_PAUSE = `<svg viewBox="0 0 20 20" fill="currentColor"><rect x="5" y="4" width="3.4" height="12"/><rect x="11.6" y="4" width="3.4" height="12"/></svg>`;
@@ -516,7 +523,7 @@ const RUSH_CHEVRON = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor"
 const RUSH_TABS = [
   { key: "all", label: "All" }, { key: "feature", label: "Features" },
   { key: "series", label: "Series" }, { key: "short", label: "Shorts" },
-  { key: "commercial", label: "Commercial" }
+  { key: "commercial", label: "Commercial" }, { key: "realestate", label: "Real Estate" }
 ];
 
 // Builds the mobile-only Rush-style mini-editor (sticky chrome + a vertical
