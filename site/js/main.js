@@ -27,7 +27,7 @@ function groupVideos(videos) {
 // a sandboxed preview iframe (Error 153 = missing referrer). Always view the
 // site over http(s) — locally that's http://localhost:8090.
 function ytId(url) {
-  const m = String(url || "").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);
+  const m = String(url || "").match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{6,})/);
   return m ? m[1] : null;
 }
 function ytThumb(url) { const id = ytId(url); return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null; }
