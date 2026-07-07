@@ -190,25 +190,26 @@ const PROJECTS = [
     desc: "Documentary-style commercials, brand films, and motion graphics for major automotive and consumer brands — Chevrolet and GMC spots made with Rune Entertainment; Bear Paws and Schneiders spots made with TCG – The Creative Group.",
     award: null, laurels: null,
     trailer: "https://youtu.be/HWLaX6nLD_g", featured: false,
-    // Extra spots shown as a clip-bin on the project page (first one = main player)
+    // Extra spots shown as a clip-bin on the project page (first one = main player).
+    // `group` splits the bin into client/agency sub-bins wherever the videos-bin renders.
     videos: [
-      { title: "Chevrolet Cruze — 120s spot", url: "https://youtu.be/HWLaX6nLD_g" },
-      { title: "Chevrolet Cruze — cargo space", url: "https://youtu.be/l83_4PBmga4" },
-      { title: "Chevrolet Cruze — smartphone connectivity", url: "https://youtu.be/1R-6cUYAfas" },
-      { title: "GMC Acadia — fold-flat rows", url: "https://youtu.be/YRmSPFesOpQ" },
-      { title: "GMC Acadia — seats up to 7", url: "https://youtu.be/YC43ziJ4WlQ" },
-      { title: "Chevrolet Silverado — smartphone connectivity", url: "https://youtu.be/LmY2a57hMuk" },
-      { title: "Chevrolet Silverado — max towing", url: "https://youtu.be/exYTvJ5x-NI" },
-      { title: "Bear Paws — PawPop", url: "https://youtube.com/shorts/UUvKTXgyQbs" },
-      { title: "Bear Paws — Fruit Paw", url: "https://youtube.com/shorts/v6kukkKV3lk" },
-      { title: "Bear Paws — Fruit Paw (alt cut)", url: "https://youtube.com/shorts/j6YrlNlLYGs" },
-      { title: "Bear Paws — Chill Paw", url: "https://youtube.com/shorts/ryUcW1D99NA" },
-      { title: "Bear Paws — Chill Paw (alt cut)", url: "https://youtube.com/shorts/XndP5vuMGX0" },
-      { title: "Schneiders Winter Grilling — Recipe 1 (stop motion)", url: "https://youtube.com/shorts/tnYQfL5uAL4" },
-      { title: "Schneiders Winter Grilling — Recipe 2, vertical (stop motion)", url: "https://youtube.com/shorts/Z0qRwoZx1Fs" },
-      { title: "Schneiders Winter Grilling — Recipe 2 (stop motion)", url: "https://youtube.com/shorts/FGmGhhc5sls" },
-      { title: "Schneiders Winter Grilling — Recipe 3, vertical (stop motion)", url: "https://youtube.com/shorts/mihO2LmK3qc" },
-      { title: "Schneiders Winter Grilling — Recipe 3 (stop motion)", url: "https://youtube.com/shorts/_97kZoQF4as" }
+      { title: "Chevrolet Cruze — 120s spot", url: "https://youtu.be/HWLaX6nLD_g", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "Chevrolet Cruze — cargo space", url: "https://youtu.be/l83_4PBmga4", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "Chevrolet Cruze — smartphone connectivity", url: "https://youtu.be/1R-6cUYAfas", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "GMC Acadia — fold-flat rows", url: "https://youtu.be/YRmSPFesOpQ", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "GMC Acadia — seats up to 7", url: "https://youtu.be/YC43ziJ4WlQ", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "Chevrolet Silverado — smartphone connectivity", url: "https://youtu.be/LmY2a57hMuk", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "Chevrolet Silverado — max towing", url: "https://youtu.be/exYTvJ5x-NI", group: "Chevrolet & GMC (Rune Entertainment)" },
+      { title: "Bear Paws — PawPop", url: "https://youtube.com/shorts/UUvKTXgyQbs", group: "Bear Paws (TCG)" },
+      { title: "Bear Paws — Fruit Paw", url: "https://youtube.com/shorts/v6kukkKV3lk", group: "Bear Paws (TCG)" },
+      { title: "Bear Paws — Fruit Paw (alt cut)", url: "https://youtube.com/shorts/j6YrlNlLYGs", group: "Bear Paws (TCG)" },
+      { title: "Bear Paws — Chill Paw", url: "https://youtube.com/shorts/ryUcW1D99NA", group: "Bear Paws (TCG)" },
+      { title: "Bear Paws — Chill Paw (alt cut)", url: "https://youtube.com/shorts/XndP5vuMGX0", group: "Bear Paws (TCG)" },
+      { title: "Schneiders Winter Grilling — Recipe 1 (stop motion)", url: "https://youtube.com/shorts/tnYQfL5uAL4", group: "Schneiders Winter Grilling (TCG)" },
+      { title: "Schneiders Winter Grilling — Recipe 2, vertical (stop motion)", url: "https://youtube.com/shorts/Z0qRwoZx1Fs", group: "Schneiders Winter Grilling (TCG)" },
+      { title: "Schneiders Winter Grilling — Recipe 2 (stop motion)", url: "https://youtube.com/shorts/FGmGhhc5sls", group: "Schneiders Winter Grilling (TCG)" },
+      { title: "Schneiders Winter Grilling — Recipe 3, vertical (stop motion)", url: "https://youtube.com/shorts/mihO2LmK3qc", group: "Schneiders Winter Grilling (TCG)" },
+      { title: "Schneiders Winter Grilling — Recipe 3 (stop motion)", url: "https://youtube.com/shorts/_97kZoQF4as", group: "Schneiders Winter Grilling (TCG)" }
     ]
   },
   {
@@ -220,18 +221,19 @@ const PROJECTS = [
     award: "BILD Award — Best Long Video",
     laurels: "Best Long Video, Marketing Category, BILD Awards 2019 (Scout Condos, LA Ads).",
     trailer: "https://youtu.be/qJvcJGG67uw", featured: false,
-    // Extra spots shown as a clip-bin on the project page (first one = main player)
+    // Extra spots shown as a clip-bin on the project page (first one = main player).
+    // `group` splits the bin into client/agency sub-bins wherever the videos-bin renders.
     videos: [
-      { title: "TreMari Bakery — Scout Condos (BILD Award campaign)", url: "https://youtu.be/qJvcJGG67uw" },
-      { title: "People's Pint — Scout Condos", url: "https://youtu.be/9X-SDKQifvM" },
-      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q" },
-      { title: "Georgian Odessa — 60s spot", url: "https://youtu.be/8uwRAIC04xk" },
-      { title: "Brixton Social — traditional cut", url: "https://youtu.be/jt-lLKRTjR0" },
-      { title: "Brixton Social — rental cut", url: "https://youtu.be/gf5ckpcQRvs" },
-      { title: "Brixton Social — nightlife cut", url: "https://youtu.be/B-xFbprIcBo" },
-      { title: "Tridel Royal Bayview Golf Club — webinar", url: "https://youtu.be/vV0hMwwypiI" },
-      { title: "Revel Park — slideshow", url: "https://youtu.be/KzIGGxaqsuc" },
-      { title: "7 Dale Social", url: "https://youtu.be/wFeZkAJ1rOI" }
+      { title: "TreMari Bakery — Scout Condos (BILD Award campaign)", url: "https://youtu.be/qJvcJGG67uw", group: "Scout Condos (LA Ads)" },
+      { title: "People's Pint — Scout Condos", url: "https://youtu.be/9X-SDKQifvM", group: "Scout Condos (LA Ads)" },
+      { title: "Hounslow's House — Scout Condos", url: "https://youtu.be/Wd7FZdB3R-Q", group: "Scout Condos (LA Ads)" },
+      { title: "Georgian Odessa — 60s spot", url: "https://youtu.be/8uwRAIC04xk", group: "The Brand Factory" },
+      { title: "Brixton Social — traditional cut", url: "https://youtu.be/jt-lLKRTjR0", group: "The Brand Factory" },
+      { title: "Brixton Social — rental cut", url: "https://youtu.be/gf5ckpcQRvs", group: "The Brand Factory" },
+      { title: "Brixton Social — nightlife cut", url: "https://youtu.be/B-xFbprIcBo", group: "The Brand Factory" },
+      { title: "Tridel Royal Bayview Golf Club — webinar", url: "https://youtu.be/vV0hMwwypiI", group: "The Brand Factory" },
+      { title: "Revel Park — slideshow", url: "https://youtu.be/KzIGGxaqsuc", group: "The Brand Factory" },
+      { title: "7 Dale Social", url: "https://youtu.be/wFeZkAJ1rOI", group: "The Brand Factory" }
     ]
   }
 ];
