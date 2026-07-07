@@ -197,6 +197,21 @@ section.suite-hero.stage-static::after { height: 44px; }
 .bin-dot { font-size: 8px; color: var(--text-faint); flex-shrink: 0; width: 8px; }
 .bin-item.on .bin-dot, .bin-item:hover .bin-dot { color: var(--accent-dim); }
 
+/* sub-bins — a client/campaign grouping nested inside Commercial or Real Estate */
+.bin-subgroup { margin: 0 0 2px; }
+.bin-subheader {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  font-family: "SF Mono", Menlo, monospace; font-size: 10.5px; letter-spacing: .3px;
+  text-align: left; color: var(--text-faint); background: none; border: none;
+  cursor: pointer; padding: 6px 4px 6px 2px; transition: color .15s;
+}
+.bin-subheader:hover { color: var(--text-dim); }
+.bin-subicon { font-size: 8px; color: var(--accent-dim); transition: transform .2s; display: inline-block; width: 7px; }
+.bin-subgroup.open .bin-subicon { transform: rotate(90deg); color: var(--accent); }
+.bin-sublabel { flex: 1; }
+.bin-subitems { display: none; padding: 0 0 4px 10px; }
+.bin-subgroup.open .bin-subitems { display: block; }
+
 .monitor { position: relative; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); overflow: hidden; }
 .mon-label {
   position: absolute; top: 10px; left: 12px; z-index: 3; pointer-events: none;
@@ -369,7 +384,10 @@ section.suite-hero.stage-static::after { height: 44px; }
 .yt-fallback-in p { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; }
 
 .clip-bin-head { margin-top: 36px; font-size: 11px; letter-spacing: 2px; color: var(--text-faint); font-family: "SF Mono", Menlo, monospace; }
+.clip-bin-subhead { margin: 20px 0 10px; font-size: 10.5px; letter-spacing: 1px; color: var(--accent-dim); font-family: "SF Mono", Menlo, monospace; }
+.clip-bin-subhead:first-of-type { margin-top: 14px; }
 .clip-bin { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
+.clip-bin + .clip-bin-subhead { margin-top: 20px; }
 .clip-thumb {
   background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px;
   padding: 0 0 8px; cursor: pointer; text-align: left; overflow: hidden; transition: border-color .2s;

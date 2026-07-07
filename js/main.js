@@ -9,6 +9,19 @@ const DEPTH = document.body.dataset.depth || "";
 function still(p) { return `${DEPTH}assets/stills/${p.slug}.${p.img}`; }
 function pageUrl(p) { return `${DEPTH}project.html?p=${p.slug}`; }
 
+// Buckets a project's videos[] by their `group` field (client/campaign), keeping
+// each video's original index so bin selectors stay stable. Ungrouped videos (no
+// `group` field) come back as a single bucket with key: null.
+function groupVideos(videos) {
+  const buckets = [];
+  videos.forEach((v, i) => {
+    let b = buckets.find(x => x.key === (v.group || null));
+    if (!b) { b = { key: v.group || null, items: [] }; buckets.push(b); }
+    b.items.push([v, i]);
+  });
+  return buckets;
+}
+
 // ---------- YouTube helpers ----------
 // NOTE: YouTube refuses to play when the page is opened via file:// or inside
 // a sandboxed preview iframe (Error 153 = missing referrer). Always view the
@@ -378,6 +391,8 @@ function renderTimeline() {
       item.classList.add("on");
       const g = item.closest(".bin-group");
       if (g) g.classList.add("open");
+      const sub = item.closest(".bin-subgroup");
+      if (sub) sub.classList.add("open");
       item.scrollIntoView({ block: "nearest" });
     }
   }
@@ -416,14 +431,22 @@ function renderTimeline() {
     ];
 
     bins.innerHTML = `<p class="bins-head">BINS · CLICK TO OPEN</p><div class="bins-list">` + groups.map(g => {
-      // a videos[]-bearing project expands to every individual spot, not a single project clip
+      // a videos[]-bearing project expands to every individual spot, not a single project clip;
+      // spots with a `group` field nest into client/campaign sub-bins
       const sp = spotProjects.find(p => p.type === g.key);
       if (sp) {
         if (!sp.videos.length) return "";
+        const buckets = groupVideos(sp.videos);
+        const spotBtn = (s, i) => `<button class="bin-item" data-spot="${sp.slug}:${i}"><span class="bin-dot">◆</span><span class="bin-title">${esc(s.title)}</span></button>`;
+        const bodyHtml = buckets.length > 1
+          ? buckets.map(b => `<div class="bin-subgroup" data-sub="${esc(b.key || "Other")}">
+              <button class="bin-subheader"><span class="bin-subicon">▸</span><span class="bin-sublabel">${esc(b.key || "Other")}</span><span class="bin-count">${b.items.length}</span></button>
+              <div class="bin-subitems">${b.items.map(([s, i]) => spotBtn(s, i)).join("")}</div>
+            </div>`).join("")
+          : sp.videos.map((s, i) => spotBtn(s, i)).join("");
         return `<div class="bin-group" data-bin="${g.key}">
           <button class="bin-header"><span class="bin-icon">▸</span><span class="bin-label">${g.label}</span><span class="bin-count">${sp.videos.length}</span></button>
-          <div class="bin-items">${sp.videos.map((s, i) =>
-            `<button class="bin-item" data-spot="${sp.slug}:${i}"><span class="bin-dot">◆</span><span class="bin-title">${esc(s.title)}</span></button>`).join("")}</div>
+          <div class="bin-items">${bodyHtml}</div>
         </div>`;
       }
       const items = clips.map((c, i) => [c, i]).filter(([c]) => c.type === g.key)
@@ -438,6 +461,9 @@ function renderTimeline() {
 
     bins.querySelectorAll(".bin-header").forEach(h => {
       h.addEventListener("click", () => h.parentElement.classList.toggle("open"));
+    });
+    bins.querySelectorAll(".bin-subheader").forEach(h => {
+      h.addEventListener("click", e => { e.stopPropagation(); h.parentElement.classList.toggle("open"); });
     });
     bins.querySelectorAll(".bin-item").forEach(it => {
       it.addEventListener("click", () => {
@@ -766,12 +792,15 @@ function renderProject() {
     ? `<div class="proj-media" id="proj-media"></div>`
     : `<div class="proj-media still"><img src="${still(p)}" alt="Still from ${esc(p.title)}"></div>`;
 
+  const clipThumb = v => `<button class="clip-thumb" data-url="${esc(v.url)}" data-poster="${ytThumb(v.url)}" title="${esc(v.title)}">
+    <img src="${ytThumb(v.url)}" alt="" loading="lazy"><span>${esc(v.title)}</span></button>`;
+  const videoBuckets = p.videos ? groupVideos(p.videos) : [];
   const videosHtml = p.videos ? `
     <p class="clip-bin-head">SELECTED SPOTS — CLICK TO PLAY</p>
-    <div class="clip-bin">${p.videos.map(v =>
-      `<button class="clip-thumb" data-url="${esc(v.url)}" data-poster="${ytThumb(v.url)}" title="${esc(v.title)}">
-        <img src="${ytThumb(v.url)}" alt="" loading="lazy"><span>${esc(v.title)}</span></button>`).join("")}
-    </div>` : "";
+    ${videoBuckets.length > 1
+      ? videoBuckets.map(b => `<p class="clip-bin-subhead">${esc(b.key || "OTHER")}</p>
+          <div class="clip-bin">${b.items.map(([v]) => clipThumb(v)).join("")}</div>`).join("")
+      : `<div class="clip-bin">${p.videos.map(clipThumb).join("")}</div>`}` : "";
 
   const mini = timelineMarkup(buildClips(), { mini: true, currentSlug: p.slug });
 
