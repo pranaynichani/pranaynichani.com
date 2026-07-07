@@ -190,6 +190,15 @@ const PROJECTS = [
     desc: "Documentary-style commercials, brand films, and motion graphics for major automotive and consumer brands — Chevrolet and GMC spots made with Rune Entertainment; Bear Paws and Schneiders spots made with TCG – The Creative Group.",
     award: null, laurels: null,
     trailer: "https://youtu.be/HWLaX6nLD_g", featured: false,
+    // splitTimelineByGroup: instead of one long clip on the homepage timeline,
+    // each video `group` below gets its own clip (dated via groupMeta) so the
+    // variety of brands/clients is visible at a glance.
+    splitTimelineByGroup: true,
+    groupMeta: {
+      "Chevrolet & GMC (Rune Entertainment)": { start: 2016.5, end: 2017.5 },
+      "Schneiders Winter Grilling (TCG)": { start: 2020.4, end: 2020.55 },
+      "Bear Paws (TCG)": { start: 2021.2, end: 2021.35 }
+    },
     // Extra spots shown as a clip-bin on the project page (first one = main player).
     // `group` splits the bin into client/agency sub-bins wherever the videos-bin renders.
     videos: [
