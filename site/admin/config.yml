@@ -55,9 +55,17 @@ collections:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
               - { label: "Teaser (shown on the Notes list page)", name: "teaser", widget: "text" }
-              - label: "Content Blocks (add as many as you need, in order)"
+              - label: "Custom HTML File (optional)"
+                name: "customFile"
+                widget: "file"
+                required: false
+                media_folder: "/assets/posts"
+                public_folder: "/assets/posts"
+                hint: "Upload a full standalone .html file for a fully custom-designed post (its own layout, styles, images). If set, this is used instead of Content Blocks below, and the post links straight to the uploaded file."
+              - label: "Content Blocks (ignored if a Custom HTML File is set above; add as many as you need, in order)"
                 name: "blocks"
                 widget: "list"
+                required: false
                 summary: "{{fields.type}}: {{fields.text}}"
                 fields:
                   - { label: "Type", name: "type", widget: "select", options: ["paragraph", "heading", "html"], default: "paragraph" }
