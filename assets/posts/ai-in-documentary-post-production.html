@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where AI Actually Belongs in Documentary Post-Production — Pranay Nichani</title>
+<meta name="description" content="How AI fits into documentary post-production: an assistant editor's before-and-after of the prep pipeline — ingest, sync, transcripts, scene breakdowns, and delivery — with AI in the loop and a human on every decision that matters. By Pranay Nichani, Toronto.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Where AI Actually Belongs in Documentary Post-Production","author":{"@type":"Person","name":"Pranay Nichani","url":"https://pranaynichani.com"},"datePublished":"2026-07-08","description":"An assistant editor's before-and-after of the documentary post-production prep pipeline, rebuilt with AI in the loop.","keywords":"documentary post-production, AI film editing, assistant editor workflow, Premiere Pro, DaVinci Resolve, multicam sync, transcripts, dailies"}</script>
+<style>
+body{margin:0;background:#0F0E0C;color:#C9C5BB;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:17px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:#D0A04A;text-decoration:none}a:hover{color:#E7C077}
+p{margin:0 0 22px}
+.serif{font-family:"Cormorant Garamond",Georgia,serif}
+.mono{font-family:"IBM Plex Mono",Menlo,monospace}
+.gold{color:#D0A04A}
+.muted{color:#948F85}
+.dim{color:#6F6B63}
+.kick{font-family:"IBM Plex Mono",Menlo,monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+.hair{border:none;border-top:1px solid rgba(214,210,200,.12);margin:0}
+.nav{padding:26px 0}
+.navlink{font-size:12px;letter-spacing:.14em;color:#948F85;font-family:"IBM Plex Mono",Menlo,monospace}.navlink:hover{color:#EDE9DF}
+.wide{max-width:1080px;margin:0 auto;padding:0 28px}
+.art{max-width:704px;margin:0 auto;padding:0 28px}
+.title{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:clamp(42px,6vw,66px);line-height:1.06;color:#EDE9DF;margin:26px 0 24px;text-wrap:balance}
+.stand{font-size:20px;line-height:1.7;color:#A9A499;margin:0 0 26px}
+.h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:33px;line-height:1.15;color:#EDE9DF;margin:10px 0 18px}
+.h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:24px;color:#E4E0D5;margin:34px 0 12px}
+.sec{padding:44px 0 8px}
+.pull{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-weight:500;font-size:29px;line-height:1.4;color:#D8B36A;text-align:center;padding:34px 20px;margin:38px 0;border-top:1px solid rgba(214,210,200,.12);border-bottom:1px solid rgba(214,210,200,.12);text-wrap:balance}
+.toc{border:1px solid rgba(214,210,200,.14);padding:22px 26px;margin:34px 0;font-size:13px}
+.tocrow{padding:7px 0;display:flex;gap:16px;align-items:baseline}
+.tocno{font-family:"IBM Plex Mono",Menlo,monospace;font-size:10px;letter-spacing:.15em;color:#6F6B63;flex:0 0 26px}
+.toca{color:#C9C5BB}.toca:hover{color:#E7C077}
+.fig{margin:34px 0}
+.figimg{width:100%;display:block;border:1px solid rgba(214,210,200,.16)}
+.cap{font-family:"IBM Plex Mono",Menlo,monospace;font-size:11px;letter-spacing:.06em;color:#6F6B63;margin-top:11px;line-height:1.6}
+.figrow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dia{border:1px solid rgba(214,210,200,.14);background:#13120F;padding:26px;margin:38px 0}
+.dhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:14px;border-bottom:1px solid rgba(214,210,200,.12);margin-bottom:18px}
+.dtitle{font-family:"IBM Plex Mono",Menlo,monospace;font-size:11px;letter-spacing:.2em;color:#D0A04A;text-transform:uppercase}
+.dsub{font-family:"IBM Plex Mono",Menlo,monospace;font-size:10px;letter-spacing:.08em;color:#6F6B63}
+.track{display:flex;flex-wrap:wrap;gap:7px}
+.clip{flex:1 1 148px;border:1px solid rgba(208,160,74,.38);background:rgba(208,160,74,.05);padding:11px 13px;min-width:138px}
+.clipn{font-family:"IBM Plex Mono",Menlo,monospace;font-size:10px;letter-spacing:.14em;color:#D0A04A;display:block;margin-bottom:5px}
+.clipt{font-size:13px;line-height:1.45;color:#DDD8CD;font-weight:500}
+.clipd{font-size:11.5px;line-height:1.5;color:#8B867C;margin-top:4px}
+.gclip{border-color:rgba(214,210,200,.2);background:rgba(214,210,200,.03)}
+.gclip .clipn{color:#8B867C}
+.cmp{border:1px solid rgba(214,210,200,.14);font-size:13.5px;line-height:1.6}
+.crow{display:grid;grid-template-columns:132px 1fr 1fr;border-top:1px solid rgba(214,210,200,.1)}
+.crow.chead{border-top:none;background:rgba(214,210,200,.04)}
+.ccell{padding:13px 16px;border-left:1px solid rgba(214,210,200,.1)}
+.ccell.first{border-left:none}
+.cphase{font-family:"IBM Plex Mono",Menlo,monospace;font-size:10.5px;letter-spacing:.1em;color:#D0A04A;line-height:1.5;padding-top:15px}
+.chl{font-family:"IBM Plex Mono",Menlo,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#948F85}
+.manual{color:#948F85}
+.ai{color:#C9C5BB}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#D0A04A;margin-right:7px;vertical-align:1px}
+.dothollow{display:inline-block;width:7px;height:7px;border-radius:50%;border:1px solid #D0A04A;box-sizing:border-box;margin-right:7px;vertical-align:1px}
+.legend{display:flex;gap:26px;flex-wrap:wrap;font-family:"IBM Plex Mono",Menlo,monospace;font-size:10px;letter-spacing:.1em;color:#6F6B63;margin-top:16px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.splcol{padding:6px 26px 6px 0}
+.splcol.right{border-left:1px solid rgba(208,160,74,.35);padding:6px 0 6px 26px}
+.splh{font-family:"IBM Plex Mono",Menlo,monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px}
+.spli{font-size:13.5px;line-height:1.55;color:#C9C5BB;padding:9px 0;border-top:1px solid rgba(214,210,200,.08);display:flex;gap:11px}
+.splm{font-family:"IBM Plex Mono",Menlo,monospace;font-size:11px;flex:0 0 14px;padding-top:1px}
+.splfoot{grid-column:1/-1;text-align:center;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:22px;color:#D8B36A;padding-top:24px;margin-top:20px;border-top:1px solid rgba(214,210,200,.12)}
+.ladder{display:flex;flex-wrap:wrap;gap:7px;margin:30px 0}
+.rung{flex:1 1 160px;border:1px solid rgba(214,210,200,.14);padding:14px 16px}
+.rungh{font-family:"IBM Plex Mono",Menlo,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#D0A04A;margin-bottom:6px}
+.rungt{font-size:12.5px;line-height:1.55;color:#948F85}
+.footcta{text-align:center;padding:84px 28px 60px}
+.ctamail{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:clamp(28px,4vw,44px);color:#EDE9DF}
+.ctamail:hover{color:#E7C077}
+.ftr{font-family:"IBM Plex Mono",Menlo,monospace;font-size:11px;letter-spacing:.1em;color:#6F6B63;margin-top:18px}
+.ul{margin:0 0 22px;padding-left:22px}
+.ul li{margin-bottom:10px}
+strong{color:#E4E0D5;font-weight:600}
+em{color:#D8D3C8}
+.fx{display:flex}
+.ac{align-items:center}
+.jb{justify-content:space-between}
+.gap24{gap:24px}
+.m0{margin:0}
+@media(max-width:760px){.crow{grid-template-columns:1fr}.ccell{border-left:none;border-top:1px solid rgba(214,210,200,.06)}.cphase{padding-top:13px;padding-bottom:0}.split{grid-template-columns:1fr}.splcol{padding:6px 0}.splcol.right{border-left:none;padding:22px 0 6px;border-top:1px solid rgba(208,160,74,.35);margin-top:16px}.figrow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wide nav fx ac jb"><a href="https://pranaynichani.com/" class="kick" style="color:#EDE9DF;font-size:13px">PRANAY <span class="gold">NICHANI</span></a><div class="fx ac gap24"><a href="https://pranaynichani.com/" class="navlink">HOME</a><a href="https://pranaynichani.com/work" class="navlink">WORK</a><a href="https://pranaynichani.com/about" class="navlink">ABOUT</a><a href="https://pranaynichani.com/blog/" class="navlink" style="color:#EDE9DF">NOTES</a><a href="https://pranaynichani.com/#contact" class="navlink">CONTACT</a></div></div>
+<hr class="hair">
+<article class="art" style="padding-top:64px">
+<div class="kick dim">JULY 2026 · NOTES FROM THE EDIT SUITE</div>
+<h1 class="title">Where AI actually belongs in documentary post-production</h1>
+<p class="stand">Over the last year I rebuilt the pipeline that takes a documentary from the shoot to the edit suite — with AI in the loop at every phase, and a human hand on every decision that matters. This is the before and after.</p>
+<div class="kick dim" style="font-size:10px">PRANAY NICHANI · TORONTO · 14 MIN READ</div>
+<nav class="toc"><div class="kick dim" style="margin-bottom:12px;font-size:10px">IN THIS POST</div><div class="tocrow"><span class="tocno">01</span><a class="toca" href="#s1">The invisible half of post</a></div><div class="tocrow"><span class="tocno">02</span><a class="toca" href="#s2">The rule: AI drafts, a human decides</a></div><div class="tocrow"><span class="tocno">03</span><a class="toca" href="#s3">The pipeline, end to end</a></div><div class="tocrow"><span class="tocno">04</span><a class="toca" href="#s4">Timecode is what makes AI possible</a></div><div class="tocrow"><span class="tocno">05</span><a class="toca" href="#s5">Before and after, phase by phase</a></div><div class="tocrow"><span class="tocno">06</span><a class="toca" href="#s6">A short tour of what I built</a></div><div class="tocrow"><span class="tocno">07</span><a class="toca" href="#s7">The dividing line</a></div><div class="tocrow"><span class="tocno">08</span><a class="toca" href="#s8">What building it taught me</a></div></nav>
+
+<section class="sec" id="s1"><div class="kick gold">01</div><h2 class="h2">The invisible half of post</h2>
+<p>Every documentary has two edits. There's the one people talk about — the year in a dark room finding the film. And there's the one nobody talks about: the weeks of work that make that room possible. Ingesting and backing up the footage. Organizing it so nothing gets lost. Transcoding proxies. Syncing multicam days. Transcribing interviews and figuring out who's speaking. Breaking each shoot day into scenes. Getting transcripts and rushes into the director's hands fast enough to shape the next shoot.</p>
+<p>That second edit is post-production prep, and it's where I've spent a large part of fifteen years — on features, series, and shorts, including an Academy Award–nominated feature that ran to 88 terabytes of footage across 156 shoot days. Prep is unglamorous, deeply procedural, and completely unforgiving: a mislabeled clip or a broken sync surfaces months later, mid-edit, at the worst possible moment.</p>
+<p>It's also, it turns out, an almost perfect testing ground for AI — because so much of it is mechanical work wrapped around a small number of judgment calls. Over the past year I've rebuilt my entire prep workflow with AI in the loop: some of it purpose-built tooling that lives inside Premiere Pro, some of it an agent that reads call sheets and transcripts and folder trees, some of it a local web app that ties the whole pipeline together.</p>
+<p>This post is the before and after. Not a think-piece about whether AI will replace editors — it won't, and I'll show you exactly why — but a working account of where automation genuinely helps in a documentary post workflow, where it doesn't, and what I learned building it.</p></section>
+
+<section class="sec" id="s2"><div class="kick gold">02</div><h2 class="h2">The rule: AI drafts, a human decides</h2>
+<p>Before any tooling, one rule — the one every tool I built is designed around:</p>
+<div class="pull">AI drafts. A human decides.</div>
+<p>Timecode discipline, sync integrity, where a scene begins and ends, and what ships to the director are human-owned. Full stop. AI's job is to remove the mechanical load <em>around</em> those decisions, not to make them. When a tool proposes a folder rename, it shows me the plan before touching the drive. When it proposes a scene breakdown, I adjust the boundaries before anything gets cut. When anything is ambiguous — two clips sharing a filename, a speaker it can't confidently identify — the tools are built to stop and ask, never to guess.</p>
+<p>That sounds like a philosophical stance. It's actually an engineering one. Documentary footage is irreplaceable; the entire pipeline exists to protect it. Any automation that guesses is a liability, and any automation that drafts-then-confirms is leverage. Everything below follows from that distinction.</p></section>
+
+<section class="sec" id="s3"><div class="kick gold">03</div><h2 class="h2">The pipeline, end to end</h2>
+<p>Here's the shape of the work, from the moment a field drive arrives to the moment an editor can start cutting. It reads like a timeline because it is one — each phase preserves something the next one depends on.</p>
+<div class="dia"><div class="dhead"><span class="dtitle">The prep pipeline</span><span class="dsub">SHOOT → EDITOR CAN CUT</span></div>
+<div class="track">
+<div class="clip"><span class="clipn">PHASE 0</span><span class="clipt">Jam timecode</span><div class="clipd">On set, before anything is shot</div></div>
+<div class="clip"><span class="clipn">PHASE 1</span><span class="clipt">Ingest &amp; back up</span><div class="clipd">Originals verified, then read-only</div></div>
+<div class="clip"><span class="clipn">PHASE 2</span><span class="clipt">Organize &amp; QC</span><div class="clipd">Day folders, naming, no duplicates</div></div>
+<div class="clip"><span class="clipn">PHASE 3</span><span class="clipt">Proxies</span><div class="clipd">Light editing copies, conform-ready</div></div>
+<div class="clip"><span class="clipn">PHASE 4</span><span class="clipt">Sync the day</span><div class="clipd">One multicam map per shoot day</div></div>
+<div class="clip"><span class="clipn">PHASE 5</span><span class="clipt">Transcripts &amp; speakers</span><div class="clipd">Real names on real people</div></div>
+<div class="clip"><span class="clipn">PHASE 6</span><span class="clipt">Scene breakdown</span><div class="clipd">The day, cut into meaningful units</div></div>
+<div class="clip"><span class="clipn">PHASE 7</span><span class="clipt">Rushes &amp; delivery</span><div class="clipd">Transcripts + review cuts, out the door</div></div>
+<div class="clip gclip"><span class="clipn">PHASE 8</span><span class="clipt">Archival</span><div class="clipd">Parallel: IDs, rights, provenance</div></div>
+<div class="clip gclip"><span class="clipn">HAND-OFF</span><span class="clipt">Editor opens cold</span><div class="clipd">Drive guide, consistency check</div></div>
+</div></div>
+<p>Every phase used to be manual. Today, every phase can have an AI layer — but the layer looks different in each one, and the differences are the interesting part.</p></section>
+
+<section class="sec" id="s4"><div class="kick gold">04</div><h2 class="h2">Timecode is what makes AI possible</h2>
+<p>Here is something I have not heard anyone mention about AI in film workflows: the most important enabler isn't a model - Claude, ChatGPT, Gemini or whatever the latest buzz word might be.<br><br>It's a properly jammed timecode.</p>
+<p>On a well-run documentary shoot, every camera and the external audio recorder are jammed to a common timecode before anything is shot. That one act of on-set discipline is the backbone of everything downstream: it's what lets a multicam day sync instantly and exactly, and it's what keeps an unbroken chain from a paragraph in a transcript, to a burned-in timecode on a review file, to the precise frame on the editor's timeline. Type a timecode anywhere in that chain and you land on the same moment everywhere.</p>
+<p>It's also what makes almost every AI step in my pipeline work. Automated sync assembly, matching clips to transcripts, generating scene breakdowns with frame-accurate in and out points, building shot logs where every entry carries its real timecode — all of it rides on that chain. A missed jam on set can't be fixed by any tool; it just downgrades a whole day from "instant and exact" to "slow and approximate."</p>
+<p>I find that genuinely reassuring. The oldest, most manual craft discipline in the pipeline turned out to be the foundation the newest technology stands on. The machines inherited it.</p></section>
+
+<section class="sec" id="s5"><div class="kick gold">05</div><h2 class="h2">Before and after, phase by phase</h2>
+<p>What follows is the honest ledger: what each phase looked like done entirely by hand, and what it looks like now with AI in the loop. A filled marker means it's in daily use on real productions; a hollow one means it's built or specced but still earning trust.</p></section>
+</article>
+<div class="wide"><div class="dia" style="padding:0;margin:10px 0 40px"><div class="dhead" style="padding:22px 26px 14px;margin-bottom:0"><span class="dtitle">Manual vs. AI-enabled</span><span class="dsub">SAME PIPELINE · TWO WAYS OF RUNNING IT</span></div>
+<div class="cmp" style="border:none">
+<div class="crow chead"><div class="ccell first chl">Phase</div><div class="ccell chl">By hand</div><div class="ccell chl gold" style="color:#D0A04A">With AI in the loop</div></div>
+<div class="crow"><div class="ccell first cphase">0 · TIMECODE</div><div class="ccell manual">Spot-check the first clips of each camera and the sound recorder against each other, by eye, hoping the jam held.</div><div class="ccell ai"><span class="dothollow"></span>An agent reads the embedded timecode of every source and flags a missed or drifted jam in one report — before hours are sunk into a sync that won't hold.</div></div>
+<div class="crow"><div class="ccell first cphase">1 · INGEST + BACKUP</div><div class="ccell manual">Copy the field drive to the originals drive; trust the checksum manifest; verify by eye.</div><div class="ccell ai"><span class="dothollow"></span>An independent verification pass compares source and destination — counts, sizes, manifests — a second set of eyes on the one step that's unrecoverable if it goes wrong.</div></div>
+<div class="crow"><div class="ccell first cphase">2 · ORGANIZE + QC</div><div class="ccell manual">Build dated day folders, rename every camera file that doesn't embed a date, and hunt duplicate filenames across the whole tree by hand.</div><div class="ccell ai"><span class="dot"></span>An agent reads the call sheets and proposes the day-folder names, renames non-conforming camera files (always dry-run first), and a scripted pass hard-stops on any duplicate filename.</div></div>
+<div class="crow"><div class="ccell first cphase">3 · PROXIES</div><div class="ccell manual">Mirror the folder structure for proxies, set up the transcode in DaVinci Resolve day by day, copy sound across, count files.</div><div class="ccell ai"><span class="dot"></span>The proxy folder tree is scaffolded automatically, and the Resolve setup — bins, imports, timelines, render queue — is generated as ready-to-run scripts, per day, camera package auto-detected.</div></div>
+<div class="crow"><div class="ccell first cphase">4 · SYNC</div><div class="ccell manual">Multicam-sync each day in Premiere; fall back to waveform or manual slate-matching when timecode disagrees.</div><div class="ccell ai"><span class="dot"></span>For clean-timecode days, a tool builds the frame-exact multicam sync map directly into the project — a day's sync becomes effectively instant. Off-timecode days stay human.</div></div>
+<div class="crow"><div class="ccell first cphase">5 · SPEAKERS</div><div class="ccell manual">Premiere labels everyone "Speaker 1, Speaker 2" — and renumbers them per clip. Relabel real names clip by clip, all day.</div><div class="ccell ai"><span class="dot"></span>AI identifies each voice from the call sheet, director's notes, and the transcript's own tells ("Speaker 2: My name is…"), then applies real names to the source clips so they carry into every timeline.</div></div>
+<div class="crow"><div class="ccell first cphase">6 · BREAKDOWN</div><div class="ccell manual">Read the transcript against the call sheet and cut the day into scene subsequences one at a time — judgment call after judgment call.</div><div class="ccell ai"><span class="dot"></span>AI drafts the full breakdown — in/out timecodes, scene names, nothing dropped — from the transcript and call sheet. I adjust boundaries and names, then cut. The judgment stays mine; the first pass is just faster.</div></div>
+<div class="crow"><div class="ccell first cphase">7 · DELIVERY</div><div class="ccell manual">Export per-scene and full-day transcripts, assemble review timelines camera by camera, strip dead video, QC every file by hand.</div><div class="ccell ai"><span class="dot"></span>Batch export handles transcripts and exchange formats in one pass; a generator turns the day's sync map into a gap-free, split-screen review timeline automatically. QC remains a human ritual.</div></div>
+<div class="crow"><div class="ccell first cphase">8 · ARCHIVAL</div><div class="ccell manual">Tag each archive piece with a project ID and reconcile it against the researcher's rights spreadsheet manually.</div><div class="ccell ai"><span class="dothollow"></span>An agent reconciles what's on disk against the tracking sheet and flags any piece missing from either side — exactly the gap that becomes a licensing problem at the finish line.</div></div>
+<div class="crow"><div class="ccell first cphase">HAND-OFF</div><div class="ccell manual">Write the drive-and-project guide from memory; build shot logs, when requested, by scrubbing every clip.</div><div class="ccell ai"><span class="dot"></span>A shot log — clip, timecode, camera, speakers, shot type, a visual description — is generated by a local vision model running on my own machine. The hand-off guide is drafted from the actual state of the drive.</div></div>
+</div>
+<div class="legend" style="padding:16px 26px 22px"><span><span class="dot"></span>IN DAILY USE ON REAL PRODUCTIONS</span><span><span class="dothollow"></span>BUILT OR SPECCED, STILL EARNING TRUST</span></div>
+</div></div>
+<article class="art">
+<p>Two things stand out in that table. First, the AI column never says "and then it delivers to the director" — every row ends at a human checkpoint. Second, the phases where AI is most mature are the most mechanical ones: naming, scaffolding, sync assembly, batch export. The phases that stay stubbornly human — QC, scene judgment, what ships — are exactly the ones you'd want to stay human.</p>
+
+<section class="sec" id="s6"><div class="kick gold">06</div><h2 class="h2">A short tour of what I built</h2>
+<p>The tooling settled into two forms. The first is <strong>purpose-built tools that live inside the edit</strong> — panels inside Premiere Pro that do the in-project work: syncing, speaker naming, breakdowns, batch export. The second is <strong>an agent and a local web app</strong> that handle everything outside the edit: ingest verification, renaming, organizing, proxy prep, shot logs, delivery. Everything runs locally; footage never leaves my machines.</p>
+<h3 class="h3">Inside Premiere: one panel, one pass</h3>
+<p>What used to be five separate steps — sync the day, transcribe, name speakers, break down scenes, export — now runs as a guided pass inside a single panel. It builds the day's sync map at real timecode, proposes speaker names and scene boundaries for me to adjust, commits the names onto the source clips, cuts the subsequences natively, and exports transcripts and review timelines — without ever round-tripping the project through fragile exchange formats.</p>
+<figure class="fig m0"><div class="figrow"><img class="figimg" src="../stills/panel-preppass.png" alt="The prep pass inside Premiere Pro: speaker naming and scene breakdown in one panel"><img class="figimg" src="../stills/panel-deliver.png" alt="Batch export of transcripts and timelines from the same panel"></div><figcaption class="cap">FIG 01 — THE IN-PREMIERE PANEL. LEFT: THE PREP PASS (SPEAKERS → BREAKDOWN). RIGHT: BATCH DELIVERY OF TRANSCRIPTS AND TIMELINES.</figcaption></figure>
+<h3 class="h3">Outside Premiere: a cockpit for the whole pipeline</h3>
+<p>Everything that happens on the drive rather than in the project runs through a local web app — one place that walks a shoot day through ingest, rename, organize, duplicate checks, proxies, verification, shot logs, and delivery, with a human confirmation gate at every stage. Its home screen answers the question every production manager asks and every assistant editor dreads reconstructing: <em>where is every shoot day, right now?</em></p>
+<figure class="fig"><img class="figimg" src="../stills/cockpit-home.png" alt="Prep status dashboard showing every shoot day's progress through eight prep phases"><figcaption class="cap">FIG 02 — THE HOME SCREEN: EVERY SHOOT DAY, EVERY PHASE, DONE / ACTIVE / BLOCKED — READ STRAIGHT FROM THE DRIVE AND THE PROJECT FILE.</figcaption></figure>
+<p>The stages themselves are deliberately boring, in the best way. The rename stage reads the call sheet and proposes the folder name; nothing touches the drive until I've seen the preview. The shot-log stage points a locally-run vision model at the day's footage and produces a searchable log — every clip with its timecode, camera, matched speakers, shot type, and a description of what's in frame.</p>
+<figure class="fig"><div class="figrow"><img class="figimg" src="../stills/cockpit-rename.png" alt="Rename stage: day folder naming proposed from call sheets, preview before apply"><img class="figimg" src="../stills/cockpit-shotlog.png" alt="Shot log stage: per-clip timecode, camera, speakers and AI visual descriptions from a local model"></div><figcaption class="cap">FIG 03 — TWO STAGES: CALL-SHEET-DRIVEN RENAMING (EVERYTHING PREVIEWS FIRST) AND SHOT LOGS FROM A LOCAL VISION MODEL.</figcaption></figure>
+<h3 class="h3">The loose-media problem</h3>
+<p>Documentaries accumulate media that arrives from nowhere in particular — a subject's phone videos, scans, stills, screen recordings. A separate organizer takes those dumps and proposes a structure: by date from embedded metadata, or by content using the same local model. It plans, I review the plan, then it executes. It never deletes anything on its own; anything questionable is staged for my review instead.</p>
+<figure class="fig"><img class="figimg" src="../stills/media-organizer.png" alt="Media organizer app showing a proposed plan of file moves before execution"><figcaption class="cap">FIG 04 — THE MEDIA ORGANIZER: PLAN → REVIEW → EXECUTE. THE "PROPOSED PLAN" TABLE IS THE WHOLE SAFETY MODEL IN ONE SCREEN.</figcaption></figure>
+<p>None of this replaced my seat at the desk. What it replaced is the part of the job that was always secretly data entry — and it gave the time back to the parts that were always secretly editorial: reading the footage, catching problems, making the day make sense.</p></section>
+
+<section class="sec" id="s7"><div class="kick gold">07</div><h2 class="h2">The dividing line</h2>
+<p>If you take one diagram from this post, take this one. It's the actual division of labour in my pipeline today — not aspirational, operational.</p>
+<div class="dia"><div class="dhead"><span class="dtitle">Division of labour</span><span class="dsub">AS RUN, TODAY</span></div>
+<div class="split">
+<div class="splcol"><div class="splh muted">THE HUMAN OWNS</div>
+<div class="spli" style="border-top:none"><span class="splm dim">—</span>Whether the timecode can be trusted — and what to do when it can't</div>
+<div class="spli"><span class="splm dim">—</span>Where a scene begins and ends</div>
+<div class="spli"><span class="splm dim">—</span>Signing off on who each voice belongs to</div>
+<div class="spli"><span class="splm dim">—</span>Quality control on everything that ships to the director</div>
+<div class="spli"><span class="splm dim">—</span>Every ambiguity: duplicate names, unclear matches, missing media</div>
+</div>
+<div class="splcol right"><div class="splh gold">AI CARRIES</div>
+<div class="spli" style="border-top:none"><span class="splm gold">→</span>Naming and renaming at scale, from call sheets — previewed first</div>
+<div class="spli"><span class="splm gold">→</span>Folder scaffolding, proxy prep, and generated Resolve setups</div>
+<div class="spli"><span class="splm gold">→</span>Frame-exact sync assembly on clean-timecode days</div>
+<div class="spli"><span class="splm gold">→</span>First-pass speaker identification and scene breakdowns</div>
+<div class="spli"><span class="splm gold">→</span>Batch exports, review timelines, shot logs, verification counts</div>
+</div>
+<div class="splfoot">AI drafts. A human decides.</div>
+</div></div>
+<p>Notice what's on the left: nothing on that list is a chore. Every item is a judgment call with consequences. And notice what's on the right: nothing there is a judgment call. That's not a compromise I settled for — it's the design.</p></section>
+
+<section class="sec" id="s8"><div class="kick gold">08</div><h2 class="h2">What building it taught me</h2>
+<p>I built these tools myself, with AI pair-programming the implementation while I supplied the workflow knowledge — which means I also collected a year of lessons about what it actually takes to automate a craft. Four of them are worth passing on.</p>
+<h3 class="h3">Preview before anything destructive. Always.</h3>
+<p>Every tool that touches files shows its full plan before executing, and anything resembling a deletion goes to a staging folder for review — never to the trash. This isn't one clever line of code; it's a posture applied identically across every tool, in every language, on every host. It's the single biggest reason I trust the toolkit against real footage and not just test fixtures.</p>
+<h3 class="h3">Ambiguity is a hard stop, not a best guess.</h3>
+<p>Two clips sharing a filename halts the entire pipeline until a human resolves it — even though a heuristic guess would probably be right most of the time. "Probably right most of the time" is a fine standard for a photo library. It's a catastrophic standard for irreplaceable documentary footage, where a silently overwritten camera file is a moment of someone's life that doesn't exist anymore.</p>
+<h3 class="h3">Real footage breaks every synthetic assumption.</h3>
+<p>The hardest bugs never appeared in testing — they appeared the moment real production media entered the loop. Test clips had one audio channel; real location sound runs three or four, and camera scratch audio runs eight, and an automation that placed audio correctly in tests silently overwrote neighbouring channels in production. If you're evaluating any AI tool for post, ask one question first: <em>has it been run against real rushes?</em> The gap between demo and dailies is where these tools live or die.</p>
+<h3 class="h3">Be honest about maturity.</h3>
+<p>Every AI step in my written workflow carries a tag, and I'd encourage anyone building or buying post tooling to demand the same candour:</p>
+<div class="ladder">
+<div class="rung"><div class="rungh"><span class="dot"></span>Proven</div><div class="rungt">Used successfully on real productions. Trusted.</div></div>
+<div class="rung"><div class="rungh"><span class="dot" style="opacity:.65"></span>Prototype</div><div class="rungt">Built and working, not yet generalized across shows.</div></div>
+<div class="rung"><div class="rungh"><span class="dothollow"></span>Planned</div><div class="rungt">Fully specced, ready to build. Not yet real.</div></div>
+<div class="rung"><div class="rungh"><span class="dothollow" style="opacity:.55"></span>Idea</div><div class="rungt">A proposal. Flagged so nobody mistakes it for a tool.</div></div>
+</div>
+<p>Most of what you'll read about AI in filmmaking collapses those four categories into one breathless tense. Keeping them separate is what lets a production actually plan around the technology instead of being burned by it.</p>
+<div class="pull">Knowing the tools doesn't make you less of a storyteller. Knowing exactly what your tools can do is how the story gets told.</div>
+<p>I've built my career on both sides of that line — cutting films, and building the workflows that let films get cut. What this year of building confirmed is that they were never two disciplines. The assistant editor who understands why the timecode chain matters is precisely the person who can teach a machine to protect it. The craft and the machinery are the same discipline; AI just raised the stakes on knowing both.</p>
+<p>If you're a director or producer with a documentary heading into post — or mid-shoot and already drowning in footage — this pipeline is how I work, and it's available. And if you're an assistant editor building your own version of this: start with the timecode, make every tool show its plan, and never let anything guess.</p></section>
+</article>
+<hr class="hair" style="margin-top:56px">
+<div class="footcta"><div class="kick dim" style="margin-bottom:22px">GOT A PROJECT IN POST?</div><a class="ctamail" href="mailto:pranaynichani@gmail.com">pranaynichani@gmail.com</a><div class="ftr"><a href="tel:+16477079594" class="dim" style="color:#6F6B63">+1 647 707 9594</a> · TORONTO, ON</div><div class="ftr" style="margin-top:34px">© 2026 PRANAY NICHANI</div></div>
+</body>
+</html>
