@@ -59,7 +59,7 @@ collections:
                 name: "customFile"
                 widget: "file"
                 required: false
-                media_folder: "/assets/posts"
+                media_folder: "site/assets/posts"
                 public_folder: "/assets/posts"
                 hint: "Upload a full standalone .html file for a fully custom-designed post (its own layout, styles, images). If set, this is used instead of Content Blocks below, and the post links straight to the uploaded file."
               - label: "Content Blocks (ignored if a Custom HTML File is set above; add as many as you need, in order)"
