@@ -920,7 +920,10 @@ function renderBlogPost() {
   fetch(DEPTH + "content/blog.json").then(r => r.json()).then(data => {
     const p = data.posts.find(x => x.slug === slug) || data.posts[0];
     document.title = `${p.title} — Pranay Nichani`;
-    const blocksHtml = p.blocks.map(b => b.type === "heading" ? `<h2>${esc(b.text)}</h2>` : `<p>${b.text}</p>`).join("");
+    const blocksHtml = p.blocks.map(b =>
+      b.type === "heading" ? `<h2>${esc(b.text)}</h2>` :
+      b.type === "html" ? b.text :
+      `<p>${b.text}</p>`).join("");
     host.innerHTML = `
       <article class="post">
         <p class="date">${blogDateLabel(p.date)}</p>
