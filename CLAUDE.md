@@ -163,21 +163,20 @@ no code required. Two collections:
     prose — **this is what Pranay mostly wants to publish going forward**). When set, the post links
     straight to the uploaded standalone file instead of routing through `post.html` at all.
 
-**⚠️ Known bug, unresolved as of 2026-07-08: the `customFile` upload silently fails.** The post
-entry (metadata) commits and publishes fine, and the *field* shows the file as attached in the
-Decap UI, but the actual file binary never gets pushed to GitHub — confirmed empirically (no
-"Upload ..." commit appears for the html file, unlike the image uploads in the same session, which
-worked correctly). This looks like a Decap CMS bug specific to the generic `file` widget on the
-GitHub backend (as opposed to the `image` widget, which works). **Workaround until fixed**: after
-Pranay publishes a post with a Custom HTML File and it 404s, check `git log` for the missing file,
-then have Pranay send Claude the actual HTML file (and any images) to commit directly:
-1. Check `site/content/blog.json` for the `customFile` path Decap already saved (e.g.
-   `/assets/posts/<slug>.html`) — commit the real file there to match.
-2. Images uploaded via Decap's general Media Library land in `site/assets/stills/` (the global
-   `media_folder`), *not* `site/assets/posts/` — fix the HTML's `<img src>` paths to
-   `../stills/<filename>.png` (relative from `site/assets/posts/`) rather than assuming same-folder.
-3. Verify locally (temp-copy into `site/assets/posts/`, load via the preview server, check images
-   resolve and no console errors) before committing for real.
+**Fixed 2026-07-08 — `customFile` upload was silently failing.** Root cause: the field's
+`media_folder` was set to `/assets/posts` (leading slash, no `site/` prefix) instead of
+`site/assets/posts`, inconsistent with the working top-level convention (`media_folder:
+"site/assets/stills"` — repo-root-relative, no leading slash; `public_folder` is the one that
+gets the leading slash, since that's a URL path not a repo path). The malformed path made
+Decap's commit target invalid, so the upload silently failed while the field still *showed* a
+value and the post metadata still saved fine. Not a Decap bug — a config mistake. Fixed in
+`site/admin/config.yml`; not yet re-tested end-to-end by Pranay as of this writing, so verify a
+fresh upload actually commits before assuming it's fully resolved. Separately: images uploaded
+via Decap's general Media Library (not tied to the `customFile` field) land in
+`site/assets/stills/` (the global `media_folder`), not `site/assets/posts/` — when writing a
+custom post's `<img src>` paths, either account for that (`../stills/<filename>.png` relative
+from `site/assets/posts/`) or have Pranay use the field's own upload picker for images used
+inside that specific post so they land alongside it.
 - **Auth**: GitHub OAuth App (owned by Pranay's GitHub account, callback URL
   `https://pranaynichani.com/api/callback`) + `netlify/functions/auth.js` and `callback.js`
   implementing the OAuth handshake Decap needs (Netlify's old Identity/Git Gateway shortcut is
