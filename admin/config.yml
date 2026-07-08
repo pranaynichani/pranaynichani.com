@@ -60,5 +60,5 @@ collections:
                 widget: "list"
                 summary: "{{fields.type}}: {{fields.text}}"
                 fields:
-                  - { label: "Type", name: "type", widget: "select", options: ["paragraph", "heading"], default: "paragraph" }
-                  - { label: "Text", name: "text", widget: "text", hint: "Basic HTML like <em>italics</em> is fine here." }
+                  - { label: "Type", name: "type", widget: "select", options: ["paragraph", "heading", "html"], default: "paragraph" }
+                  - { label: "Text", name: "text", widget: "text", hint: "Paragraph/Heading: plain text, basic HTML like <em>italics</em> is fine. Raw HTML: paste a full HTML snippet — it's inserted as-is, not wrapped in a <p> or <h2>." }
