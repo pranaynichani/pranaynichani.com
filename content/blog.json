@@ -1,0 +1,24 @@
+{
+  "posts": [
+    {
+      "slug": "tools-are-the-craft",
+      "title": "The tools are the craft",
+      "date": "2026-07-01",
+      "teaser": "Why knowing your way around a workflow doesn't make you less of a storyteller — and what a decade of documentary post has taught me about the space between the two.",
+      "blocks": [
+        { "type": "paragraph", "text": "There's a moment that happens on almost every shoot I've assisted: someone finds out I know my way around a media management pipeline, and their face does this small recalibration. <em>Oh — so you're technical.</em> As if that settles what kind of person I am on a crew. As if knowing how proxies work and knowing how to feel a scene are two different skill sets, and you can only really have one." },
+        { "type": "paragraph", "text": "I've spent fifteen years in the space between raw footage and finished film, and I don't believe that anymore. I'm not sure I ever did." },
+        { "type": "heading", "text": "Every workflow decision is a story decision" },
+        { "type": "paragraph", "text": "On <em>To Kill a Tiger</em>, we were managing 88 terabytes of footage across 156 shoot days — some of it shot in rural Jharkhand, most of it in Hindi, all of it needing to move through proxies, subtitle pipelines, and translator workshops before an editor could even sit down and feel where a scene should breathe. Nobody watching the finished film sees any of that. They shouldn't. But if the ingest structure is wrong, if a clip is mis-synced or buried three folders deep, that moment doesn't get cut into the film — not because it wasn't shot, but because nobody could find it in time. The editor's instinct never gets a chance to work on it." },
+        { "type": "paragraph", "text": "That's the part people miss about the \"technical\" side of post. It's not a chore that happens before the real work. It's the thing that decides which parts of the story are even reachable." },
+        { "type": "heading", "text": "What I actually teach" },
+        { "type": "paragraph", "text": "When I had students at Seneca, half of them arrived wanting to skip straight to editing — the fun part, the part that feels like authorship. I made them build bin structures and learn timecode first, and I could tell some of them thought I was hazing them a little. I wasn't. I was trying to get across that the way you organize a project is already a creative act. It's you deciding, before a single cut is made, what will be easy to find and what will be hard — which is another way of deciding what the editor will have the patience to consider and what they'll quietly give up on at 1am." },
+        { "type": "paragraph", "text": "The best assistant editors I've worked alongside aren't the ones who are fastest with the software. They're the ones who can anticipate what an editor will need three steps before they ask for it — because they understand the story well enough to guess where it's going." },
+        { "type": "heading", "text": "The instrument, not the obstacle" },
+        { "type": "paragraph", "text": "I don't think fluency with tools is the opposite of taste. I think it's what taste needs in order to reach the screen. The more completely you understand your workflow — Premiere, Resolve, a translator pipeline, a media management plan for an eight-part series — the more of the story survives the trip from footage to film." },
+        { "type": "paragraph", "text": "The tools aren't in the way of the craft. They're not even next to it." },
+        { "type": "paragraph", "text": "They're the craft." }
+      ]
+    }
+  ]
+}

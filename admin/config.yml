@@ -1,0 +1,64 @@
+backend:
+  name: github
+  repo: pranaynichani/pranaynichani.com
+  branch: main
+  base_url: https://pranaynichani.com
+  auth_endpoint: api/auth
+
+media_folder: "site/assets/stills"
+public_folder: "/assets/stills"
+
+collections:
+  - name: "about"
+    label: "About Page"
+    files:
+      - file: "site/content/about.json"
+        label: "About Content"
+        name: "about"
+        fields:
+          - { label: "Heading", name: "heading", widget: "string" }
+          - { label: "Intro (lede)", name: "lede", widget: "text" }
+          - label: "Body Paragraphs"
+            name: "body"
+            widget: "list"
+            summary: "{{fields.text}}"
+            field: { label: "Paragraph", name: "text", widget: "text", hint: "Basic HTML like <em>italics</em> is fine here." }
+          - label: "Selected Honours"
+            name: "honors"
+            widget: "list"
+            summary: "{{fields.text}}"
+            field: { label: "Honour", name: "text", widget: "string" }
+          - label: "Tools"
+            name: "tools"
+            widget: "list"
+            summary: "{{fields.text}}"
+            field: { label: "Tool", name: "text", widget: "string" }
+          - label: "Education"
+            name: "education"
+            widget: "list"
+            summary: "{{fields.text}}"
+            field: { label: "Item", name: "text", widget: "string" }
+
+  - name: "blog"
+    label: "Blog Posts"
+    files:
+      - file: "site/content/blog.json"
+        label: "All Posts"
+        name: "posts"
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.date}}"
+            fields:
+              - { label: "Slug (short-dashed-id, e.g. my-new-post — keep it stable once published)", name: "slug", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+              - { label: "Teaser (shown on the Notes list page)", name: "teaser", widget: "text" }
+              - label: "Content Blocks (add as many as you need, in order)"
+                name: "blocks"
+                widget: "list"
+                summary: "{{fields.type}}: {{fields.text}}"
+                fields:
+                  - { label: "Type", name: "type", widget: "select", options: ["paragraph", "heading"], default: "paragraph" }
+                  - { label: "Text", name: "text", widget: "text", hint: "Basic HTML like <em>italics</em> is fine here." }
