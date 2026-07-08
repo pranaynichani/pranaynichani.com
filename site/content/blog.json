@@ -55,6 +55,13 @@
           "text": "They're the craft."
         }
       ]
+    },
+    {
+      "slug": "Where-AI-actually-belongs-in-documentary-post-production",
+      "title": "Where AI actually belongs in documentary post-production",
+      "date": "2026-07-08",
+      "teaser": "Over the last year I rebuilt the pipeline that takes a documentary from the shoot to the edit suite — with AI in the loop at every phase, and a human hand on every important decision. This is the before and after.",
+      "customFile": "/assets/posts/ai-in-documentary-post-production.html"
     }
   ]
 }
