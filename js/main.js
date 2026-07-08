@@ -904,8 +904,11 @@ function renderBlogIndex() {
   if (!host) return;
   fetch(DEPTH + "content/blog.json").then(r => r.json()).then(data => {
     const posts = [...data.posts].sort((a, b) => b.date.localeCompare(a.date));
+    // a post with a Custom HTML File links straight to that standalone page instead of
+    // routing through post.html — it carries its own full design, header, and footer
+    const hrefFor = p => p.customFile ? DEPTH + p.customFile.replace(/^\//, "") : `post.html?s=${encodeURIComponent(p.slug)}`;
     host.innerHTML = posts.map(p => `
-      <a class="post-item" href="post.html?s=${encodeURIComponent(p.slug)}">
+      <a class="post-item" href="${esc(hrefFor(p))}">
         <p class="date">${blogDateLabel(p.date)}</p>
         <h3>${esc(p.title)}</h3>
         <p>${esc(p.teaser)}</p>
@@ -919,8 +922,11 @@ function renderBlogPost() {
   const slug = new URLSearchParams(location.search).get("s");
   fetch(DEPTH + "content/blog.json").then(r => r.json()).then(data => {
     const p = data.posts.find(x => x.slug === slug) || data.posts[0];
+    // a post with a Custom HTML File doesn't render through this template at all —
+    // send the browser straight to the standalone file instead
+    if (p.customFile) { location.replace(DEPTH + p.customFile.replace(/^\//, "")); return; }
     document.title = `${p.title} — Pranay Nichani`;
-    const blocksHtml = p.blocks.map(b =>
+    const blocksHtml = (p.blocks || []).map(b =>
       b.type === "heading" ? `<h2>${esc(b.text)}</h2>` :
       b.type === "html" ? b.text :
       `<p>${b.text}</p>`).join("");
