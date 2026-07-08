@@ -876,6 +876,60 @@ function renderProject() {
   });
 }
 
+// ---------- about page (content/about.json, CMS-editable) ----------
+function renderAbout() {
+  const host = $("#about-main");
+  if (!host) return;
+  fetch(DEPTH + "content/about.json").then(r => r.json()).then(a => {
+    host.innerHTML = `
+      <h2>${esc(a.heading)}</h2>
+      <p class="lede">${esc(a.lede)}</p>
+      ${a.body.map(p => `<p>${p}</p>`).join("")}
+      <p><a href="teaching.html" style="color:var(--accent)">More about my teaching →</a></p>`;
+    const fill = (id, items) => { const el = document.getElementById(id); if (el) el.innerHTML = items.map(t => `<li>${esc(t)}</li>`).join(""); };
+    fill("about-honors", a.honors);
+    fill("about-tools", a.tools);
+    fill("about-education", a.education);
+  });
+}
+
+// ---------- blog (content/blog.json, CMS-editable) ----------
+function blogDateLabel(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "long", year: "numeric" }).toUpperCase();
+}
+
+function renderBlogIndex() {
+  const host = $("#blog-posts");
+  if (!host) return;
+  fetch(DEPTH + "content/blog.json").then(r => r.json()).then(data => {
+    const posts = [...data.posts].sort((a, b) => b.date.localeCompare(a.date));
+    host.innerHTML = posts.map(p => `
+      <a class="post-item" href="post.html?s=${encodeURIComponent(p.slug)}">
+        <p class="date">${blogDateLabel(p.date)}</p>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.teaser)}</p>
+      </a>`).join("");
+  });
+}
+
+function renderBlogPost() {
+  const host = $("#post");
+  if (!host) return;
+  const slug = new URLSearchParams(location.search).get("s");
+  fetch(DEPTH + "content/blog.json").then(r => r.json()).then(data => {
+    const p = data.posts.find(x => x.slug === slug) || data.posts[0];
+    document.title = `${p.title} — Pranay Nichani`;
+    const blocksHtml = p.blocks.map(b => b.type === "heading" ? `<h2>${esc(b.text)}</h2>` : `<p>${b.text}</p>`).join("");
+    host.innerHTML = `
+      <article class="post">
+        <p class="date">${blogDateLabel(p.date)}</p>
+        <h1>${esc(p.title)}</h1>
+        ${blocksHtml}
+      </article>`;
+  });
+}
+
 // ---------- reveal on scroll ----------
 function watchReveals() {
   const io = new IntersectionObserver(entries => {
@@ -902,5 +956,8 @@ renderFeatured();
 renderTimeline();
 renderArchive();
 renderProject();
+renderAbout();
+renderBlogIndex();
+renderBlogPost();
 watchReveals();
 wireNavToggle();
