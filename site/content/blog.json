@@ -55,22 +55,6 @@
           "text": "They're the craft."
         }
       ]
-    },
-    {
-      "slug": "Test- test",
-      "title": "testing",
-      "date": "2026-07-08",
-      "teaser": "Teasing Teaser",
-      "blocks": [
-        {
-          "type": "heading",
-          "text": "This is a Heading"
-        },
-        {
-          "type": "paragraph",
-          "text": "This is a paragraph. This is <em>italics test</em>"
-        }
-      ]
     }
   ]
 }
