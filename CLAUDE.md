@@ -57,14 +57,9 @@ A project's `type` drives the bins, filters, and mobile tabs. Current types:
 `type === "commercial"` / slug `commercial-work` (`commClip`, `commProj`, `loadSpot`, and the
 `g.key === "commercial"` branch in the bins). It expands to show every spot.
 
-**Pranay's next task = split Commercial into "Commercial" + "Real estate commercials."** The
-real-estate spots are the **Scout Condos** ones (TreMari Bakery, People's Pint, Hounslow's House);
-the rest are automotive/brand (Chevrolet, GMC). Recommended approach: create a second project
-(e.g. `real-estate-work`, `type: "realestate"`) with its own `videos[]` and still, move the three
-Scout Condos spots into it, and **generalize the spot-expansion logic** so it works for any
-`videos[]`-bearing project rather than being hard-coded to `commercial-work`. Then register
-`realestate` in the three places above. Verify the desktop bins, the work-page filter, and the
-mobile tabs all show both categories and play the right spots.
+✅ Done: Commercial was split into "Commercial" + "Real Estate" (slugs `commercial-work` /
+`real-estate-work`), with the spot-expansion/sub-bin logic generalized to work off any
+`videos[]`-bearing project (see `groupVideos()` in main.js) rather than being hard-coded.
 
 ---
 
@@ -109,13 +104,85 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
 
 ## Conventions
 
-- This is a git repo. **Commit after each working, verified change** (Pranay has been asking for
-  commits throughout; if unsure, commit — it's all recoverable). End commit messages with:
-  `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`
-- **Not deployed yet.** Plan is Cloudflare Pages (free) → point the `pranaynichani.com` domain at it
-  → retire the old Adobe Portfolio site. Walk Pranay through deploy hands-on when he's ready.
-- **`website/` (project root) is the OLD Adobe Portfolio export** — reference only. Don't edit or
-  serve it. The live site is everything under `site/`.
+- This is a git repo, **pushed to GitHub at `pranaynichani/pranaynichani.com` (private)**. `gh` CLI
+  is installed and authenticated as `pranaynichani`. **Commit after each working, verified change**
+  (Pranay has been asking for commits throughout; if unsure, commit — it's all recoverable). End
+  commit messages with: `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`
+- `website/` (the old Adobe Portfolio export) was **permanently removed** from both git history and
+  disk on 2026-07-07 via `git filter-repo` (it was 728MB of old video files blocking the first
+  GitHub push). Pranay confirmed he has a separate backup. Don't reference it as if it still exists.
 - `docs/MOBILE-RUSH-BUILD-BRIEF.md` = the spec the mobile editor was built from (kept for reference).
   `README.md` = a shorter human-facing overview.
 - No build step, no framework, no dependencies — plain HTML/CSS/JS. Just edit and reload.
+
+---
+
+## Deployment — LIVE on Netlify (as of 2026-07-08)
+
+- **Live at `https://pranaynichani.com`**, hosted on **Netlify** (site name `pranaynichani-com`,
+  site_id `3207a742-e256-4af3-a38f-b9f5e3955332`, also reachable at `pranaynichani-com.netlify.app`).
+  Netlify CLI is installed and authenticated (`netlify status` to check).
+- **Continuous deployment is live**: every push to `main` on GitHub auto-deploys. `netlify.toml` at
+  repo root sets `publish = "site"`, `command = ""` (no build step), `functions = "netlify/functions"`.
+- **DNS**: the domain is *not* on Netlify DNS or Cloudflare — it's still registered at
+  **Network Solutions** (via Wix as reseller; Wix bills for it but its own DNS panel won't let you
+  edit NS records, and "connect to external site" requires a paid Wix plan). Instead, DNS records
+  were edited directly in **Wix's "Manage DNS Records" panel** (Domains → DNS Records in the Wix
+  dashboard): apex `pranaynichani.com` → **A record → `75.2.60.5`** (Netlify's load balancer IP),
+  `www` → **CNAME → `pranaynichani-com.netlify.app`**. This works without moving nameservers because
+  Netlify auto-issues SSL for any domain pointed at it this way.
+- **Domain transfer in progress, currently blocked.** Plan was Wix → Namecheap (intermediate stop,
+  since Wix won't release nameservers pre-transfer and Cloudflare Registrar requires a domain
+  already on Cloudflare nameservers before it'll accept a transfer) → optionally Cloudflare Registrar
+  later for at-cost pricing. Pranay accidentally triggered ICANN's mandatory **60-day transfer lock**
+  by editing the domain's contact info while looking for the privacy toggle (~2026-07-08); lock
+  clears **~2026-09-05**, or sooner if Wix support agrees to waive it. **This does not block anything
+  live** — DNS/hosting works independently of who the registrar is.
+- **Cloudflare is a dormant leftover, not in use.** Early in the deploy process a Cloudflare
+  Workers-based static-asset deploy was set up (Worker name `pranay-portfolio-website`, zone
+  `pranaynichani.com` added but never activated since nameservers never moved there) before pivoting
+  to Netlify — Wix's domain-panel limitations made the Cloudflare path require either a paid Wix plan
+  or the now-blocked registrar transfer, while Netlify's plain CNAME/A-record custom-domain support
+  needed neither. `wrangler.jsonc` still sits at repo root from that abandoned attempt; it's inert
+  and safe to ignore (or delete) unless hosting ever migrates back to Cloudflare.
+
+## Content editing — Decap CMS (as of 2026-07-08)
+
+Pranay can self-edit the About page and blog posts at **`pranaynichani.com/admin`** (GitHub login),
+no code required. Two collections:
+
+- **About Page** → edits `site/content/about.json` (heading, lede, body paragraphs, honours, tools,
+  education). Rendered by `renderAbout()` in main.js into `about.html`'s `#about-main` /
+  `#about-honors` / `#about-tools` / `#about-education` containers.
+- **Blog Posts** → edits `site/content/blog.json` (a `posts[]` array: slug, title, date, teaser, plus
+  either `blocks[]` **or** `customFile`). Rendered by `renderBlogIndex()` (the Notes list page) and
+  `renderBlogPost()` (`site/blog/post.html?s=<slug>`, replaces the old one-file-per-post approach).
+  - `blocks[]`: ordered list of `{ type: "paragraph" | "heading" | "html", text }`. `html` inserts
+    `text` as-is (no wrapping `<p>`/`<h2>`) — for pasting a raw snippet inline.
+  - `customFile`: for a fully custom-designed post (its own complete HTML/CSS, not shared-template
+    prose — **this is what Pranay mostly wants to publish going forward**). When set, the post links
+    straight to the uploaded standalone file instead of routing through `post.html` at all.
+
+**⚠️ Known bug, unresolved as of 2026-07-08: the `customFile` upload silently fails.** The post
+entry (metadata) commits and publishes fine, and the *field* shows the file as attached in the
+Decap UI, but the actual file binary never gets pushed to GitHub — confirmed empirically (no
+"Upload ..." commit appears for the html file, unlike the image uploads in the same session, which
+worked correctly). This looks like a Decap CMS bug specific to the generic `file` widget on the
+GitHub backend (as opposed to the `image` widget, which works). **Workaround until fixed**: after
+Pranay publishes a post with a Custom HTML File and it 404s, check `git log` for the missing file,
+then have Pranay send Claude the actual HTML file (and any images) to commit directly:
+1. Check `site/content/blog.json` for the `customFile` path Decap already saved (e.g.
+   `/assets/posts/<slug>.html`) — commit the real file there to match.
+2. Images uploaded via Decap's general Media Library land in `site/assets/stills/` (the global
+   `media_folder`), *not* `site/assets/posts/` — fix the HTML's `<img src>` paths to
+   `../stills/<filename>.png` (relative from `site/assets/posts/`) rather than assuming same-folder.
+3. Verify locally (temp-copy into `site/assets/posts/`, load via the preview server, check images
+   resolve and no console errors) before committing for real.
+- **Auth**: GitHub OAuth App (owned by Pranay's GitHub account, callback URL
+  `https://pranaynichani.com/api/callback`) + `netlify/functions/auth.js` and `callback.js`
+  implementing the OAuth handshake Decap needs (Netlify's old Identity/Git Gateway shortcut is
+  deprecated as of Feb 2025, so this manual-function approach is the current supported pattern).
+  Client ID/secret live as Netlify env vars `GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET`
+  (secret is Production-context-only — free tier doesn't allow "same value everywhere" for
+  secret-flagged vars). Never print these via `netlify api getSiteEnvVars` or similar — that returns
+  values in plaintext.
