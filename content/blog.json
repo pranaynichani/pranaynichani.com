@@ -62,6 +62,13 @@
       "date": "2026-07-08",
       "teaser": "Over the last year I rebuilt the pipeline that takes a documentary from the shoot to the edit suite — with AI in the loop at every phase, and a human hand on every important decision. This is the before and after.",
       "customFile": "/assets/posts/ai-in-documentary-post-production.html"
+    },
+    {
+      "slug": "How-to-prep-a-documentary-for-the-edit:-a-field-guide-for-assistant-editors",
+      "title": "How to prep a documentary for the edit: a field guide for new assistant editors",
+      "date": "2026-04-18",
+      "teaser": "Everything that has to happen between “the shoot happened” and “the editor can start cutting” — the manual craft, phase by phase, and the reasons behind every step. Written for the assistant editor running their first shoot day end to end.",
+      "customFile": "/assets/posts/the-prep-bible-a-guide-for-new-assistant-editors.html"
     }
   ]
 }
