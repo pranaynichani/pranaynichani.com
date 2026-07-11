@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" width="600" height="120">
+  <rect x="0" y="56" width="600" height="6" rx="2" fill="#232019"/>
+  <rect x="30" y="30" width="470" height="58" rx="6" fill="none" stroke="#d9a441" stroke-width="1.5"/>
+  <rect x="30" y="30" width="8" height="58" rx="2" fill="#d9a441"/>
+  <polygon points="63,24 77,24 70,36" fill="#e05a4e"/>
+  <rect x="68.7" y="34" width="2.6" height="60" fill="#e05a4e"/>
+  <text x="110" y="72" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-weight="500" fill="#f2f0e9">Pranay Nichani</text>
+</svg>

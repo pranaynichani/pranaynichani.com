@@ -45,8 +45,9 @@ header.site .wrap {
   display: flex; justify-content: space-between; align-items: center;
   height: 64px;
 }
-.logo { font-family: var(--font-body); font-size: 14px; letter-spacing: 3px; font-weight: 600; }
-.logo span { color: var(--accent); }
+.logo { font-family: var(--font-body); font-size: 14px; letter-spacing: 3px; font-weight: 600; display: inline-flex; align-items: center; gap: 11px; }
+.logo .logo-mark { flex: none; width: 11px; height: 22px; display: block; }
+.logo .logo-name span { color: var(--accent); }
 nav.main { display: flex; gap: 28px; }
 nav.main a {
   font-size: 13px; letter-spacing: 1px; color: var(--text-dim);
