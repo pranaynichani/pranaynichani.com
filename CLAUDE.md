@@ -150,6 +150,21 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
   secrets scan came back clean). Never commit secrets, tokens, or private info — and `website/`
   (728MB local-only folder) is gitignored; keep it that way.
 
+## SEO / findability (set up 2026-08-06)
+
+- `site/sitemap.xml` — 29 URLs. **⚠️ REGENERATE IT whenever a project or post is added** (it lists
+  every `/project.html?p=<slug>` from `data.js` plus the standalone posts), then bump `<lastmod>`.
+- `site/robots.txt` — allows all crawlers (AI ones included) and points at the sitemap.
+- Every static page has `rel="canonical"` + Open Graph/Twitter tags. **New pages must get them too**
+  — copy the block from `work.html`.
+- JSON-LD structured data: a `Person` block (with award-bearing `workExample` entries) on
+  `index.html` and `about.html`; a `BlogPosting` block on each standalone post. **Give every new
+  post one** — it's what makes AI answer engines cite the work correctly.
+- **Search Console**: property `sc-domain:pranaynichani.com`, sitemap submitted and reading Success.
+  Pranay must drive it in his logged-in Chrome (claude-in-chrome MCP) — there's no API set up yet.
+  After publishing a new post, inspect its URL there and hit "Request indexing".
+  ⚠️ `get_page_text` returns stale panels on the URL-Inspection screen — trust screenshots.
+
 ## Content editing — Decap CMS is DEAD (since the 2026-08-06 GitHub Pages move)
 
 **The `/admin` self-edit page no longer works** — its GitHub-login handshake ran on Netlify
