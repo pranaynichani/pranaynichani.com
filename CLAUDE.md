@@ -137,11 +137,11 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
   (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) and `www` → **CNAME →
   `pranaynichani.github.io`**. Domain transfer to Namecheap still blocked by the 60-day ICANN lock
   (clears **~2026-09-05**); doesn't affect anything live.
-- **HTTPS cert status (check if session is near 2026-08-06):** GitHub auto-issues the Let's Encrypt
-  cert after the DNS flip; it was still provisioning when this was written. Once
-  `gh api repos/pranaynichani/pranaynichani.com/pages --jq '.https_certificate.state'` says
-  `approved`/`issued`, enable enforcement:
-  `gh api -X PUT repos/pranaynichani/pranaynichani.com/pages -F https_enforced=true`
+- **HTTPS: fully live and enforced** (verified 2026-08-06: all pages 200 over https, http→https
+  301, www→apex 301). Gotcha for the future: after a domain/DNS change, GitHub's cert provisioning
+  can silently stall (`.https_certificate` stays null for an hour) — the fix is to remove and
+  re-add the custom domain via `PUT /repos/.../pages` with `{"cname":null}` then
+  `{"cname":"pranaynichani.com"}`, which kicks it to `approved` within seconds.
 - **Netlify is RETIRED but not deleted** (site `pranaynichani-com`, was blocked by the credits
   system — the reason for this move). It may still serve stale copies to unpropagated DNS for a
   while; ignore it. `netlify.toml`, `netlify/functions/`, and `wrangler.jsonc` (Cloudflare, an even
