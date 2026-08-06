@@ -104,8 +104,9 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
 
 ## Conventions
 
-- This is a git repo, **pushed to GitHub at `pranaynichani/pranaynichani.com` (private)**. `gh` CLI
-  is installed and authenticated as `pranaynichani`. **Commit after each working, verified change**
+- This is a git repo, **pushed to GitHub at `pranaynichani/pranaynichani.com` (PUBLIC as of
+  2026-08-06 — it's the Pages hosting source; never commit secrets)**. `gh` CLI is installed and
+  authenticated as `pranaynichani`. **Commit after each working, verified change**
   (Pranay has been asking for commits throughout; if unsure, commit — it's all recoverable). End
   commit messages with: `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`
 - `website/` (the old Adobe Portfolio export) was **permanently removed** from both git history and
@@ -117,39 +118,60 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
 
 ---
 
-## Deployment — LIVE on Netlify (as of 2026-07-08)
+## Deployment — LIVE on GitHub Pages (as of 2026-08-06)
 
-- **Live at `https://pranaynichani.com`**, hosted on **Netlify** (site name `pranaynichani-com`,
-  site_id `3207a742-e256-4af3-a38f-b9f5e3955332`, also reachable at `pranaynichani-com.netlify.app`).
-  Netlify CLI is installed and authenticated (`netlify status` to check).
-- **Continuous deployment is live**: every push to `main` on GitHub auto-deploys. `netlify.toml` at
-  repo root sets `publish = "site"`, `command = ""` (no build step), `functions = "netlify/functions"`.
-- **DNS**: the domain is *not* on Netlify DNS or Cloudflare — it's still registered at
-  **Network Solutions** (via Wix as reseller; Wix bills for it but its own DNS panel won't let you
-  edit NS records, and "connect to external site" requires a paid Wix plan). Instead, DNS records
-  were edited directly in **Wix's "Manage DNS Records" panel** (Domains → DNS Records in the Wix
-  dashboard): apex `pranaynichani.com` → **A record → `75.2.60.5`** (Netlify's load balancer IP),
-  `www` → **CNAME → `pranaynichani-com.netlify.app`**. This works without moving nameservers because
-  Netlify auto-issues SSL for any domain pointed at it this way.
-- **Domain transfer in progress, currently blocked.** Plan was Wix → Namecheap (intermediate stop,
-  since Wix won't release nameservers pre-transfer and Cloudflare Registrar requires a domain
-  already on Cloudflare nameservers before it'll accept a transfer) → optionally Cloudflare Registrar
-  later for at-cost pricing. Pranay accidentally triggered ICANN's mandatory **60-day transfer lock**
-  by editing the domain's contact info while looking for the privacy toggle (~2026-07-08); lock
-  clears **~2026-09-05**, or sooner if Wix support agrees to waive it. **This does not block anything
-  live** — DNS/hosting works independently of who the registrar is.
-- **Cloudflare is a dormant leftover, not in use.** Early in the deploy process a Cloudflare
-  Workers-based static-asset deploy was set up (Worker name `pranay-portfolio-website`, zone
-  `pranaynichani.com` added but never activated since nameservers never moved there) before pivoting
-  to Netlify — Wix's domain-panel limitations made the Cloudflare path require either a paid Wix plan
-  or the now-blocked registrar transfer, while Netlify's plain CNAME/A-record custom-domain support
-  needed neither. `wrangler.jsonc` still sits at repo root from that abandoned attempt; it's inert
-  and safe to ignore (or delete) unless hosting ever migrates back to Cloudflare.
+- **Live at `https://pranaynichani.com`**, hosted on **GitHub Pages** from the now-**public** repo
+  `pranaynichani/pranaynichani.com`. Pages serves the **`gh-pages` branch** (a copy of just the
+  `site/` folder). `site/CNAME` (containing `pranaynichani.com`) binds the custom domain — never
+  delete that file.
+- **⚠️ DEPLOYS ARE MANUAL — pushing `main` does NOT update the live site.** After committing a
+  verified change to `main`, republish with:
+  `SHA=$(git subtree split --prefix site main | tail -1) && git push origin "$SHA:refs/heads/gh-pages" --force`
+  Then verify live (allow ~1–2 min for Pages to rebuild). **Every site edit must end with this
+  subtree push** or Pranay's live site silently stays stale.
+- **Why not GitHub Actions:** the `gh` OAuth token lacks `workflow` scope — pushes containing
+  `.github/workflows/*` files are rejected. Don't add workflow files unless Pranay re-auths
+  `gh` with that scope.
+- **DNS**: registered at Network Solutions via Wix (Wix's own DNS-records panel is editable; NS
+  records are not). As of 2026-08-06 the apex has **four A records → GitHub Pages IPs**
+  (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`) and `www` → **CNAME →
+  `pranaynichani.github.io`**. Domain transfer to Namecheap still blocked by the 60-day ICANN lock
+  (clears **~2026-09-05**); doesn't affect anything live.
+- **HTTPS cert status (check if session is near 2026-08-06):** GitHub auto-issues the Let's Encrypt
+  cert after the DNS flip; it was still provisioning when this was written. Once
+  `gh api repos/pranaynichani/pranaynichani.com/pages --jq '.https_certificate.state'` says
+  `approved`/`issued`, enable enforcement:
+  `gh api -X PUT repos/pranaynichani/pranaynichani.com/pages -F https_enforced=true`
+- **Netlify is RETIRED but not deleted** (site `pranaynichani-com`, was blocked by the credits
+  system — the reason for this move). It may still serve stale copies to unpropagated DNS for a
+  while; ignore it. `netlify.toml`, `netlify/functions/`, and `wrangler.jsonc` (Cloudflare, an even
+  earlier abandoned attempt) are inert leftovers — safe to delete once the move is confirmed stable.
+- **The repo is PUBLIC now** (required for free GitHub Pages; Pranay approved 2026-08-06 after a
+  secrets scan came back clean). Never commit secrets, tokens, or private info — and `website/`
+  (728MB local-only folder) is gitignored; keep it that way.
 
-## Content editing — Decap CMS (as of 2026-07-08)
+## Content editing — Decap CMS is DEAD (since the 2026-08-06 GitHub Pages move)
 
-Pranay can self-edit the About page and blog posts at **`pranaynichani.com/admin`** (GitHub login),
-no code required. Two collections:
+**The `/admin` self-edit page no longer works** — its GitHub-login handshake ran on Netlify
+Functions, which GitHub Pages can't host. Pranay updates the site by asking Claude (edit →
+verify → commit → subtree push, per Deployment above). He accepted this trade-off knowingly;
+if he ever wants self-editing back, it needs an OAuth helper hosted elsewhere (e.g. a free
+Cloudflare Worker) — don't rebuild it unprompted. The `site/admin/` folder and the config notes
+below are kept for that eventuality.
+
+**Blog posts:** add an entry to `site/content/blog.json` (see fields below) and, for a
+custom-designed post, drop its standalone HTML at `site/assets/posts/<slug>.html` — that's the
+path `customFile: "/assets/posts/<slug>.html"` resolves to in production. ⚠️ If a post arrives as
+a Claude-artifact **"bundled" export** (`<title>Bundled Page</title>`, `__bundler/manifest`
+script, UUID src refs), **unbundle it before publishing** — bundles display for humans but are
+invisible to search/AI crawlers. Precedent: the Prep Bible post (2026-08-06) — decode the
+`__bundler/template` JSON string, inline the manifest's woff2 fonts as data: URIs, drop the
+dc-runtime loader + `x-dc`/`helmet` wrappers (move helmet contents into `<head>`), add a real
+`<title>`.
+
+### Old Decap reference (dormant)
+
+The two collections were:
 
 - **About Page** → edits `site/content/about.json` (heading, lede, body paragraphs, honours, tools,
   education). Rendered by `renderAbout()` in main.js into `about.html`'s `#about-main` /
