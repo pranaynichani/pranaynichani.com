@@ -150,6 +150,18 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
   secrets scan came back clean). Never commit secrets, tokens, or private info — and `website/`
   (728MB local-only folder) is gitignored; keep it that way.
 
+## ⚠️ Don't diagnose this site by grepping raw HTML
+
+Nearly every list on this site is **injected by JavaScript at page load** — the Notes index, the
+timeline, bins, project pages — all rendered by `main.js` from `data.js` / `content/blog.json`.
+`curl` + `grep` on the raw HTML therefore shows *nothing*, and the only hardcoded `<a>` tags in
+`blog/index.html` are the two external press links. A chat did exactly this on 2026-08-06 and
+wrongly concluded the blog posts were "orphaned with no navigation path" — they are correctly
+listed and linked on the live page. **Always verify by loading the page in a real browser** (the
+preview/browser MCP, then query the DOM) before concluding something is missing. And **never
+"fix" it by hardcoding a post link into `blog/index.html`** — that would render the post twice.
+To add a post to the Notes index, add it to `site/content/blog.json`; that's the only step.
+
 ## SEO / findability (set up 2026-08-06)
 
 - `site/sitemap.xml` — 29 URLs. **⚠️ REGENERATE IT whenever a project or post is added** (it lists
