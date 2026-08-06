@@ -1,2 +1,8 @@
 # Local Netlify folder
 .netlify
+
+# Old Adobe Portfolio export (728MB of videos) - never push
+website/
+
+# macOS
+.DS_Store
