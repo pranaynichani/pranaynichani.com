@@ -7,7 +7,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const DEPTH = document.body.dataset.depth || "";
 
 function still(p) { return `${DEPTH}assets/stills/${p.slug}.${p.img}`; }
-function pageUrl(p) { return `${DEPTH}project.html?p=${p.slug}`; }
+function pageUrl(p) { return `${DEPTH}project/${p.slug}.html`; }
 
 // Buckets a project's videos[] by their `group` field (client/campaign), keeping
 // each video's original index so bin selectors stay stable. Ungrouped videos (no
@@ -804,7 +804,9 @@ function renderArchive() {
 function renderProject() {
   const host = $("#proj");
   if (!host) return;
-  const slug = new URLSearchParams(location.search).get("p");
+  // static pages (project/<slug>.html) carry their slug on <body data-project>;
+  // the ?p= fallback keeps any old query-style link working
+  const slug = document.body.dataset.project || new URLSearchParams(location.search).get("p");
   const idx = PROJECTS.findIndex(p => p.slug === slug);
   const p = PROJECTS[idx] || PROJECTS[0];
   document.title = `${p.title} — Pranay Nichani`;
@@ -919,6 +921,9 @@ function renderBlogIndex() {
 function renderBlogPost() {
   const host = $("#post");
   if (!host) return;
+  // static post pages (blog/<slug>.html, generated) already contain their content
+  // — re-rendering here would follow customFile back to this same page in a loop
+  if (document.body.dataset.post) return;
   const slug = new URLSearchParams(location.search).get("s");
   fetch(DEPTH + "content/blog.json").then(r => r.json()).then(data => {
     const p = data.posts.find(x => x.slug === slug) || data.posts[0];
