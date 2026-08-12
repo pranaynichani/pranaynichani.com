@@ -34,7 +34,8 @@ Every project, trailer, role, award, and category is defined in **`site/js/data.
 - **Add a new project:** copy an existing `PROJECTS` block, fill in the fields, pick a unique
   `slug`, and drop a 16:9 still at `site/assets/stills/<slug>.<ext>` (set `img` to that extension).
   Stills for existing films came from the old site; for new ones, ask Pranay for an image or pull a
-  frame from the trailer.
+  frame from the trailer. **Then run `node scripts/generate-static.js`** — it creates the project's
+  static page and updates the sitemap (see SEO section).
 - **Feature a project on the homepage:** set `featured: true` (currently 6 are featured).
 - **Write a blog post:** duplicate `site/blog/posts/tools-and-story.html`, edit the prose, and add
   one `<a class="post-item">` entry to `site/blog/index.html`.
@@ -164,8 +165,19 @@ To add a post to the Notes index, add it to `site/content/blog.json`; that's the
 
 ## SEO / findability (set up 2026-08-06)
 
-- `site/sitemap.xml` — 29 URLs. **⚠️ REGENERATE IT whenever a project or post is added** (it lists
-  every `/project.html?p=<slug>` from `data.js` plus the standalone posts), then bump `<lastmod>`.
+- **Static SEO pages are GENERATED (since 2026-08-12):** run **`node scripts/generate-static.js`**
+  after ANY edit to `data.js` or `content/blog.json`. It bakes a crawler-readable page per project
+  at `site/project/<slug>.html` (canonical `…/project/<slug>`, extensionless), a static page per
+  block-based blog post at `site/blog/<slug>.html`, and regenerates `site/sitemap.xml` — all three
+  in one command. The baked `<main>` is a replica of what `main.js` renders; on load `main.js`
+  re-renders it with the interactive bits (this is intentional — don't "fix" the double render).
+  `project.html` is now only a redirector for old `?p=` links; `pageUrl()` in main.js points at the
+  new files. Canonical URLs are extensionless everywhere; on-disk links keep `.html` so
+  `localhost:8090` (plain `python http.server`) still works.
+- `site/sitemap.xml` — ⚠️ never hand-edit; it's overwritten by `generate-static.js`.
+- Legacy redirect stubs at site root (`illusion-bound.html`, `eye-of-the-hurricane.html`,
+  `bio-1.html`) catch old Adobe-Portfolio-era URLs Google still crawls; `404.html` is the
+  GitHub Pages not-found page ("MEDIA OFFLINE"). Leave them be.
 - `site/robots.txt` — allows all crawlers (AI ones included) and points at the sitemap.
 - Every static page has `rel="canonical"` + Open Graph/Twitter tags. **New pages must get them too**
   — copy the block from `work.html`.
