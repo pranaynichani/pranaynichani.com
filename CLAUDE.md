@@ -127,7 +127,9 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
   delete that file.
 - **⚠️ DEPLOYS ARE MANUAL — pushing `main` does NOT update the live site.** After committing a
   verified change to `main`, republish with:
-  `SHA=$(git subtree split --prefix site main | tail -1) && git push origin "$SHA:refs/heads/gh-pages" --force`
+  `SHA=$(git subtree split --prefix site main 2>/dev/null | tail -1 | tr -d '[:space:]') && git push origin "${SHA}:refs/heads/gh-pages" --force`
+  ⚠️ The braces in `${SHA}` are required — in zsh, `"$SHA:refs/…"` silently applies the `:r`
+  modifier and mangles the refspec (`error: src refspec …efs/heads/gh-pages`).
   Then verify live (allow ~1–2 min for Pages to rebuild). **Every site edit must end with this
   subtree push** or Pranay's live site silently stays stale.
 - **Why not GitHub Actions:** the `gh` OAuth token lacks `workflow` scope — pushes containing
