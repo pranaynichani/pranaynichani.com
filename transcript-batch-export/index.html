@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcript Batch Export</title>
+  <link rel="canonical" href="https://pranaynichani.com/transcript-batch-export/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Transcript Batch Export">
+  <meta property="og:description" content="Batch transcript, timeline and marker export for Adobe Premiere Pro — timecoded speaker-labelled DOCX, SRT, CSV, chapters and more.">
+  <meta property="og:url" content="https://pranaynichani.com/transcript-batch-export/">
+  <meta property="og:image" content="https://pranaynichani.com/transcript-batch-export/assets/screenshot.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="description" content="Batch transcript, timeline and marker export for Adobe Premiere Pro — timecoded speaker-labelled DOCX, SRT, CSV, chapters and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../css/style.css">
+  
+<style>
+  .tbe-doc { max-width: 760px; margin: 0 auto; padding: 48px 22px 72px; }
+  .tbe-doc h1 { font-family: var(--font-display); font-weight: 420; font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.12; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .tbe-doc .lead { color: var(--text-dim); font-size: 17px; line-height: 1.6; margin-bottom: 34px; }
+  .tbe-doc h2 { font-family: var(--font-display); font-weight: 450; font-size: 24px; margin: 42px 0 12px;
+    padding-top: 10px; border-top: 1px solid var(--line); }
+  .tbe-doc h3 { font-size: 16px; font-weight: 600; margin: 26px 0 8px; }
+  .tbe-doc p, .tbe-doc li { font-size: 15.5px; line-height: 1.7; color: var(--text); }
+  .tbe-doc p { margin: 0 0 14px; }
+  .tbe-doc ul, .tbe-doc ol { margin: 0 0 16px 22px; }
+  .tbe-doc li { margin-bottom: 6px; }
+  .tbe-doc code { background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 6px; font-size: 0.88em; }
+  .tbe-doc pre { background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; margin: 0 0 16px; }
+  .tbe-doc pre code { background: none; border: 0; padding: 0; }
+  .tbe-doc a { color: var(--accent); }
+  .tbe-doc hr { border: 0; border-top: 1px solid var(--line); margin: 34px 0; }
+  .tbe-doc .fine { color: var(--text-faint); font-size: 13px; }
+  .tbe-doc .tscroll { overflow-x: auto; margin: 0 0 18px; }
+  .tbe-doc table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 14.5px; }
+  .tbe-doc th { text-align: left; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--text-faint); padding: 8px 14px 8px 0; border-bottom: 1px solid var(--line-strong); }
+  .tbe-doc td { padding: 9px 14px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top;
+    line-height: 1.55; }
+  .tbe-crumb { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-faint);
+    margin-bottom: 18px; }
+  .tbe-crumb a { color: var(--text-dim); text-decoration: none; }
+  .tbe-crumb a:hover { color: var(--accent); }
+</style>
+
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="../index.html"><svg class="logo-mark" viewBox="0 0 14 28" aria-hidden="true" focusable="false"><polygon points="1,0 13,0 7,10" fill="#e05a4e"/><rect x="5.75" y="9" width="2.5" height="19" fill="#e05a4e"/></svg><span class="logo-name">PRANAY <span>NICHANI</span></span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main" id="site-nav">
+      <a href="../index.html">HOME</a>
+      <a href="../work.html">WORK</a>
+      <a href="../about.html">ABOUT</a>
+      <a href="../blog/index.html">NOTES</a>
+      <a href="../index.html#contact">CONTACT</a>
+    </nav>
+  </div>
+</header>
+
+<section class="block">
+  <article class="tbe-doc">
+
+<p class="tbe-crumb">A PREMIERE PRO PLUGIN BY PRANAY NICHANI</p>
+<h1>Transcript Batch Export</h1>
+<p class="lead">Every transcript out of Premiere Pro, in the format you actually need — timecoded,
+speaker-labelled Word documents, subtitles, spreadsheets, markers and chapters. Batch is how it
+scales: select your sequences, tick what you want, run once.</p>
+
+<p><img src="assets/screenshot.png" alt="Transcript Batch Export panel docked in Premiere Pro, exporting eight interview sequences in one pass" style="width:100%;border:1px solid var(--line);border-radius:10px;" loading="lazy"></p>
+
+<h2>What it does</h2>
+<ul>
+  <li><strong>Transcripts with real timecode</strong> — Timeline/Source TC (HH:MM:SS:FF), zero-based real time (HH:MM:SS), or both. Clips are stamped with the camera's source timecode.</li>
+  <li><strong>A Word document you can hand to a producer</strong> — timecode column, speaker column, running header, page numbers, real heading styles.</li>
+  <li><strong>One document for the whole batch</strong> — eight interview days become a single paper-edit document, one sequence per page.</li>
+  <li><strong>Speaker tools</strong> — rename, exclude, one file per speaker, per-project speaker memory.</li>
+  <li><strong>Every format post asks for</strong> — TXT, DOCX, clean read, Markdown, CSV, XLSX, SRT, VTT, JSON, stats.</li>
+  <li><strong>Timelines and markers too</strong> — FCPXML, OTIO, marker CSV/JSON, a DaVinci Resolve-ready marker CSV, and a paste-ready YouTube chapter list.</li>
+</ul>
+
+<h2>Get it</h2>
+<p>Transcript Batch Export is coming to the <strong>Adobe Creative Cloud Marketplace</strong> —
+monthly subscription with a 30-day free trial, installed and updated through the Creative Cloud
+desktop app. Requires Premiere Pro 25.6 or later on macOS or Windows.</p>
+<p>No account, no telemetry, no internet connection: the plugin runs entirely on your machine and
+your media never leaves it.</p>
+
+<h2>Documentation</h2>
+<ul>
+  <li><a href="help.html">Help — full guide to every feature</a></li>
+  <li><a href="privacy.html">Privacy policy</a></li>
+  <li><a href="eula.html">End User License Agreement</a></li>
+</ul>
+
+<h2>Support</h2>
+<p>Email <a href="mailto:pranaynichani@gmail.com">pranaynichani@gmail.com</a> — answered by the
+person who wrote the code. Include your Premiere version, OS, and a copy of the panel log
+(the <em>copy</em> link above the log).</p>
+
+  </article>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="foot-contact">
+      <p style="font-size:12px; letter-spacing:2px; color:var(--text-faint); margin-bottom:8px;">SUPPORT</p>
+      <a href="mailto:pranaynichani@gmail.com">pranaynichani@gmail.com</a>
+    </div>
+    <div class="foot-meta">
+      <p><a href="index.html">Transcript Batch Export</a> · <a href="help.html">Help</a> · <a href="privacy.html">Privacy</a> · <a href="eula.html">EULA</a></p>
+      <p>© 2026 Pranay Nichani</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){var t=document.getElementById('nav-toggle'),nav=document.getElementById('site-nav');
+  if(t&&nav)t.addEventListener('click',function(){var open=nav.classList.toggle('open');
+  t.setAttribute('aria-expanded',open?'true':'false');});})();
+</script>
+</body>
+</html>

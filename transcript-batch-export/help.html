@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help — Transcript Batch Export</title>
+  <link rel="canonical" href="https://pranaynichani.com/transcript-batch-export/help">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Help — Transcript Batch Export">
+  <meta property="og:description" content="How to use Transcript Batch Export for Adobe Premiere Pro — transcripts, timecode modes, speakers, markers, and troubleshooting.">
+  <meta property="og:url" content="https://pranaynichani.com/transcript-batch-export/help">
+  <meta property="og:image" content="https://pranaynichani.com/transcript-batch-export/assets/screenshot.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="description" content="How to use Transcript Batch Export for Adobe Premiere Pro — transcripts, timecode modes, speakers, markers, and troubleshooting.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../css/style.css">
+  
+<style>
+  .tbe-doc { max-width: 760px; margin: 0 auto; padding: 48px 22px 72px; }
+  .tbe-doc h1 { font-family: var(--font-display); font-weight: 420; font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.12; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .tbe-doc .lead { color: var(--text-dim); font-size: 17px; line-height: 1.6; margin-bottom: 34px; }
+  .tbe-doc h2 { font-family: var(--font-display); font-weight: 450; font-size: 24px; margin: 42px 0 12px;
+    padding-top: 10px; border-top: 1px solid var(--line); }
+  .tbe-doc h3 { font-size: 16px; font-weight: 600; margin: 26px 0 8px; }
+  .tbe-doc p, .tbe-doc li { font-size: 15.5px; line-height: 1.7; color: var(--text); }
+  .tbe-doc p { margin: 0 0 14px; }
+  .tbe-doc ul, .tbe-doc ol { margin: 0 0 16px 22px; }
+  .tbe-doc li { margin-bottom: 6px; }
+  .tbe-doc code { background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px;
+    padding: 1px 6px; font-size: 0.88em; }
+  .tbe-doc pre { background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; margin: 0 0 16px; }
+  .tbe-doc pre code { background: none; border: 0; padding: 0; }
+  .tbe-doc a { color: var(--accent); }
+  .tbe-doc hr { border: 0; border-top: 1px solid var(--line); margin: 34px 0; }
+  .tbe-doc .fine { color: var(--text-faint); font-size: 13px; }
+  .tbe-doc .tscroll { overflow-x: auto; margin: 0 0 18px; }
+  .tbe-doc table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 14.5px; }
+  .tbe-doc th { text-align: left; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--text-faint); padding: 8px 14px 8px 0; border-bottom: 1px solid var(--line-strong); }
+  .tbe-doc td { padding: 9px 14px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top;
+    line-height: 1.55; }
+  .tbe-crumb { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-faint);
+    margin-bottom: 18px; }
+  .tbe-crumb a { color: var(--text-dim); text-decoration: none; }
+  .tbe-crumb a:hover { color: var(--accent); }
+</style>
+
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="../index.html"><svg class="logo-mark" viewBox="0 0 14 28" aria-hidden="true" focusable="false"><polygon points="1,0 13,0 7,10" fill="#e05a4e"/><rect x="5.75" y="9" width="2.5" height="19" fill="#e05a4e"/></svg><span class="logo-name">PRANAY <span>NICHANI</span></span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main" id="site-nav">
+      <a href="../index.html">HOME</a>
+      <a href="../work.html">WORK</a>
+      <a href="../about.html">ABOUT</a>
+      <a href="../blog/index.html">NOTES</a>
+      <a href="../index.html#contact">CONTACT</a>
+    </nav>
+  </div>
+</header>
+
+<section class="block">
+  <article class="tbe-doc">
+<p class="tbe-crumb"><a href="index.html">TRANSCRIPT BATCH EXPORT</a> — HELP</p><h1>Help</h1>
+<h2>Installing</h2>
+<p>Transcript Batch Export installs through the Creative Cloud desktop app. After installing, open Premiere Pro and go to <strong>Window &gt; Extensions &gt; Transcript Batch Export</strong>. Dock it anywhere you like.</p>
+<p>Requires <strong>Premiere Pro 25.6 or later</strong> on macOS or Windows.</p>
+<h2>The five-second version</h2>
+<ol><li>Click <strong>Output folder…</strong> and pick where files should go.</li><li>Select sequences, clips or whole bins in the <strong>Project panel</strong>.</li><li>Tick what you want.</li><li>Click <strong>Export Selection</strong>.</li></ol>
+<h2>Exports</h2>
+<h3>Transcripts</h3>
+<p>Works on sequences <em>and</em> clips. The item must <strong>already have a transcript</strong> — Transcript Batch Export exports Premiere's transcript data, it does not transcribe. Use <strong>Window &gt; Text &gt; Transcript</strong> to create one first. Items without a transcript are reported as skipped in the log.</p>
+<div class="tscroll"><table><thead><tr><th>Format</th><th>What you get</th></tr></thead><tbody><tr><td><strong>TXT</strong></td><td><code>[stamp] Speaker:</code> blocks — see <em>Timecode stamps</em> below</td></tr><tr><td><strong>DOCX</strong></td><td>A formatted Word document: timecode column + speech column, running header, page numbers, headings that drive Word's navigation pane</td></tr><tr><td><strong>Clean read TXT</strong></td><td>Continuous prose, speaker turns merged, no timecodes</td></tr><tr><td><strong>SRT / VTT</strong></td><td>Subtitle cues, split on speaker changes and sentence ends</td></tr><tr><td><strong>JSON</strong></td><td>Adobe's raw transcript data</td></tr><tr><td><strong>Markdown</strong></td><td><code># title</code>, bold stamp/speaker lead-ins — drops straight into Notion, Obsidian or show notes</td></tr><tr><td><strong>CSV — segments</strong></td><td>One row per segment: TC In/Out, Real In/Out, Speaker, Duration, Words, Text — a ready-made selects/logging sheet</td></tr><tr><td><strong>XLSX — segments</strong></td><td>The same sheet as a real Excel workbook (opens in Excel, Numbers, Google Sheets)</td></tr><tr><td><strong>Stats</strong></td><td>Runtime, speaking time, word count, words/minute, per-speaker share</td></tr><tr><td><strong>Merge markers</strong></td><td>Sequence/clip markers dropped into TXT, DOCX and Markdown at their timecode — notes and transcript in one document</td></tr></tbody></table></div>
+<h3>Timecode stamps</h3>
+<p>Two independent switches, for TXT, DOCX and CSV. Tick either or both:</p>
+<ul><li><strong>Timeline / Source timecode</strong> (<code>HH:MM:SS:FF</code>) — sequences use their own start timecode, so a timeline starting at <code>00:59:50:00</code> produces notes that match the Premiere ruler exactly. <strong>Clips use the camera's source timecode</strong> (the media start TC, at the footage frame rate), so notes line up with the camera files.</li><li><strong>Real time, zero-based</strong> (<code>HH:MM:SS</code>) — elapsed time from the start of the item. This is what YouTube and podcast workflows want.</li></ul>
+<p>Both ticked → <code>[00:59:52:04 - 01:00:11:09 | 00:00:02] Sarah:</code>. Neither ticked → real time is used, with a note in the log. SRT and VTT always use zero-based times, as the subtitle standards require.</p>
+<h3>Combine into a single document</h3>
+<p>Tick <strong>Combine into a single document</strong> and the TXT, clean-read, Markdown and DOCX output for the whole batch becomes one file per format, written to the output folder, each item under its own heading. In the DOCX every item starts on a new page with a Heading 1 — so Word's navigation pane lists them and Insert &gt; Table of Contents just works. Other formats still write per item.</p>
+<h3>Speakers</h3>
+<ul><li><strong>Include speaker labels</strong> — untick for anonymous text.</li><li><strong>Exclude speakers</strong> — comma-separated names (e.g. <code>Interviewer, Producer</code>); their segments are dropped from every transcript format, including SRT/VTT.</li><li><strong>Rename speakers</strong> — <code>Old=New</code> pairs (<code>Speaker 1=Sarah Chen, Speaker 2=Marcus</code>), applied before exclusion, so you can exclude by the new name.</li><li><strong>One file per speaker</strong> — TXT, DOCX, clean read and Markdown are written once per speaker, each containing only that speaker's segments (suffix <code> - Name</code>). Overrides Combine for those formats.</li></ul>
+<p>The panel also <strong>remembers speakers per project</strong>: after a run, your rename and exclude entries are saved under the project's name, and restored automatically next time you export from that project with the fields empty.</p>
+<h3>Range &amp; filter</h3>
+<ul><li><strong>Only the sequence In/Out range</strong> — set In/Out on the timeline and only segments inside the range are exported (transcript documents, CSV/XLSX, stats, and merged markers). If no valid range is set, everything exports and the log says so.</li><li><strong>Keyword filter</strong> — comma-separated terms; only segments containing at least one of them (case-insensitive) are exported. Applies to the document formats, CSV/XLSX and stats. <strong>SRT and VTT are never filtered</strong> — a captions file with holes is not a captions file.</li></ul>
+<p><strong>SRT/VTT need word-level timing.</strong> Some transcripts only carry segment-level timing; those are skipped for SRT/VTT with a note in the log, while TXT and DOCX still export fine.</p>
+<p><strong>VTT speaker voices.</strong> When speaker labels are on, VTT cues carry WebVTT voice tags (<code>&lt;v Sarah Chen&gt;</code>), which podcast platforms and players honour.</p>
+<h3>Timeline formats</h3>
+<p><strong>Sequences only</strong> — clips are skipped. Exports Final Cut Pro XML (<code>.fcpxml</code>) and OpenTimelineIO (<code>.otio</code>) via Premiere's own converters.</p>
+<h3>Markers</h3>
+<p>Sequences and clips. CSV and JSON carry name, type, start, end, duration, comments and colour. The <strong>Resolve EDL-style CSV</strong> is column-matched for importing markers into DaVinci Resolve. The <strong>YouTube chapter list</strong> turns sequence markers into a paste-ready <code>MM:SS Title</code> list (first line forced to <code>00:00</code>, as YouTube requires) — drop it straight into a video description.</p>
+<h2>Selecting items</h2>
+<p>Select anything in the Project panel. <strong>Select a bin</strong> and the plugin walks everything inside it, including nested bins, and de-duplicates — so an item that appears twice is only exported once.</p>
+<h2>Organising output</h2>
+<p>Combine freely:</p>
+<ul><li><strong>Folder per bin</strong> — output grouped under the name of the top-most selected bin.</li><li><strong>Subfolder per sequence / clip</strong> — one folder per item.</li><li><strong>Subfolder per format</strong> — <code>TXT/</code>, <code>DOCX/</code>, <code>SRT/</code>, <code>MARKERS/</code>, <code>FCPXML/</code>…</li></ul>
+<h2>File naming</h2>
+<p>Build the filename from tokens:</p>
+<div class="tscroll"><table><thead><tr><th>Token</th><th>Becomes</th></tr></thead><tbody><tr><td><code>{name}</code></td><td>The sequence or clip name</td></tr><tr><td><code>{bin}</code></td><td>The bin it came from</td></tr><tr><td><code>{project}</code></td><td>The Premiere project name</td></tr><tr><td><code>{format}</code></td><td><code>TXT</code>, <code>SRT</code>, <code>MARKERS</code>…</td></tr><tr><td><code>{fps}</code></td><td>Frame rate, e.g. <code>23.98</code></td></tr><tr><td><code>{tcstart}</code></td><td>Timeline start timecode, digits only</td></tr><tr><td><code>{date}</code> / <code>{time}</code></td><td><code>2026-08-24</code> / <code>1430</code></td></tr><tr><td><code>{index}</code></td><td>Position in the batch — <code>01</code>, <code>02</code>, …</td></tr></tbody></table></div>
+<p>Add a <strong>Prefix</strong> and <strong>Suffix</strong> if you want. The <strong>Preview</strong> line under the template shows a real example filename as you type. Unknown tokens are left in the filename on purpose, so a typo is visible rather than silently dropped.</p>
+<p>Characters illegal in filenames are replaced with <code>_</code>, and names are trimmed to 120 characters.</p>
+<h2>Presets</h2>
+<p>Set the panel up the way you want, click <strong>Save…</strong>, and give it a name. Pick it from the dropdown any time to restore every checkbox, the template, prefix and suffix. <strong>Delete</strong> removes the selected preset.</p>
+<h2>Options</h2>
+<ul><li><strong>Dry run</strong> — logs every file it <em>would</em> write, and writes nothing. Always worth doing before a big batch.</li><li><strong>Skip files that already exist</strong> — safe re-runs; finished work is left alone.</li><li><strong>Open output folder when finished</strong> — reveals the folder in Finder/Explorer.</li></ul>
+<h2>Cancel</h2>
+<p><strong>Cancel</strong> stops the run cleanly at the next file boundary. Files already written are kept.</p>
+<h2>Reading the log</h2>
+<div class="tscroll"><table><thead><tr><th>Prefix</th><th>Meaning</th></tr></thead><tbody><tr><td><code>OK</code></td><td>File written</td></tr><tr><td><code>-</code></td><td>Skipped, with the reason (no transcript, not a sequence, already exists…)</td></tr><tr><td><code>ERR</code></td><td>Something failed — the message says what</td></tr><tr><td><code>[DRY]</code></td><td>Dry run: this file <em>would</em> have been written</td></tr></tbody></table></div>
+<p>Click <strong>copy</strong> above the log to put the whole thing on the clipboard.</p>
+<h2>Troubleshooting</h2>
+<p><strong>"No sequences or clips selected in the Project panel."</strong> The selection must be in the <strong>Project</strong> panel, not the timeline. Click the Project panel first so it has focus.</p>
+<p><strong>"transcript skipped (none / not available)"</strong> That item has no transcript yet. Transcribe it in Premiere first.</p>
+<p><strong>Timeline formats skipped</strong> FCPXML and OTIO only apply to sequences. Clips are skipped by design.</p>
+<p><strong>The panel doesn't appear under Window &gt; Extensions</strong> Confirm Premiere Pro is 25.6 or later, then restart Premiere.</p>
+<p><strong>Settings didn't persist</strong> Settings are stored in the plugin's own data folder. If Premiere was force quit mid-session the last write may have been lost; reopening and changing any option writes them again.</p>
+<h2>Support</h2>
+<p>pranaynichani@gmail.com — please include your Premiere Pro version, your OS, and a copy of the log (use the <strong>copy</strong> link).</p>
+  </article>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="foot-contact">
+      <p style="font-size:12px; letter-spacing:2px; color:var(--text-faint); margin-bottom:8px;">SUPPORT</p>
+      <a href="mailto:pranaynichani@gmail.com">pranaynichani@gmail.com</a>
+    </div>
+    <div class="foot-meta">
+      <p><a href="index.html">Transcript Batch Export</a> · <a href="help.html">Help</a> · <a href="privacy.html">Privacy</a> · <a href="eula.html">EULA</a></p>
+      <p>© 2026 Pranay Nichani</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){var t=document.getElementById('nav-toggle'),nav=document.getElementById('site-nav');
+  if(t&&nav)t.addEventListener('click',function(){var open=nav.classList.toggle('open');
+  t.setAttribute('aria-expanded',open?'true':'false');});})();
+</script>
+</body>
+</html>
