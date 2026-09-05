@@ -1,6 +1,75 @@
 {
   "posts": [
     {
+      "slug": "transcript-batch-export",
+      "title": "I built a Premiere plugin because the export dialog broke me",
+      "date": "2026-09-05",
+      "teaser": "Eight interview days, one paper edit, and a transcript export that only worked one sequence at a time. So I built the tool I wanted to buy. It's on the Adobe Marketplace now.",
+      "customFile": "/blog/transcript-batch-export.html",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Somewhere around day fourteen of a feature documentary, I needed transcripts. Not transcripts in the abstract — Premiere had already made those, and they were good. I needed them <em>out</em>: as Word documents, with the timecode from my timeline on every block and the speakers' actual names, so a producer could read them on a plane and come back with a paper edit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Premiere would give me that one sequence at a time, as a text file. Not as a document. Not with the speakers renamed. And a dozen trips through the export dialog for a dozen days — again every time the transcripts changed. If I wanted source timecode on the camera originals, the answer was the assistant editor's answer: build a syncmap, lay every clip out at its timecode, gaps and all, and export from that."
+        },
+        {
+          "type": "paragraph",
+          "text": "That's a small pain. Small pains, repeated across a feature, are how post production actually eats your time."
+        },
+        {
+          "type": "heading",
+          "text": "So I built the thing"
+        },
+        {
+          "type": "paragraph",
+          "text": "Transcript Batch Export is a panel that lives inside Premiere. You select your sequences in the Project panel — or just select the bin — tick what you want, and run once. It walks everything, reads the transcript Premiere already made, and writes what post actually uses."
+        },
+        {
+          "type": "paragraph",
+          "text": "The centre of it is a Word document I'm genuinely proud of: timecode column on the left, speaker and speech on the right, a running header, page numbers, and real heading styles so Word's navigation pane lists every interview day. Tick <em>Combine</em> and eight days become one document, each on its own page. The timecode is your timeline's timecode, with real time beside it if you want both clocks. And export straight from a camera-original clip and you get the camera's source timecode — no syncmap needed just to get transcripts that match the camera files."
+        },
+        {
+          "type": "paragraph",
+          "text": "Around that centre, the rest of the deliverables the workflow asks for: timecoded TXT, a clean-read version with no timecodes, a segments spreadsheet (CSV or a real Excel file), SRT and VTT subtitles, Markdown for Notion, per-speaker stats. Markers merged into the transcript at their timecode, so notes and dialogue live in one document. FCPXML and OTIO. A DaVinci Resolve-ready marker CSV. A YouTube chapter list from your markers that you can paste straight into a description."
+        },
+        {
+          "type": "paragraph",
+          "text": "And speaker control, which turned out to matter more than I expected: rename speakers on the way out (Speaker 1 = Sarah Chen), drop the interviewer entirely, or write one file per person. It remembers your speaker map per project."
+        },
+        {
+          "type": "heading",
+          "text": "What it deliberately doesn't do"
+        },
+        {
+          "type": "paragraph",
+          "text": "It doesn't transcribe. Premiere does that well already, and I didn't want to be another subscription that wants your audio. It doesn't phone home. There's no account, no telemetry, no internet connection — the plugin runs entirely on your machine and your media never leaves it. The privacy policy is one paragraph long because there's nothing to disclose."
+        },
+        {
+          "type": "heading",
+          "text": "Who it's for"
+        },
+        {
+          "type": "paragraph",
+          "text": "Documentary and long-form editors building paper edits from interview days — that's me, and that's who I built it for. Assistant editors preparing transcript and marker deliverables. Post supervisors moving projects between Premiere, Resolve and Avid. And, it turns out, podcasters and YouTubers who just want a clean transcript, chapters and stats without a dozen dialog boxes."
+        },
+        {
+          "type": "heading",
+          "text": "Where to get it"
+        },
+        {
+          "type": "paragraph",
+          "text": "It's on the <a href=\"https://exchange.adobe.com/apps/cc/5da46c0c/transcript-batch-export\">Adobe Creative Cloud Marketplace</a> — install and updates come through the Creative Cloud desktop app, thirty days free, then $4.99 a month, cancel whenever. Premiere Pro 25.6 or later, Mac or Windows."
+        },
+        {
+          "type": "paragraph",
+          "text": "The full guide, privacy policy and licence are at <a href=\"/transcript-batch-export/\">pranaynichani.com/transcript-batch-export</a>. If something doesn't work in your workflow, email me — the support address is answered by the person who wrote the code, and the next version is shaped by what people actually ask for."
+        }
+      ]
+    },
+    {
       "slug": "tools-are-the-craft",
       "title": "The tools are the craft",
       "date": "2026-07-01",
