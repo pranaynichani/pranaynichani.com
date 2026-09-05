@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I built a Premiere plugin because the export dialog broke me — Pranay Nichani</title>
+  <meta name="description" content="Eight interview days, one paper edit, and a transcript export that only worked one sequence at a time. So I built the tool I wanted to buy. It's on the…">
+  <link rel="canonical" href="https://pranaynichani.com/blog/transcript-batch-export">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I built a Premiere plugin because the export dialog broke me — Pranay Nichani">
+  <meta property="og:description" content="Eight interview days, one paper edit, and a transcript export that only worked one sequence at a time. So I built the tool I wanted to buy. It's on the…">
+  <meta property="og:url" content="https://pranaynichani.com/blog/transcript-batch-export">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"I built a Premiere plugin because the export dialog broke me","datePublished":"2026-09-05","description":"Eight interview days, one paper edit, and a transcript export that only worked one sequence at a time. So I built the tool I wanted to buy. It's on the Adobe Marketplace now.","url":"https://pranaynichani.com/blog/transcript-batch-export","author":{"@type":"Person","name":"Pranay Nichani","url":"https://pranaynichani.com/"}}</script>
+</head>
+<body data-depth="../" data-post="transcript-batch-export">
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="../index.html"><svg class="logo-mark" viewBox="0 0 14 28" aria-hidden="true" focusable="false"><polygon points="1,0 13,0 7,10" fill="#e05a4e"/><rect x="5.75" y="9" width="2.5" height="19" fill="#e05a4e"/></svg><span class="logo-name">PRANAY <span>NICHANI</span></span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main" id="site-nav">
+      <a href="../index.html">HOME</a>
+      <a href="../work.html" class="active">WORK</a>
+      <a href="../about.html">ABOUT</a>
+      <a href="../blog/index.html">NOTES</a>
+      <a href="../index.html#contact">CONTACT</a>
+    </nav>
+  </div>
+</header>
+
+<main id="post">
+  <article class="post">
+    <p class="date">SEPTEMBER 2026</p>
+    <h1>I built a Premiere plugin because the export dialog broke me</h1>
+    <p>Somewhere around day fourteen of a feature documentary, I needed transcripts. Not transcripts in the abstract — Premiere had already made those, and they were good. I needed them <em>out</em>: as Word documents, with the timecode from my timeline on every block and the speakers' actual names, so a producer could read them on a plane and come back with a paper edit.</p>
+      <p>Premiere would give me that one sequence at a time, as a text file. Not as a document. Not with the speakers renamed. And a dozen trips through the export dialog for a dozen days — again every time the transcripts changed. If I wanted source timecode on the camera originals, the answer was the assistant editor's answer: build a syncmap, lay every clip out at its timecode, gaps and all, and export from that.</p>
+      <p>That's a small pain. Small pains, repeated across a feature, are how post production actually eats your time.</p>
+      <h2>So I built the thing</h2>
+      <p>Transcript Batch Export is a panel that lives inside Premiere. You select your sequences in the Project panel — or just select the bin — tick what you want, and run once. It walks everything, reads the transcript Premiere already made, and writes what post actually uses.</p>
+      <p>The centre of it is a Word document I'm genuinely proud of: timecode column on the left, speaker and speech on the right, a running header, page numbers, and real heading styles so Word's navigation pane lists every interview day. Tick <em>Combine</em> and eight days become one document, each on its own page. The timecode is your timeline's timecode, with real time beside it if you want both clocks. And export straight from a camera-original clip and you get the camera's source timecode — no syncmap needed just to get transcripts that match the camera files.</p>
+      <p>Around that centre, the rest of the deliverables the workflow asks for: timecoded TXT, a clean-read version with no timecodes, a segments spreadsheet (CSV or a real Excel file), SRT and VTT subtitles, Markdown for Notion, per-speaker stats. Markers merged into the transcript at their timecode, so notes and dialogue live in one document. FCPXML and OTIO. A DaVinci Resolve-ready marker CSV. A YouTube chapter list from your markers that you can paste straight into a description.</p>
+      <p>And speaker control, which turned out to matter more than I expected: rename speakers on the way out (Speaker 1 = Sarah Chen), drop the interviewer entirely, or write one file per person. It remembers your speaker map per project.</p>
+      <h2>What it deliberately doesn't do</h2>
+      <p>It doesn't transcribe. Premiere does that well already, and I didn't want to be another subscription that wants your audio. It doesn't phone home. There's no account, no telemetry, no internet connection — the plugin runs entirely on your machine and your media never leaves it. The privacy policy is one paragraph long because there's nothing to disclose.</p>
+      <h2>Who it's for</h2>
+      <p>Documentary and long-form editors building paper edits from interview days — that's me, and that's who I built it for. Assistant editors preparing transcript and marker deliverables. Post supervisors moving projects between Premiere, Resolve and Avid. And, it turns out, podcasters and YouTubers who just want a clean transcript, chapters and stats without a dozen dialog boxes.</p>
+      <h2>Where to get it</h2>
+      <p>It's on the <a href="https://exchange.adobe.com/apps/cc/5da46c0c/transcript-batch-export">Adobe Creative Cloud Marketplace</a> — install and updates come through the Creative Cloud desktop app, thirty days free, then $4.99 a month, cancel whenever. Premiere Pro 25.6 or later, Mac or Windows.</p>
+      <p>The full guide, privacy policy and licence are at <a href="/transcript-batch-export/">pranaynichani.com/transcript-batch-export</a>. If something doesn't work in your workflow, email me — the support address is answered by the person who wrote the code, and the next version is shaped by what people actually ask for.</p>
+  </article>
+</main>
+
+<footer class="site" id="contact">
+  <div class="wrap">
+    <div class="foot-contact">
+      <p style="font-size:12px; letter-spacing:2px; color:var(--text-faint); margin-bottom:8px;">GOT A PROJECT IN POST?</p>
+      <a href="mailto:pranaynichani@gmail.com">pranaynichani@gmail.com</a>
+    </div>
+    <div class="foot-meta">
+      <p><a href="tel:+16477079594">+1 647 707 9594</a> · Toronto, ON</p>
+      <p>© 2026 Pranay Nichani</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/data.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
