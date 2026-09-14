@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<link rel="icon" href="/assets/favicon.svg">
+<meta name="theme-color" content="#D55E00">
+<title>Ganpati Aarti Sangrah — गणपती आरती संग्रह</title>
+<style>
+  :root{
+    --ink:#1a1512; --muted:#6b5f57; --rule:#e0d6cc;
+    --saffron:#E69F00; --vermillion:#D55E00; --green:#009E73; --blue:#0072B2;
+    --paper:#FFFDF8; --band:#FBF3E6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    line-height:1.55; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 22px 80px}
+
+  header.masthead{text-align:center;padding:14px 0 26px;border-bottom:3px double var(--vermillion)}
+  .om{font-size:40px;color:var(--vermillion);line-height:1;margin-bottom:6px}
+  h1{font-size:30px;margin:.1em 0 .05em;letter-spacing:.01em}
+  .h1-dev{font-size:22px;color:var(--vermillion);margin:0 0 10px;font-weight:600}
+  .sub{color:var(--muted);font-size:14.5px;margin:0}
+
+  .howto{background:var(--band);border-left:5px solid var(--saffron);
+    padding:14px 18px;margin:26px 0;border-radius:0 6px 6px 0;font-size:14.5px}
+  .howto > b:first-child{display:block;margin-bottom:4px;font-size:15px}
+
+  h2.toc-h{font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:30px 0 10px;font-weight:700}
+  ol.toc{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
+  ol.toc li{border-bottom:1px solid var(--rule);padding:9px 2px;display:flex;
+    align-items:baseline;gap:12px;font-size:15.5px}
+  ol.toc .n{font-weight:700;color:var(--vermillion);min-width:1.4em;font-variant-numeric:tabular-nums}
+  ol.toc .t{flex:1}
+  ol.toc .t small{display:block;color:var(--muted);font-size:13px;font-style:italic}
+  ol.toc .tc{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:13px;
+    color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  ol.toc a{color:inherit;text-decoration:none}
+  ol.toc a:hover .t{text-decoration:underline}
+
+  section.aarti{margin:52px 0 0;padding-top:6px;page-break-inside:auto}
+  .head{border-bottom:2px solid var(--saffron);padding-bottom:10px;margin-bottom:20px}
+  .badge{display:inline-block;background:var(--vermillion);color:#fff;font-size:12px;
+    font-weight:700;letter-spacing:.09em;padding:3px 10px;border-radius:12px;
+    font-family:system-ui,sans-serif;vertical-align:2px}
+  .stamp{float:right;font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:13px;
+    color:var(--muted);background:var(--band);padding:3px 9px;border-radius:4px;
+    font-variant-numeric:tabular-nums;margin-top:1px}
+  h3{font-size:25px;margin:11px 0 2px}
+  .dev-title{font-size:20px;color:var(--vermillion);margin:0 0 6px;font-weight:600}
+  .note{font-size:13.5px;color:var(--muted);font-style:italic;margin:0}
+
+  .label{font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+    font-family:system-ui,sans-serif;font-weight:700;margin:22px 0 7px;
+    display:flex;align-items:center;gap:9px}
+  .label::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+  .v{margin:0 0 4px}
+  .dev{font-size:19.5px;line-height:1.75;margin:0}
+  .rom{font-size:15.5px;line-height:1.6;color:#4a4038;font-style:italic;margin:2px 0 0}
+
+  .chorus{background:var(--band);border-left:5px solid var(--green);
+    padding:13px 17px;border-radius:0 6px 6px 0;margin:14px 0}
+  .chorus .label{margin-top:0;color:#046b50}
+  .chorus .label::after{background:#cfe6dd}
+
+  .mantra{border-left:5px solid var(--blue);background:#F2F7FB;
+    padding:13px 17px;border-radius:0 6px 6px 0;margin:14px 0}
+  .mantra .label{margin-top:0;color:#0072B2}
+  .mantra .label::after{background:#d5e5f0}
+
+  .meaning{font-size:14px;color:var(--muted);border-top:1px dotted var(--rule);
+    padding-top:9px;margin-top:16px}
+  .meaning b{color:var(--ink);font-style:normal}
+
+  .finale{text-align:center;margin:56px 0 0;padding:30px 18px;
+    background:var(--band);border-radius:10px;border:2px solid var(--saffron)}
+  .finale .dev{font-size:27px;color:var(--vermillion);line-height:1.9;font-weight:600}
+  .finale .rom{font-size:17px;font-style:normal;color:#4a4038}
+
+  footer{margin-top:54px;border-top:1px solid var(--rule);padding-top:16px;
+    font-size:13px;color:var(--muted);text-align:center}
+
+  .dl{display:inline-block;border:1.5px solid var(--vermillion);color:var(--vermillion);
+    text-decoration:none;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600}
+  .dl:hover{background:var(--vermillion);color:#fff}
+  @media print{ .dl{display:none} }
+
+  @media print{
+    body{background:#fff}
+    .wrap{max-width:100%;padding:0}
+    section.aarti{page-break-inside:avoid}
+    .howto{border:1px solid #ccc}
+  }
+  @media (max-width:480px){
+    .wrap{padding:22px 16px 60px}
+    h1{font-size:24px} h3{font-size:21px} .dev{font-size:18px} .rom{font-size:14.5px}
+    .stamp{float:none;display:inline-block;margin:0 0 6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="om">॥ ॐ ॥</div>
+  <h1>Ganpati Aarti Sangrah</h1>
+  <p class="h1-dev">॥ गणपती आरती संग्रह ॥</p>
+  <p class="sub">Ganesh Chaturthi &nbsp;·&nbsp; The complete aarti, in the order it is sung</p>
+</header>
+
+<div class="howto">
+  <b>How to use this</b>
+  Seven aartis are sung back to back, without a break. The timestamps show where each one
+  begins in the recording, so you can follow along. Each line is given first in
+  Devanagari, then in English letters underneath — sing whichever is easier for you.
+  Everyone joins in on the <b>refrain</b>, which repeats after every verse.
+</div>
+
+<h2 class="toc-h">The order of singing</h2>
+<ol class="toc">
+  <li><span class="n">1</span><a href="#a1" class="t">Sukhkarta Dukhharta<small>सुखकर्ता दुःखहर्ता · to Shri Ganesh (Marathi)</small></a><span class="tc">0:00</span></li>
+  <li><span class="n">2</span><a href="#a2" class="t">Shendur Lal Chadhayo<small>शेंदूर लाल चढ़ायो · to Shri Ganesh (Hindi)</small></a><span class="tc">1:30</span></li>
+  <li><span class="n">3</span><a href="#a3" class="t">Durge Durghat Bhari<small>दुर्गे दुर्घट भारी · to Devi Durga</small></a><span class="tc">2:47</span></li>
+  <li><span class="n">4</span><a href="#a4" class="t">Yei Ho Vitthale<small>येई हो विठ्ठले · to Shri Vitthal (Panduranga)</small></a><span class="tc">4:07</span></li>
+  <li><span class="n">5</span><a href="#a5" class="t">Om Jai Jagdish Hare<small>ॐ जय जगदीश हरे · to the Lord of all</small></a><span class="tc">6:14</span></li>
+  <li><span class="n">6</span><a href="#a6" class="t">Ghalin Lotangan<small>घालीन लोटांगण · the closing prayer &amp; shlokas</small></a><span class="tc">11:11</span></li>
+  <li><span class="n">7</span><a href="#a7" class="t">Ganpati Bappa Morya<small>गणपती बाप्पा मोरया · the closing chant</small></a><span class="tc">12:23</span></li>
+</ol>
+
+<!-- ══════════ 1 ══════════ -->
+<section class="aarti" id="a1">
+  <div class="head">
+    <span class="stamp">0:00 – 1:29</span>
+    <span class="badge">AARTI 1</span>
+    <h3>Sukhkarta Dukhharta</h3>
+    <p class="dev-title">॥ सुखकर्ता दुःखहर्ता ॥</p>
+    <p class="note">The great Ganpati aarti, composed by Samarth Ramdas (17th century). Marathi.</p>
+  </div>
+
+  <div class="label">Opening call</div>
+  <div class="v">
+    <p class="dev">मंगलमूर्ती मोरया !</p>
+    <p class="rom">Mangalmurti Morya!</p>
+  </div>
+
+  <div class="label">Verse 1</div>
+  <div class="v">
+    <p class="dev">सुखकर्ता दुःखहर्ता वार्ता विघ्नाची ।<br>
+      नुरवी पुरवी प्रेम कृपा जयाची ॥<br>
+      सर्वांगी सुंदर उटी शेंदुराची ।<br>
+      कंठी झळके माळ मुक्ताफळांची ॥</p>
+    <p class="rom">Sukhkarta Dukhharta Varta Vighnachi<br>
+      Nurvi Purvi Prem Krupa Jayachi<br>
+      Sarvangi Sundar Uti Shendurachi<br>
+      Kanthi Zhalke Mal Muktaphalanchi</p>
+  </div>
+
+  <div class="chorus">
+    <div class="label">Refrain — everyone</div>
+    <p class="dev">जय देव जय देव जय मंगलमूर्ती ।<br>
+      दर्शनमात्रे मनकामना पुरती ॥</p>
+    <p class="rom">Jai Dev Jai Dev Jai Mangalmurti<br>
+      Darshanmatre Mankamana Purti</p>
+  </div>
+
+  <div class="label">Verse 2</div>
+  <div class="v">
+    <p class="dev">रत्नखचित फरा तुज गौरीकुमरा ।<br>
+      चंदनाची उटी कुंकुमकेशरा ॥<br>
+      हिरेजडित मुकुट शोभतो बरा ।<br>
+      रुणझुणती नूपुरे चरणी घागरिया ॥</p>
+    <p class="rom">Ratnakhachit Phara Tuj Gaurikumara<br>
+      Chandanachi Uti Kumkumkeshara<br>
+      Hirejadit Mukut Shobhato Bara<br>
+      Runzhunati Nupure Charani Ghagariya</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <div class="label">Verse 3</div>
+  <div class="v">
+    <p class="dev">लंबोदर पीतांबर फणिवरवंदना ।<br>
+      सरळ सोंड वक्रतुंड त्रिनयना ॥<br>
+      दास रामाचा वाट पाहे सदना ।<br>
+      संकटी पावावे निर्वाणी रक्षावे सुरवरवंदना ॥</p>
+    <p class="rom">Lambodar Pitambar Phanivarvandana<br>
+      Saral Sond Vakratunda Trinayana<br>
+      Das Ramacha Vat Pahe Sadana<br>
+      Sankati Pavave Nirvani Rakshave Survarvandana</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <p class="meaning"><b>In short:</b> He who brings joy and removes sorrow, who leaves no trace of
+    obstacles. His body glows with vermillion, a string of pearls at his throat. Come at the mere
+    sight of you, every wish of the heart is fulfilled.</p>
+</section>
+
+<!-- ══════════ 2 ══════════ -->
+<section class="aarti" id="a2">
+  <div class="head">
+    <span class="stamp">1:30 – 2:46</span>
+    <span class="badge">AARTI 2</span>
+    <h3>Shendur Lal Chadhayo</h3>
+    <p class="dev-title">॥ शेंदूर लाल चढ़ायो ॥</p>
+    <p class="note">The Hindi aarti to Ganesh, sung immediately after the Marathi one.</p>
+  </div>
+
+  <div class="label">Verse 1</div>
+  <div class="v">
+    <p class="dev">शेंदूर लाल चढ़ायो अच्छा गजमुखको ।<br>
+      दोंदिल लाल बिराजे सुत गौरीहरको ॥<br>
+      हाथ लिये गुड़लड्डू साईं सुरवरको ।<br>
+      महिमा कहे न जाय लागत हूँ पदको ॥</p>
+    <p class="rom">Shendur Lal Chadhayo Achchha Gajmukhko<br>
+      Dondil Lal Biraje Sut Gaurihar Ko<br>
+      Hath Liye Gudladdu Sai Survar Ko<br>
+      Mahima Kahe Na Jay Lagat Hun Pad Ko</p>
+  </div>
+
+  <div class="chorus">
+    <div class="label">Refrain — everyone</div>
+    <p class="dev">जय जय जी गणराज विद्यासुखदाता ।<br>
+      धन्य तुम्हारा दर्शन मेरा मन रमता ॥</p>
+    <p class="rom">Jai Jai Ji Ganraj Vidyasukhdata<br>
+      Dhanya Tumhara Darshan Mera Man Ramta</p>
+  </div>
+
+  <div class="label">Verse 2</div>
+  <div class="v">
+    <p class="dev">अष्टौ सिद्धि दासी संकटको बैरी ।<br>
+      विघ्नविनाशन मंगलमूरत अधिकारी ॥<br>
+      कोटि सूरज प्रकाश ऐसी छबि तेरी ।<br>
+      गंडस्थल मदमस्तक झूले शशिबिहारी ॥</p>
+    <p class="rom">Ashtau Siddhi Dasi Sankat Ko Bairi<br>
+      Vighnavinashan Mangalmurat Adhikari<br>
+      Koti Suraj Prakash Aisi Chhabi Teri<br>
+      Gandasthal Madmastak Zhule Shashibihari</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <div class="label">Verse 3</div>
+  <div class="v">
+    <p class="dev">भावभगत से कोई शरणागत आवे ।<br>
+      संतत संपत सबही भरपूर पावे ॥<br>
+      ऐसे तुम महाराज मोको अति भावे ।<br>
+      गोसावीनंदन निशिदिन गुण गावे ॥</p>
+    <p class="rom">Bhavbhagat Se Koi Sharanagat Aave<br>
+      Santat Sampat Sabhi Bharpur Pave<br>
+      Aise Tum Maharaj Moko Ati Bhave<br>
+      Gosavinandan Nishidin Gun Gave</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <p class="meaning"><b>In short:</b> Vermillion adorns the elephant face; the son of Gauri and Shankar
+    sits holding jaggery laddoos. The eight siddhis serve him, he is the destroyer of obstacles —
+    whoever comes to his shelter with devotion receives abundance.</p>
+</section>
+
+<!-- ══════════ 3 ══════════ -->
+<section class="aarti" id="a3">
+  <div class="head">
+    <span class="stamp">2:47 – 4:06</span>
+    <span class="badge">AARTI 3</span>
+    <h3>Durge Durghat Bhari</h3>
+    <p class="dev-title">॥ दुर्गे दुर्घट भारी ॥</p>
+    <p class="note">The aarti to Devi Durga, also by Samarth Ramdas. Marathi.</p>
+  </div>
+
+  <div class="label">Verse 1</div>
+  <div class="v">
+    <p class="dev">दुर्गे दुर्घट भारी तुजविण संसारी ।<br>
+      अनाथनाथे अंबे करुणा विस्तारी ॥<br>
+      वारी वारी जन्ममरणांते वारी ।<br>
+      हारी पडलो आता संकट निवारी ॥</p>
+    <p class="rom">Durge Durghat Bhari Tujavin Sansari<br>
+      Anathnathe Ambe Karuna Vistari<br>
+      Vari Vari Janmamaranante Vari<br>
+      Hari Padalo Ata Sankat Nivari</p>
+  </div>
+
+  <div class="chorus">
+    <div class="label">Refrain — everyone</div>
+    <p class="dev">जय देवी जय देवी जय महिषासुरमथिनी ।<br>
+      सुरवर ईश्वरवरदे तारक संजीवनी ॥</p>
+    <p class="rom">Jai Devi Jai Devi Jai Mahishasurmathini<br>
+      Survar Ishwarvarade Tarak Sanjivani</p>
+  </div>
+
+  <div class="label">Verse 2</div>
+  <div class="v">
+    <p class="dev">त्रिभुवनभुवनी पाहता तुजऐसी नाही ।<br>
+      चारी श्रमले परंतु न बोलवे काही ॥<br>
+      साही विवाद करिता पडिले प्रवाही ।<br>
+      ते तू भक्तालागी पावसि लवलाही ॥</p>
+    <p class="rom">Tribhuvanbhuvani Pahata Tujaisi Nahi<br>
+      Chari Shramale Parantu Na Bolave Kahi<br>
+      Sahi Vivad Karita Padile Pravahi<br>
+      Te Tu Bhaktalagi Pavasi Lavlahi</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <div class="label">Verse 3</div>
+  <div class="v">
+    <p class="dev">प्रसन्नवदने प्रसन्न होसी निजदासा ।<br>
+      क्लेशांपासुनि सोडी तोडी भवपाशा ॥<br>
+      अंबे तुजवाचून कोण पुरविल आशा ।<br>
+      नरहरि तल्लिन झाला पदपंकजलेशा ॥</p>
+    <p class="rom">Prasannavadane Prasanna Hosi Nijadasa<br>
+      Kleshanpasuni Sodi Todi Bhavpasha<br>
+      Ambe Tujavachun Kon Purvil Asha<br>
+      Narahari Tallin Zhala Padpankajlesha</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <p class="meaning"><b>In short:</b> O Durga, without you the world is a hard passage. Mother of the
+    motherless, spread your compassion. I am worn out — remove this difficulty. Victory to you,
+    slayer of Mahishasura, giver of boons, the life-giving one who carries us across.</p>
+</section>
+
+<!-- ══════════ 4 ══════════ -->
+<section class="aarti" id="a4">
+  <div class="head">
+    <span class="stamp">4:07 – 6:13</span>
+    <span class="badge">AARTI 4</span>
+    <h3>Yei Ho Vitthale</h3>
+    <p class="dev-title">॥ येई हो विठ्ठले ॥</p>
+    <p class="note">The aarti to Vitthal of Pandharpur, signed by Sant Namdev ("Vishnudas Nama"). Marathi.</p>
+  </div>
+
+  <div class="chorus">
+    <div class="label">Refrain — everyone</div>
+    <p class="dev">येई हो विठ्ठले माझे माऊली ये ।<br>
+      निढळावरी कर ठेवूनि वाट मी पाहे ॥</p>
+    <p class="rom">Yei Ho Vitthale Majhe Mauli Ye<br>
+      Nidhalavari Kar Thevuni Vat Mi Pahe</p>
+  </div>
+
+  <div class="label">Verse 1</div>
+  <div class="v">
+    <p class="dev">आलिया गेलिया हाती धाडी निरोप ।<br>
+      पंढरपुरी आहे माझा मायबाप ॥</p>
+    <p class="rom">Aliya Geliya Hati Dhadi Nirop<br>
+      Pandharpuri Ahe Majha Maybap</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <div class="label">Verse 2</div>
+  <div class="v">
+    <p class="dev">पिवळा पीतांबर कैसा गगनी झळकला ।<br>
+      गरुडावरी बैसोनि माझा कैवारी आला ॥</p>
+    <p class="rom">Pivala Pitambar Kaisa Gagani Zhalakala<br>
+      Garudavari Baisoni Majha Kaivari Ala</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <div class="label">Verse 3</div>
+  <div class="v">
+    <p class="dev">विठोबाचे राज्य आम्हा नित्य दिपवाळी ।<br>
+      विष्णुदास नामा जीवेभावे ओवाळी ॥</p>
+    <p class="rom">Vithobache Rajya Amha Nitya Dipavali<br>
+      Vishnudas Nama Jivebhave Ovali</p>
+  </div>
+  <p class="note">→ Refrain repeats</p>
+
+  <p class="meaning"><b>In short:</b> Come, Vitthal, my mother — I stand with my hand on my brow,
+    watching the road for you. In Pandharpur is my mother and father. My protector has come,
+    riding Garuda. Under Vithoba's reign, every day is Diwali for us.</p>
+</section>
+
+<!-- ══════════ 5 ══════════ -->
+<section class="aarti" id="a5">
+  <div class="head">
+    <span class="stamp">6:14 – 11:10</span>
+    <span class="badge">AARTI 5</span>
+    <h3>Om Jai Jagdish Hare</h3>
+    <p class="dev-title">॥ ॐ जय जगदीश हरे ॥</p>
+    <p class="note">The universal aarti (Shraddha Ram Phillauri, 1870). Hindi. All eight verses are sung.</p>
+  </div>
+
+  <div class="chorus">
+    <div class="label">Refrain — everyone</div>
+    <p class="dev">ॐ जय जगदीश हरे, स्वामी जय जगदीश हरे ।<br>
+      भक्तजनों के संकट, दासजनों के संकट,<br>
+      क्षण में दूर करे ॥ ॐ जय जगदीश हरे ॥</p>
+    <p class="rom">Om Jai Jagdish Hare, Swami Jai Jagdish Hare<br>
+      Bhaktajanon Ke Sankat, Dasjanon Ke Sankat,<br>
+      Kshan Mein Dur Kare — Om Jai Jagdish Hare</p>
+  </div>
+
+  <div class="label">Verse 1</div>
+  <div class="v">
+    <p class="dev">जो ध्यावे फल पावे, दुःख बिनसे मन का ।<br>
+      स्वामी दुःख बिनसे मन का ॥<br>
+      सुख संपति घर आवे, कष्ट मिटे तन का ॥</p>
+    <p class="rom">Jo Dhyave Phal Pave, Dukh Binse Man Ka<br>
+      Swami Dukh Binse Man Ka<br>
+      Sukh Sampati Ghar Aave, Kasht Mite Tan Ka</p>
+  </div>
+
+  <div class="label">Verse 2</div>
+  <div class="v">
+    <p class="dev">मात-पिता तुम मेरे, शरण गहूँ मैं किसकी ।<br>
+      स्वामी शरण गहूँ मैं किसकी ॥<br>
+      तुम बिन और न दूजा, आस करूँ मैं जिसकी ॥</p>
+    <p class="rom">Mat-Pita Tum Mere, Sharan Gahun Main Kiski<br>
+      Swami Sharan Gahun Main Kiski<br>
+      Tum Bin Aur Na Duja, Aas Karun Main Jiski</p>
+  </div>
+
+  <div class="label">Verse 3</div>
+  <div class="v">
+    <p class="dev">तुम पूरण परमात्मा, तुम अंतरयामी ।<br>
+      स्वामी तुम अंतरयामी ॥<br>
+      पारब्रह्म परमेश्वर, तुम सबके स्वामी ॥</p>
+    <p class="rom">Tum Puran Parmatma, Tum Antaryami<br>
+      Swami Tum Antaryami<br>
+      Parbrahma Parmeshwar, Tum Sabke Swami</p>
+  </div>
+
+  <div class="label">Verse 4</div>
+  <div class="v">
+    <p class="dev">तुम करुणा के सागर, तुम पालनकर्ता ।<br>
+      स्वामी तुम पालनकर्ता ॥<br>
+      मैं मूरख खल कामी, मैं सेवक तुम स्वामी,<br>
+      कृपा करो भर्ता ॥</p>
+    <p class="rom">Tum Karuna Ke Sagar, Tum Palankarta<br>
+      Swami Tum Palankarta<br>
+      Main Murakh Khal Kami, Main Sevak Tum Swami,<br>
+      Kripa Karo Bharta</p>
+  </div>
+
+  <div class="label">Verse 5</div>
+  <div class="v">
+    <p class="dev">तुम हो एक अगोचर, सबके प्राणपति ।<br>
+      स्वामी सबके प्राणपति ॥<br>
+      किस विध मिलूँ दयामय, तुमको मैं कुमति ॥</p>
+    <p class="rom">Tum Ho Ek Agochar, Sabke Pranpati<br>
+      Swami Sabke Pranpati<br>
+      Kis Vidh Milun Dayamay, Tumko Main Kumati</p>
+  </div>
+
+  <div class="label">Verse 6</div>
+  <div class="v">
+    <p class="dev">दीनबंधु दुःखहर्ता, ठाकुर तुम मेरे ।<br>
+      स्वामी रक्षक तुम मेरे ॥<br>
+      अपने हाथ उठाओ, अपने शरण लगाओ,<br>
+      द्वार पड़ा तेरे ॥</p>
+    <p class="rom">Dinbandhu Dukhharta, Thakur Tum Mere<br>
+      Swami Rakshak Tum Mere<br>
+      Apne Hath Uthao, Apne Sharan Lagao,<br>
+      Dwar Pada Tere</p>
+  </div>
+
+  <div class="label">Verse 7</div>
+  <div class="v">
+    <p class="dev">विषय विकार मिटाओ, पाप हरो देवा ।<br>
+      स्वामी कष्ट हरो देवा ॥<br>
+      श्रद्धा भक्ति बढ़ाओ, संतन की सेवा ॥</p>
+    <p class="rom">Vishay Vikar Mitao, Pap Haro Deva<br>
+      Swami Kasht Haro Deva<br>
+      Shraddha Bhakti Badhao, Santan Ki Seva</p>
+  </div>
+
+  <div class="label">Verse 8</div>
+  <div class="v">
+    <p class="dev">तन मन धन सब कुछ है तेरा ।<br>
+      स्वामी सब कुछ है तेरा ॥<br>
+      तेरा तुझको अर्पण, क्या लागे मेरा ॥</p>
+    <p class="rom">Tan Man Dhan Sab Kuchh Hai Tera<br>
+      Swami Sab Kuchh Hai Tera<br>
+      Tera Tujhko Arpan, Kya Lage Mera</p>
+  </div>
+  <p class="note">→ Refrain repeats, sung several times to close</p>
+
+  <p class="meaning"><b>In short:</b> Victory to the Lord of the universe, who removes the troubles of
+    his devotees in an instant. You are my mother and father; whose shelter else would I seek?
+    All I have is already yours — what is there in it that is mine to give?</p>
+</section>
+
+<!-- ══════════ 6 ══════════ -->
+<section class="aarti" id="a6">
+  <div class="head">
+    <span class="stamp">11:11 – 12:22</span>
+    <span class="badge">AARTI 6</span>
+    <h3>Ghalin Lotangan</h3>
+    <p class="dev-title">॥ घालीन लोटांगण ॥</p>
+    <p class="note">The closing prayer — the surrender. Marathi verse by Sant Namdev, followed by
+      three Sanskrit shlokas and the mahamantra.</p>
+  </div>
+
+  <div class="label">The surrender (Marathi)</div>
+  <div class="v">
+    <p class="dev">घालीन लोटांगण वंदीन चरण ।<br>
+      डोळ्यांनी पाहीन रूप तुझे ॥<br>
+      प्रेमे आलिंगिन आनंदे पूजिन ।<br>
+      भावे ओवाळीन म्हणे नामा ॥</p>
+    <p class="rom">Ghalin Lotangan Vandin Charan<br>
+      Dolyanni Pahin Rup Tujhe<br>
+      Preme Alingin Anande Pujin<br>
+      Bhave Ovalin Mhane Nama</p>
+  </div>
+
+  <div class="mantra">
+    <div class="label">Shloka 1 — Tvameva Mata</div>
+    <p class="dev">त्वमेव माता च पिता त्वमेव ।<br>
+      त्वमेव बंधुश्च सखा त्वमेव ॥<br>
+      त्वमेव विद्या द्रविणं त्वमेव ।<br>
+      त्वमेव सर्वं मम देवदेव ॥</p>
+    <p class="rom">Tvameva Mata Cha Pita Tvameva<br>
+      Tvameva Bandhushcha Sakha Tvameva<br>
+      Tvameva Vidya Dravinam Tvameva<br>
+      Tvameva Sarvam Mama Devadeva</p>
+    <p class="meaning">You alone are my mother and father, my kin and my friend,
+      my learning and my wealth — you are my everything, God of gods.</p>
+  </div>
+
+  <div class="mantra">
+    <div class="label">Shloka 2 — Kayena Vacha</div>
+    <p class="dev">कायेन वाचा मनसेंद्रियैर्वा ।<br>
+      बुद्ध्यात्मना वा प्रकृतिस्वभावात् ॥<br>
+      करोमि यद्यत् सकलं परस्मै ।<br>
+      नारायणायेति समर्पयामि ॥</p>
+    <p class="rom">Kayena Vacha Manasendriyairva<br>
+      Buddhyatmana Va Prakriti Svabhavat<br>
+      Karomi Yadyat Sakalam Parasmai<br>
+      Narayanayeti Samarpayami</p>
+    <p class="meaning">Whatever I do — with body, speech, mind or senses — I offer it all to Narayana.</p>
+  </div>
+
+  <div class="mantra">
+    <div class="label">Shloka 3 — Achyutam Keshavam</div>
+    <p class="dev">अच्युतं केशवं रामनारायणं ।<br>
+      कृष्णदामोदरं वासुदेवं हरिं ॥<br>
+      श्रीधरं माधवं गोपिकावल्लभं ।<br>
+      जानकीनायकं रामचंद्रं भजे ॥</p>
+    <p class="rom">Achyutam Keshavam Ram-Narayanam<br>
+      Krishna-Damodaram Vasudevam Harim<br>
+      Shridharam Madhavam Gopikavallabham<br>
+      Janakinayakam Ramchandram Bhaje</p>
+  </div>
+
+  <div class="mantra">
+    <div class="label">Mahamantra</div>
+    <p class="dev">हरे राम हरे राम राम राम हरे हरे ।<br>
+      हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ॥</p>
+    <p class="rom">Hare Ram Hare Ram Ram Ram Hare Hare<br>
+      Hare Krishna Hare Krishna Krishna Krishna Hare Hare</p>
+    <p class="meaning">Sung twice through.</p>
+  </div>
+</section>
+
+<!-- ══════════ 7 ══════════ -->
+<section class="aarti" id="a7">
+  <div class="head">
+    <span class="stamp">12:23 – 14:53</span>
+    <span class="badge">AARTI 7</span>
+    <h3>Ganpati Bappa Morya</h3>
+    <p class="dev-title">॥ गणपती बाप्पा मोरया ॥</p>
+    <p class="note">The closing chant — call and response, repeated freely, getting faster.
+      Everyone joins in.</p>
+  </div>
+
+  <div class="finale">
+    <p class="dev">मोरया रे बाप्पा मोरया रे</p>
+    <p class="rom">Morya Re Bappa Morya Re</p>
+    <p class="dev" style="margin-top:14px">गणपती बाप्पा मोरया</p>
+    <p class="rom">Ganpati Bappa Morya</p>
+  </div>
+
+  <p class="meaning"><b>Note:</b> "Morya" honours Morya Gosavi, the great Ganesh devotee of Chinchwad —
+    which is why Bappa's name and his are called together.</p>
+</section>
+
+<footer>
+  <p style="margin:0 0 14px"><a class="dl" href="/assets/aarti/ganpati-aarti-print.pdf">
+    Print-friendly PDF &nbsp;·&nbsp; 2 sheets, double-sided</a></p>
+  ॥ गणपती बाप्पा मोरया — मंगलमूर्ती मोरया ॥<br>
+  Ganesh Chaturthi
+</footer>
+
+</div>
+</body>
+</html>
