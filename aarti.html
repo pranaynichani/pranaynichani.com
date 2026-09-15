@@ -88,6 +88,13 @@
   footer{margin-top:54px;border-top:1px solid var(--rule);padding-top:16px;
     font-size:13px;color:var(--muted);text-align:center}
 
+  .video{margin:24px 0 6px}
+  .video .frame{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
+    border-radius:10px;border:2px solid var(--saffron);background:#150F0B}
+  .video .frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+  .video .cap{font-size:13.5px;color:var(--muted);font-style:italic;
+    margin:8px 2px 0;text-align:center}
+
   .dl{display:inline-block;border:1.5px solid var(--vermillion);color:var(--vermillion);
     text-decoration:none;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600}
   .dl:hover{background:var(--vermillion);color:#fff}
@@ -98,6 +105,7 @@
     .wrap{max-width:100%;padding:0}
     section.aarti{page-break-inside:avoid}
     .howto{border:1px solid #ccc}
+    .video{display:none}
   }
   @media (max-width:480px){
     .wrap{padding:22px 16px 60px}
@@ -118,10 +126,21 @@
 
 <div class="howto">
   <b>How to use this</b>
-  Eight pieces are sung back to back, without a break. The timestamps show where each one
+  Eight pieces are sung back to back, without a break. Play the video above and follow along. The timestamps show where each one
   begins in the recording, so you can follow along. Each line is given first in
   Devanagari, then in English letters underneath — sing whichever is easier for you.
   Everyone joins in on the <b>refrain</b>, which repeats after every verse.
+</div>
+
+<div class="video">
+  <div class="frame">
+    <iframe src="https://www.youtube-nocookie.com/embed/jKqpFIAWd10?rel=0"
+      title="Ganpati Aarti — full aarti with lyrics"
+      loading="lazy" allowfullscreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+  </div>
+  <p class="cap">Play this and sing along — the words below follow in the same order.
+    Tap the chapter list on YouTube to jump to any aarti.</p>
 </div>
 
 <h2 class="toc-h">The order of singing</h2>
