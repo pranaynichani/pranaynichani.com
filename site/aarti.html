@@ -95,10 +95,28 @@
   .video .cap{font-size:13.5px;color:var(--muted);font-style:italic;
     margin:8px 2px 0;text-align:center}
 
+  details.xp{margin:8px 0 2px}
+  details.xp summary{cursor:pointer;font-family:system-ui,sans-serif;font-size:12px;
+    letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--blue);
+    list-style:none;display:inline-flex;align-items:center;gap:6px;padding:4px 0;
+    -webkit-tap-highlight-color:transparent}
+  details.xp summary::-webkit-details-marker{display:none}
+  details.xp summary::before{content:"+";display:inline-block;width:15px;height:15px;
+    line-height:14px;text-align:center;border:1.3px solid var(--blue);border-radius:50%;
+    font-size:12px;font-weight:700}
+  details.xp[open] summary::before{content:"−"}
+  details.xp summary:hover{text-decoration:underline}
+  .xpb{font-size:14.5px;line-height:1.62;color:#3f382f;background:#F6F1E8;
+    border-left:3px solid var(--blue);padding:11px 15px;border-radius:0 6px 6px 0;
+    margin:5px 0 2px}
+  .chorus details.xp summary,.mantra details.xp summary{color:#0072B2}
+
   .dl{display:inline-block;border:1.5px solid var(--vermillion);color:var(--vermillion);
     text-decoration:none;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600}
   .dl:hover{background:var(--vermillion);color:#fff}
   @media print{ .dl{display:none} }
+
+  @media print{ details.xp{display:none} }
 
   @media print{
     body{background:#fff}
@@ -170,6 +188,7 @@
   <div class="v">
     <p class="dev">मंगलमूर्ती मोरया !</p>
     <p class="rom">Mangalmurti Morya!</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The call that opens the aarti. <i>Mangalmurti</i> means roughly "the very embodiment of auspiciousness" — one of Ganesh's names. <i>Morya</i> honours Morya Gosavi, a saint who was his great devotee. Calling the two names together is a Maharashtrian habit of affection: the god and his devotee, greeted in one breath.</div></details>
   </div>
 
   <div class="label">Verse 1</div>
@@ -182,6 +201,7 @@
       Nurvi Purvi Prem Krupa Jayachi<br>
       Sarvangi Sundar Uti Shendurachi<br>
       Kanthi Zhalke Mal Muktaphalanchi</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">It opens by naming what Ganesh does: he makes happiness and takes sorrow away, and where he is, obstacles leave no trace behind. Then it turns to what you are actually looking at — the idol in front of you, its body bright with vermillion, a string of pearls at the throat. The song moves from idea to image, which is why it works while you're standing before him.</div></details>
   </div>
 
   <div class="chorus">
@@ -190,6 +210,7 @@
       दर्शनमात्रे मनकामना पुरती ॥</p>
     <p class="rom">Jai Dev Jai Dev Jai Mangalmurti<br>
       Darshanmatre Mankamana Purti</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The refrain everyone joins. "Victory to you" — and then the line that gives the whole aarti its warmth: you don't have to ask for anything. Simply being in his presence and seeing him is enough for the heart's wish to be met.</div></details>
   </div>
 
   <div class="label">Verse 2</div>
@@ -202,6 +223,7 @@
       Chandanachi Uti Kumkumkeshara<br>
       Hirejadit Mukut Shobhato Bara<br>
       Runzhunati Nupure Charani Ghagariya</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A loving description of how the idol has been dressed for the festival — a jewelled backdrop, sandalwood paste and saffron, a crown set with diamonds, anklets that chime when he moves. It's the verse of someone looking closely at the decoration the family has just finished.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -215,6 +237,7 @@
       Saral Sond Vakratunda Trinayana<br>
       Das Ramacha Vat Pahe Sadana<br>
       Sankati Pavave Nirvani Rakshave Survarvandana</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">His forms are named one by one: the generous belly, the yellow silk, the curved trunk, the three eyes. Then the poet steps forward himself — Ramdas, who wrote this in the 1600s, says he's waiting at the door, and asks to be reached in times of crisis and protected at the end.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -243,6 +266,7 @@
       Dondil Lal Biraje Sut Gaurihar Ko<br>
       Hath Liye Gudladdu Sai Survar Ko<br>
       Mahima Kahe Na Jay Lagat Hun Pad Ko</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The Hindi aarti begins the same way the Marathi one did — with vermillion on the elephant face — then places him in his family: the son of Gauri and Shankar. He's holding jaggery laddoos. The singer admits his greatness simply can't be described, and so does the only thing left: bows at his feet.</div></details>
   </div>
 
   <div class="chorus">
@@ -251,6 +275,7 @@
       धन्य तुम्हारा दर्शन मेरा मन रमता ॥</p>
     <p class="rom">Jai Jai Ji Ganraj Vidyasukhdata<br>
       Dhanya Tumhara Darshan Mera Man Ramta</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Victory to the king of the ganas, who gives both learning and ease. The second line is personal rather than grand — just seeing him, the singer says, settles the mind.</div></details>
   </div>
 
   <div class="label">Verse 2</div>
@@ -263,6 +288,7 @@
       Vighnavinashan Mangalmurat Adhikari<br>
       Koti Suraj Prakash Aisi Chhabi Teri<br>
       Gandasthal Madmastak Zhule Shashibihari</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The eight <i>siddhis</i> — the classical supernatural powers — are described as attending on him, which is a way of saying nothing is beyond his reach. He is the undoing of trouble itself. His face carries the brightness of countless suns.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -276,6 +302,7 @@
       Santat Sampat Sabhi Bharpur Pave<br>
       Aise Tum Maharaj Moko Ati Bhave<br>
       Gosavinandan Nishidin Gun Gave</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The promise at the heart of the song: anyone who comes to his shelter with genuine devotion receives abundance that lasts. The final line is the poet signing his own name, as these songs traditionally do — he says he'll sing these praises day and night.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -304,6 +331,7 @@
       Anathnathe Ambe Karuna Vistari<br>
       Vari Vari Janmamaranante Vari<br>
       Hari Padalo Ata Sankat Nivari</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A change of address — now to the Goddess. Without her, it says, ordinary life is a hard crossing. She is called mother to those who have no one. The last line is unusually honest: the singer says he has simply lost, he is worn out, and asks her to lift the difficulty.</div></details>
   </div>
 
   <div class="chorus">
@@ -312,6 +340,7 @@
       सुरवर ईश्वरवरदे तारक संजीवनी ॥</p>
     <p class="rom">Jai Devi Jai Devi Jai Mahishasurmathini<br>
       Survar Ishwarvarade Tarak Sanjivani</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Victory to the one who overcame the buffalo-demon Mahishasura. She gives boons even to the gods, and she is <i>sanjivani</i> — the life-restoring one — who carries people across.</div></details>
   </div>
 
   <div class="label">Verse 2</div>
@@ -324,6 +353,7 @@
       Chari Shramale Parantu Na Bolave Kahi<br>
       Sahi Vivad Karita Padile Pravahi<br>
       Te Tu Bhaktalagi Pavasi Lavlahi</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">In all three worlds there is no one like her. The four Vedas wore themselves out trying to describe her and still couldn't manage it; the schools of philosophy argued and were swept away in the current. And yet — the turn at the end — she comes quickly to someone who simply loves her. Learning fails where devotion arrives.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -337,6 +367,7 @@
       Kleshanpasuni Sodi Todi Bhavpasha<br>
       Ambe Tujavachun Kon Purvil Asha<br>
       Narahari Tallin Zhala Padpankajlesha</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">She turns a pleased face towards her own; she loosens suffering and cuts the knots that tie us to worldly life. Who else, it asks, would fulfil a hope? The poet Narahari ends absorbed in the dust of her feet.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -361,6 +392,7 @@
       निढळावरी कर ठेवूनि वाट मी पाहे ॥</p>
     <p class="rom">Yei Ho Vitthale Majhe Mauli Ye<br>
       Nidhalavari Kar Thevuni Vat Mi Pahe</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">One of the most tender lines in the whole set. Vitthal is addressed not as a lord but as <i>mauli</i> — mother. The image is of someone standing with a hand shading their eyes, watching the road, waiting for a parent to appear.</div></details>
   </div>
 
   <div class="label">Verse 1</div>
@@ -369,6 +401,7 @@
       पंढरपुरी आहे माझा मायबाप ॥</p>
     <p class="rom">Aliya Geliya Hati Dhadi Nirop<br>
       Pandharpuri Ahe Majha Maybap</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The waiting continues: the singer sends word with everyone who passes, coming or going, because in Pandharpur — Vitthal's town — is the one who is mother and father to him.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -378,6 +411,7 @@
       गरुडावरी बैसोनि माझा कैवारी आला ॥</p>
     <p class="rom">Pivala Pitambar Kaisa Gagani Zhalakala<br>
       Garudavari Baisoni Majha Kaivari Ala</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">And then, suddenly, arrival. Yellow silk flashes across the sky; his champion has come, riding Garuda the eagle. After two verses of waiting, the god actually shows up.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -387,6 +421,7 @@
       विष्णुदास नामा जीवेभावे ओवाळी ॥</p>
     <p class="rom">Vithobache Rajya Amha Nitya Dipavali<br>
       Vishnudas Nama Jivebhave Ovali</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Under Vithoba's reign, it says, every single day is Diwali — the whole year is a festival. The poet signs off as Namdev, servant of Vishnu, waving the lamp with everything he has.</div></details>
   </div>
   <p class="note">→ Refrain repeats</p>
 
@@ -413,6 +448,7 @@
     <p class="rom">Om Jai Jagdish Hare, Swami Jai Jagdish Hare<br>
       Bhaktajanon Ke Sankat, Dasjanon Ke Sankat,<br>
       Kshan Mein Dur Kare — Om Jai Jagdish Hare</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The best-known aarti in India, sung in almost every household. Note that it doesn't name one particular god — it addresses the Lord of the universe, which is why it fits at the end of any puja. Troubles of those who love him are undone in a moment.</div></details>
   </div>
 
   <div class="label">Verse 1</div>
@@ -423,6 +459,7 @@
     <p class="rom">Jo Dhyave Phal Pave, Dukh Binse Man Ka<br>
       Swami Dukh Binse Man Ka<br>
       Sukh Sampati Ghar Aave, Kasht Mite Tan Ka</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Whoever turns their mind to him receives the fruit of it, and the ache in the mind dissolves. Ease and plenty come to the house, and the body's suffering lifts.</div></details>
   </div>
 
   <div class="label">Verse 2</div>
@@ -433,6 +470,7 @@
     <p class="rom">Mat-Pita Tum Mere, Sharan Gahun Main Kiski<br>
       Swami Sharan Gahun Main Kiski<br>
       Tum Bin Aur Na Duja, Aas Karun Main Jiski</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">You are my mother and father — so whose shelter would I go to instead? There is no second one. In whom else, it asks, would I even place my hope?</div></details>
   </div>
 
   <div class="label">Verse 3</div>
@@ -443,6 +481,7 @@
     <p class="rom">Tum Puran Parmatma, Tum Antaryami<br>
       Swami Tum Antaryami<br>
       Parbrahma Parmeshwar, Tum Sabke Swami</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A more philosophical verse: he is the complete, undivided reality, and at the same time the one who lives inside — <i>antaryami</i>, the indweller who knows your thoughts. Vast and intimate at once.</div></details>
   </div>
 
   <div class="label">Verse 4</div>
@@ -455,6 +494,7 @@
       Swami Tum Palankarta<br>
       Main Murakh Khal Kami, Main Sevak Tum Swami,<br>
       Kripa Karo Bharta</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Ocean of compassion, the one who sustains everything. Then a blunt admission: I am foolish, and full of wanting. I am the servant and you are the master — be kind to me.</div></details>
   </div>
 
   <div class="label">Verse 5</div>
@@ -465,6 +505,7 @@
     <p class="rom">Tum Ho Ek Agochar, Sabke Pranpati<br>
       Swami Sabke Pranpati<br>
       Kis Vidh Milun Dayamay, Tumko Main Kumati</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">He can't be reached by the senses, and yet he's the life in everything alive. So the singer asks the honest question — with a mind as small as mine, how would I ever reach you?</div></details>
   </div>
 
   <div class="label">Verse 6</div>
@@ -477,6 +518,7 @@
       Swami Rakshak Tum Mere<br>
       Apne Hath Uthao, Apne Sharan Lagao,<br>
       Dwar Pada Tere</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Friend of the helpless, remover of sorrow. The request becomes physical: put out your hand, pull me into your shelter. I am standing right here at your door.</div></details>
   </div>
 
   <div class="label">Verse 7</div>
@@ -487,6 +529,7 @@
     <p class="rom">Vishay Vikar Mitao, Pap Haro Deva<br>
       Swami Kasht Haro Deva<br>
       Shraddha Bhakti Badhao, Santan Ki Seva</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A request to be changed rather than given things — take away the cravings and the flaws, lift the wrongdoing. Then the positive ask: let my trust and love grow, and let me be of use to good people.</div></details>
   </div>
 
   <div class="label">Verse 8</div>
@@ -497,6 +540,7 @@
     <p class="rom">Tan Man Dhan Sab Kuchh Hai Tera<br>
       Swami Sab Kuchh Hai Tera<br>
       Tera Tujhko Arpan, Kya Lage Mera</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The verse that ends most pujas, and perhaps the wisest line in the set. Body, mind, wealth — it is all yours already. I am only handing back what was never mine. So what exactly am I giving you?</div></details>
   </div>
   <p class="note">→ Refrain repeats, sung several times to close</p>
 
@@ -526,6 +570,7 @@
       Dolyanni Pahin Rup Tujhe<br>
       Preme Alingin Anande Pujin<br>
       Bhave Ovalin Mhane Nama</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The closing prayer, and a complete act of worship in four lines: I'll lie full-length on the ground, bow at your feet, look at your form, embrace you, worship you, and wave the lamp — each step done with love rather than duty. It ends with Namdev naming himself.</div></details>
   </div>
 
   <div class="mantra">
@@ -538,6 +583,7 @@
       Tvameva Bandhushcha Sakha Tvameva<br>
       Tvameva Vidya Dravinam Tvameva<br>
       Tvameva Sarvam Mama Devadeva</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A short Sanskrit verse most people here will know by heart. You alone are my mother and father, my brother and my friend, my learning and my wealth — you are everything to me. It's often the first Sanskrit a child is taught.</div></details>
     <p class="meaning">You alone are my mother and father, my kin and my friend,
       my learning and my wealth — you are my everything, God of gods.</p>
   </div>
@@ -552,6 +598,7 @@
       Buddhyatmana Va Prakriti Svabhavat<br>
       Karomi Yadyat Sakalam Parasmai<br>
       Narayanayeti Samarpayami</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Whatever I do — with my body, my speech, my mind, my senses, or simply out of habit and nature — I hand all of it over. The point isn't to stop acting, but to stop clutching at the results of what you do.</div></details>
     <p class="meaning">Whatever I do — with body, speech, mind or senses — I offer it all to Narayana.</p>
   </div>
 
@@ -565,6 +612,7 @@
       Krishna-Damodaram Vasudevam Harim<br>
       Shridharam Madhavam Gopikavallabham<br>
       Janakinayakam Ramchandram Bhaje</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A garland of names strung together, each one a different face of Vishnu — Achyuta, Keshava, Rama, Narayana, Krishna, Damodara, Vasudeva, Hari, Shridhara, Madhava, the beloved of the gopis, the husband of Janaki. Singing the names is itself the worship.</div></details>
   </div>
 
   <div class="mantra">
@@ -573,6 +621,7 @@
       हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे ॥</p>
     <p class="rom">Hare Ram Hare Ram Ram Ram Hare Hare<br>
       Hare Krishna Hare Krishna Krishna Krishna Hare Hare</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The great chant. No request and no argument — only the names of Rama and Krishna, repeated. Sung twice through here.</div></details>
     <p class="meaning">Sung twice through.</p>
   </div>
 </section>
@@ -591,6 +640,7 @@
   <div class="finale">
     <p class="dev">मोरया रे बाप्पा मोरया रे</p>
     <p class="rom">Morya Re Bappa Morya Re</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">Call and response, and everyone joins in — it gets faster each time round. <i>Bappa</i> means father, the affectionate name. Again the god and his devotee Morya Gosavi are called together. It feels like an ending, but it isn't quite: it leads into the Mantrapushpanjali.</div></details>
     <p class="dev" style="margin-top:14px">गणपती बाप्पा मोरया</p>
     <p class="rom">Ganpati Bappa Morya</p>
   </div>
@@ -616,6 +666,7 @@
       ते ह नाकं महिमानः सचन्त यत्र पूर्वे साध्याः सन्ति देवाः ॥</p>
     <p class="rom">Om Yajnena Yajnamayajanta Devastani Dharmani Prathamanyasan<br>
       Te Ha Nakam Mahimanah Sachanta Yatra Purve Sadhyah Santi Devah</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The name means "an offering of flowers made of mantra" — the flowers are the words themselves. This first verse is very old, from the Vedas: by offering, the gods honoured the act of offering, and those first rites became the pattern; in that way they reached the heights where the earlier gods dwell.</div></details>
   </div>
 
   <div class="mantra">
@@ -630,6 +681,7 @@
       Sa Me Kaman Kamakamaya Mahyam<br>
       Kameshwaro Vaishravano Dadatu<br>
       Kuberaya Vaishravanaya — Maharajaya Namah</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A salutation to the king of kings, and to Kubera, keeper of the world's wealth — asking that what is desired be granted. In this setting it is less about riches than about being given what is genuinely needed.</div></details>
   </div>
 
   <div class="mantra">
@@ -641,6 +693,7 @@
       Maharajyamadhipatyamayam<br>
       Samantaparyayi Syatsarvabhaumah Sarvayusha Antadaparardhat<br>
       Prithivyai Samudraparyantaya Ekaraliti</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">A prayer for good governance and well-being — for sovereignty, self-rule and freedom extending across the whole earth as far as the sea, and lasting a full lifetime. Notice who it is for: not the singer, but everyone.</div></details>
   </div>
 
   <div class="mantra">
@@ -651,6 +704,7 @@
     <p class="rom">Tadapyesha Shloko'bhigito<br>
       Marutah Pariveshtaro Maruttasyavasan Grihe<br>
       Avikshitasya Kamaprervishvedevah Sabhasada Iti</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">It closes by recalling King Marutta, in whose household even the storm-gods served and the gods themselves sat in the assembly — a picture of a realm so well ruled that heaven was at home in it. That is the note the whole aarti ends on.</div></details>
   </div>
 
   <p class="meaning"><b>In short:</b> A prayer not for oneself but for the wellbeing of all — for
@@ -674,12 +728,14 @@
       तन्नो दन्ती प्रचोदयात् ॥</p>
     <p class="rom">Om Ekadantaya Vidmahe — Vakratundaya Dhimahi<br>
       Tanno Danti Prachodayat</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The Ganesh Gayatri, built on the pattern of the ancient Gayatri mantra: may we know the one-tusked one, may we meditate on the one with the curved trunk, and may he set our thoughts moving in the right direction.</div></details>
   </div>
 
   <div class="mantra">
     <div class="label">Blessing</div>
     <p class="dev">श्री शुभं भवतु ॥</p>
     <p class="rom">Shri Shubham Bhavatu</p>
+  <details class="xp"><summary>What this means</summary><div class="xpb">The last words: may all be auspicious — for everyone here, and everywhere.</div></details>
     <p class="meaning">"May all be auspicious."</p>
   </div>
 
