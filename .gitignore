@@ -6,3 +6,6 @@ website/
 
 # macOS
 .DS_Store
+
+# Unencrypted source of /screening (only the encrypted page is published)
+private/

@@ -153,6 +153,24 @@ then he opens `http://<mac-LAN-ip>:8095` on his phone (same WiFi). Find the IP w
   secrets scan came back clean). Never commit secrets, tokens, or private info — and `website/`
   (728MB local-only folder) is gitignored; keep it that way.
 
+## Private screening room — `/screening` (added 2026-09-28)
+
+A password-protected page of unreleased/private edits Pranay sends to people hiring an editor.
+Generic on purpose (never names a recipient) so it can be reused.
+
+- **Readable source lives in `private/` — gitignored, NEVER commit it** (the repo is public):
+  `private/screening.src.html` (the page; the `EDITS` array at the bottom is the list of videos,
+  their order, tags and notes), `private/screening.pw` (the password), `private/lrd_60.jpg`.
+- **Build:** `node scripts/build-screening.js` → writes `site/screening.html`, which contains only
+  AES-GCM ciphertext + a password form (PBKDF2 600k, WebCrypto). Re-run after any edit or password
+  change, verify, then commit + subtree-push as usual. Sanity check: `grep -c youtube
+  site/screening.html` must print 0.
+- `noindex`, not in the sitemap, linked from nowhere. The browser remembers a correct password in
+  localStorage (key `screening-pw`), so returning visitors skip the gate.
+- Videos: unlisted YouTube on Pranay's channel, except *Lost in the Right Direction* (password-
+  protected Vimeo — too long for his YouTube) and *Transfer* (YouTube age-restricted it, so it
+  links out instead of embedding). Filters come from each entry's `tags`.
+
 ## ⚠️ Don't diagnose this site by grepping raw HTML
 
 Nearly every list on this site is **injected by JavaScript at page load** — the Notes index, the
