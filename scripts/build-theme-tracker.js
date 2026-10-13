@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds the password-protected /theme-tracker page (unlisted).
+// Builds the password-protected /client/DLI/Themetracker/ page (unlisted).
 //
 //   node scripts/build-theme-tracker.js
 //
@@ -7,7 +7,7 @@
 //   private/theme-tracker/tracker.html   the full page (built by the pipeline outside this repo)
 //   private/theme-tracker/password       the password (one line)
 //   private/theme-tracker/version.json   {version, label} — published as-is so offline copies can spot updates
-// Output (committed + deployed): site/theme-tracker/index.html + site/theme-tracker/version.json
+// Output (committed + deployed): site/client/DLI/Themetracker/index.html + version.json
 //
 // Same scheme as /screening: gzip, then AES-256-GCM with a PBKDF2-SHA256 (600k) key from the password.
 // The published page holds only ciphertext + a password form; nothing readable without the password.
@@ -19,7 +19,7 @@ const zlib = require("zlib");
 
 const ROOT = path.join(__dirname, "..");
 const PRIV = path.join(ROOT, "private", "theme-tracker");
-const OUTDIR = path.join(ROOT, "site", "theme-tracker");
+const OUTDIR = path.join(ROOT, "site", "client", "DLI", "Themetracker");
 const ITER = 600000;
 
 const pw = fs.readFileSync(path.join(PRIV, "password"), "utf8").trim();
@@ -113,4 +113,4 @@ const shell = `<!DOCTYPE html>
 fs.mkdirSync(OUTDIR, { recursive: true });
 fs.writeFileSync(path.join(OUTDIR, "index.html"), shell);
 fs.writeFileSync(path.join(OUTDIR, "version.json"), JSON.stringify({ version: ver.version, label: ver.label }) + "\n");
-console.log(`Wrote site/theme-tracker/index.html (${(shell.length / 1024).toFixed(0)} KB, encrypted) + version.json (${ver.version})`);
+console.log(`Wrote site/client/DLI/Themetracker/index.html (${(shell.length / 1024).toFixed(0)} KB, encrypted) + version.json (${ver.version})`);

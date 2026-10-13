@@ -172,18 +172,24 @@ Generic on purpose (never names a recipient) so it can be reused.
   links out instead of embedding). Filters come from each entry's `tags`.
 
 
-## Private theme tracker — `/theme-tracker` (added 2026-10-13)
+## Private client pages — `/client/<CODE>/<Page>/` (added 2026-10-13)
+
+Pattern: each client gets a code folder under `site/client/` (nothing at `/client` or `/client/<CODE>` — those 404
+on purpose). URLs are case-sensitive on GitHub Pages and the Mac's disk is case-insensitive, so lowercase/alternate
+spellings are handled by a redirect map in `site/404.html` — add new pages there too.
+
+### DLI theme tracker — `/client/DLI/Themetracker/`
 
 Unlisted, password-protected copy of a documentary soundbite tracker for one production team (Pranay's AE work).
 Same scheme as `/screening`, plus gzip: `node scripts/build-theme-tracker.js` encrypts
-`private/theme-tracker/tracker.html` with `private/theme-tracker/password` → `site/theme-tracker/index.html`
-(ciphertext + password form only) and publishes `site/theme-tracker/version.json` ({version, label} only, so
+`private/theme-tracker/tracker.html` with `private/theme-tracker/password` → `site/client/DLI/Themetracker/index.html`
+(ciphertext + password form only) and publishes `site/client/DLI/Themetracker/version.json` ({version, label} only, so
 offline copies can tell a newer version is online). `noindex`, not in the sitemap, linked from nowhere — keep it that
 way. Keep public commit messages generic (no project/people names). The readable page is BUILT OUTSIDE this repo by
 the pipeline in `~/Documents/Claude/Projects/Dilla Theme Buckets/pipeline/` — publish with its `publish.py`
-(it rebuilds, bumps the version, runs the build script, commits only `site/theme-tracker` + the script, and does
+(it rebuilds, bumps the version, runs the build script, commits only `site/client` + `site/404.html` + the script, and does
 the subtree push). Never publish a new theme until Pranay has reviewed it. Sanity check after any build:
-`grep -ci questlove site/theme-tracker/index.html` must print 0.
+`grep -ci questlove site/client/DLI/Themetracker/index.html` must print 0.
 
 ## ⚠️ Don't diagnose this site by grepping raw HTML
 
