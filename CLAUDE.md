@@ -171,6 +171,20 @@ Generic on purpose (never names a recipient) so it can be reused.
   protected Vimeo — too long for his YouTube) and *Transfer* (YouTube age-restricted it, so it
   links out instead of embedding). Filters come from each entry's `tags`.
 
+
+## Private theme tracker — `/theme-tracker` (added 2026-10-13)
+
+Unlisted, password-protected copy of a documentary soundbite tracker for one production team (Pranay's AE work).
+Same scheme as `/screening`, plus gzip: `node scripts/build-theme-tracker.js` encrypts
+`private/theme-tracker/tracker.html` with `private/theme-tracker/password` → `site/theme-tracker/index.html`
+(ciphertext + password form only) and publishes `site/theme-tracker/version.json` ({version, label} only, so
+offline copies can tell a newer version is online). `noindex`, not in the sitemap, linked from nowhere — keep it that
+way. Keep public commit messages generic (no project/people names). The readable page is BUILT OUTSIDE this repo by
+the pipeline in `~/Documents/Claude/Projects/Dilla Theme Buckets/pipeline/` — publish with its `publish.py`
+(it rebuilds, bumps the version, runs the build script, commits only `site/theme-tracker` + the script, and does
+the subtree push). Never publish a new theme until Pranay has reviewed it. Sanity check after any build:
+`grep -ci questlove site/theme-tracker/index.html` must print 0.
+
 ## ⚠️ Don't diagnose this site by grepping raw HTML
 
 Nearly every list on this site is **injected by JavaScript at page load** — the Notes index, the
