@@ -191,6 +191,21 @@ the pipeline in `~/Documents/Claude/Projects/Dilla Theme Buckets/pipeline/` — 
 the subtree push). Never publish a new theme until Pranay has reviewed it. Sanity check after any build:
 `grep -ci questlove site/client/DLI/Themetracker/index.html` must print 0.
 
+### BRU song map — `/client/BRU/Songmap/` (added 2026-11-12)
+
+Unlisted, password-protected song map for one production team, same scheme as the theme tracker (gzip + AES-GCM,
+password form only). The readable page is BUILT OUTSIDE this repo:
+`python3 ~/Documents/Claude/BramptonUnderground/footage_kb/work_songs/site_build.py` writes
+`private/bru-songmap/songmap.html`; then `node scripts/build-bru-songmap.js` encrypts it with
+`private/bru-songmap/password` → `site/client/BRU/Songmap/index.html`; commit only `site/client` (+ `site/404.html` /
+the script if changed) with a generic message, then the subtree push. Sanity check after any build:
+`grep -ci karan site/client/BRU/Songmap/index.html` must print 0.
+Shared notes + lists on that page are saved by a small Cloudflare Worker (`pn-page-notes`, D1 database of the same
+name, source in `~/Documents/Claude/BramptonUnderground/songmap_notes_worker/`). It stores only ciphertext; its
+address, write token and the notes key live in `private/bru-songmap/config.json` and inside the encrypted page.
+NEVER delete or regenerate that config: a new key makes every saved note unreadable. Changing the page password is
+safe (notes don't depend on it). The Worker only accepts calls from pranaynichani.com and localhost.
+
 ## ⚠️ Don't diagnose this site by grepping raw HTML
 
 Nearly every list on this site is **injected by JavaScript at page load** — the Notes index, the
