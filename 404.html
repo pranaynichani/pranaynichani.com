@@ -38,7 +38,7 @@
   // Private client pages: any capitalisation / missing slash goes to the real address (URLs are case-sensitive here).
   (function () {
     var p = location.pathname.replace(/\/+$/, '').toLowerCase();
-    var map = { '/client/dli/themetracker': '/client/DLI/Themetracker/' };
+    var map = { '/client/dli/themetracker': '/client/DLI/Themetracker/', '/client/bru/songmap': '/client/BRU/Songmap/' };
     if (map[p] && location.pathname !== map[p]) location.replace(map[p] + location.hash);
   })();
 </script>
